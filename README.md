@@ -133,7 +133,7 @@
 
 ### 🔗 原项目与相关链接
 *   **Termux 官方**: [GitHub](https://github.com/termux/termux-app)
-*   **ZeroTermux 签名文件**: [GitHub Link](https://github.com/hanxinhao000/Termux-app-UpgradedVersion/tree/master/%E7%AD%BE%E5%90%8D%E6%96%87%E4%BB%B6)
+*   **ZeroTermux **: [GitHub Link](https://github.com/hanxinhao000/ZeroTermux)
 *   **ZeroTermux 下载 (旧版存档)**: [链接](https://od.ixcmstudio.cn/repository/main/ZeroTermux/)
 
 ### 🤝 联系方式 (ZeroTermux 社区)
