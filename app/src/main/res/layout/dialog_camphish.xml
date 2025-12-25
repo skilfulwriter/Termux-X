@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2b2b2b"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#333333"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="CamPhish 配置"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Ngrok Token -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ngrok Token (可选)"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextNgrokToken"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="text" />
+
+                <!-- 前置拍照数量 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="前置摄像头拍照数量"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextFrontPhotoCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:text="2" />
+
+                <!-- 后置拍照数量 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="后置摄像头拍照数量"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextBackPhotoCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:text="2" />
+
+                <!-- 前置录像秒数 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="前置摄像头录像秒数"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextFrontVideoSeconds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:text="3" />
+
+                <!-- 后置录像秒数 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="后置摄像头录像秒数"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextBackVideoSeconds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:text="3" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/buttonStart"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="启动"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/buttonStop"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="停止"
+                android:backgroundTint="#F44336"
+                android:textColor="#FFFFFF"
+                android:enabled="false"
+                android:alpha="0.5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonUpdate"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="更新"
+                android:backgroundTint="#FF9800"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/buttonViewFiles"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="查看捕获"
+                android:backgroundTint="#2196F3"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/stopHintText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="程序未运行"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"
+            android:visibility="visible" />
+
+        <!-- 本地隧道控制区域 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonTunnelStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="启动隧道"
+                android:textColor="#2196F3"
+                style="?android:attr/borderlessButtonStyle" />
+
+            <Button
+                android:id="@+id/buttonTunnelStop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="停止隧道"
+                android:textColor="#F44336"
+                style="?android:attr/borderlessButtonStyle" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="创建一个SSH隧道连接到localhost.run"
+            android:textColor="#AAAAAA"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+</ScrollView>

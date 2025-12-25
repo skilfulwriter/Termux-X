@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2b2b2b"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Metasploit 载荷生成器"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#333333"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payload 类型"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <Spinner
+                    android:id="@+id/spinnerType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:minHeight="48dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LHOST (IP 地址)"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextLhost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LPORT (端口)"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextLport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:text="4444" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="输出文件名 (可选)"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <EditText
+                    android:id="@+id/editTextFilename"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:inputType="text"
+                    android:hint="payload"
+                    android:textColorHint="#555555" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#333333"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="高级选项"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payload 模式"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <Spinner
+                    android:id="@+id/spinnerPayload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:minHeight="48dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="连接方式"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <Spinner
+                    android:id="@+id/spinnerCallback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:minHeight="48dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分段模式 (Stager)"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp"/>
+                <Spinner
+                    android:id="@+id/spinnerStager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:minHeight="48dp" />
+                    
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonGenerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="生成 Payload"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+            
+        <Button
+            android:id="@+id/buttonConsole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="启动 MSF 控制台"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+            
+        <Button
+            android:id="@+id/buttonInstall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="安装/更新 Metasploit"
+            android:backgroundTint="#FF9800"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

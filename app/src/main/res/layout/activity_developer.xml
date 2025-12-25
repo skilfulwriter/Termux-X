@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".zerocore.developer.DeveloperActivity">
+
+    <com.billy.android.swipe.SmartSwipeWrapper
+        android:layout_width="match_parent"
+        android:id="@+id/smart_swipe"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            app:swipe_gravity="right|left"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/star_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:background="#15BABA"/>
+            <Button
+                android:id="@+id/like_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:background="#CBECCC"/>
+        </LinearLayout>
+
+
+
+
+    </com.billy.android.swipe.SmartSwipeWrapper>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_ffffff"
+        android:textSize="16sp"
+        android:text="此页面逻辑可能会造成你的数据丢失"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        style="@style/Theme.Termux.Black"
+        android:layout_marginTop="10dp"
+        android:text="创捷软连接files"
+        android:id="@+id/create_files"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        style="@style/Theme.Termux.Black"
+        android:text="启动samba服务"
+        android:id="@+id/samba_create"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        style="@style/Theme.Termux.Black"
+        android:text="测试1"
+        android:id="@+id/test1"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:layout_width="wrap_content"
+        style="@style/Theme.Termux.Black"
+        android:text="测试压缩zip"
+        android:id="@+id/test_zip"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/test_unzip"
+        android:layout_width="wrap_content"
+        android:text="测试解压zip..."
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/test_rlj"
+        android:layout_width="wrap_content"
+        android:text="测试软连接..."
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/adb_connect"
+        android:layout_width="wrap_content"
+        android:text="ADB 连接框"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

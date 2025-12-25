@@ -1,0 +1,330 @@
+plugins {
+    id "com.android.application"
+
+}
+apply plugin: 'kotlin-android'
+
+
+android {
+    compileSdkVersion project.properties.compileSdkVersion.toInteger()
+    // ndkVersion '27.0.12077973'
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+    lintOptions {
+        checkReleaseBuilds false
+    }
+    tasks.withType(JavaCompile) {
+        options.fork = true
+        options.forkOptions.jvmArgs += ["-Duser.language=en"]
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+    aaptOptions {
+        noCompress "apk"
+    }
+    signingConfigs {
+        release {
+            keyAlias System.getenv("KEY_ALIAS") ?: 'phone1'
+            keyPassword System.getenv("KEY_PASSWORD") ?: '654321'
+            storeFile rootProject.file("phone.jks")
+            storePassword System.getenv("STORE_PASSWORD") ?: '123456'
+        }
+        debug {
+            keyAlias System.getenv("KEY_ALIAS") ?: 'phone1'
+            keyPassword System.getenv("KEY_PASSWORD") ?: '654321'
+            storeFile rootProject.file("phone.jks")
+            storePassword System.getenv("STORE_PASSWORD") ?: '123456'
+        }
+    }
+
+    buildFeatures {
+        dataBinding true
+    }
+
+    splits.abi {
+        enable true
+        reset()
+
+        include "arm64-v8a"
+        universalApk false
+    }
+
+    /*  sourceSets {
+          main {
+              jniLibs.srcDirs = ['libs']
+          }
+      }*/
+
+
+    dependencies {
+        def libsuVersion = '5.2.1'
+        implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+        implementation "androidx.annotation:annotation:1.2.0"
+        implementation "androidx.core:core:1.9.0-alpha05"
+        implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+        implementation "androidx.preference:preference:1.1.1"
+        implementation "androidx.viewpager:viewpager:1.0.0"
+        implementation "com.google.guava:guava:31.0.1-jre"
+        implementation 'com.google.code.gson:gson:2.8.6'
+        //网络框架
+        implementation 'com.lzy.net:okgo:3.0.4'
+        //switch Btn
+        implementation 'com.github.iielse:switchbutton:1.0.4'
+
+        implementation 'com.github.getActivity:XXPermissions:11.5'
+        implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
+
+        implementation 'me.laoyuyu.aria:core:3.8.16'
+        annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
+
+        // The core module that provides APIs to a shell
+        implementation "com.github.topjohnwu.libsu:core:${libsuVersion}"
+        // Optional: APIs for creating root services. Depends on ":core"
+        implementation "com.github.topjohnwu.libsu:service:${libsuVersion}"
+        // Optional: Provides remote file system support
+        implementation "com.github.topjohnwu.libsu:nio:${libsuVersion}"
+        // debugImplementation 'com.github.getActivity:Logcat:9.6'
+        implementation 'com.scottyab:rootbeer-lib:0.1.0'
+        //OTG0
+        implementation 'me.jahnen:libaums:0.8.0'
+        implementation 'me.jahnen:libaums-httpserver:0.5.3'
+        implementation 'me.jahnen:libaums-storageprovider:0.5.1'
+        implementation  'uk.co.alt236:usbdeviceenumerator:2.0.0'
+        //webview框架
+        implementation 'com.just.agentweb:agentweb:4.0.2'
+        implementation 'com.just.agentweb:download:4.0.2'
+        //颜色取色器
+        implementation 'com.github.rtugeek:colorseekbar:2.0.3'
+        //图片/视频选择器
+        implementation 'com.lcw.library:imagepicker:2.2.7'
+        //滑动器
+        implementation 'com.billy.android:smart-swipe:1.1.0'
+//compat for android support library
+        implementation 'com.billy.android:smart-swipe-x:1.1.0'
+        //glide
+        implementation 'com.github.bumptech.glide:glide:4.10.0'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+        //状态栏
+        //https://github.com/gyf-dev/ImmersionBar
+        implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+        //Zip解压
+        implementation 'me.testica:codeeditor:1.0.2'
+        // 线性背景
+        implementation 'com.googlecode.plist:dd-plist:1.16'
+        implementation 'com.tananaev:adblib:1.3'
+        implementation 'org.samba.jcifs:jcifs:1.3.3'
+        implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.1'
+        implementation 'org.nanohttpd:nanohttpd:2.3.1'
+        compileOnly group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+        implementation 'com.hzy:un7zip:+'
+
+        //ZFlie
+        implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+        //Avnc
+        implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+
+
+        implementation 'com.mallotec.reb:plugin-locale:1.0.12'
+        implementation "io.noties.markwon:core:$markwonVersion"
+        implementation "io.noties.markwon:ext-strikethrough:$markwonVersion"
+        implementation "io.noties.markwon:linkify:$markwonVersion"
+        implementation "io.noties.markwon:recycler:$markwonVersion"
+
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+        implementation('cn.hotapk:fastandrutils:0.8.0') {
+            exclude group: 'com.android.support'
+        }
+
+        implementation project(":terminal-view")
+        implementation project(":termux-shared")
+//        implementation project(":FHttpServer")
+ //       implementation project(":z_file")
+    }
+
+    defaultConfig {
+        applicationId "com.termux"
+        namespace "com.termux"
+        minSdkVersion project.properties.minSdkVersion.toInteger()
+        targetSdkVersion project.properties.targetSdkVersion.toInteger()
+        versionCode 117
+        versionName "0.118.3.51"
+        
+       // buildConfigField "boolean", "DEBUG", "true"
+
+        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
+        manifestPlaceholders.TERMUX_APP_NAME = "Termux"
+        manifestPlaceholders.TERMUX_API_APP_NAME = "Termux:API"
+        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "Termux:Boot"
+        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "Termux:Float"
+        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "Termux:Styling"
+        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "Termux:Tasker"
+        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "Termux:Widget"
+
+        externalNativeBuild {
+            ndkBuild {
+                cFlags "-std=c11", "-Wall", "-Wextra", "-Werror", "-Os", "-fno-stack-protector", "-Wl,--gc-sections"
+            }
+        }
+
+
+
+        ndk {
+           // abiFilters 'arm64-v8a'
+        }
+
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                // includeCompileClasspath true
+            }
+        }
+
+    }
+
+
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path "src/main/cpp/Android.mk"
+        }
+    }
+
+    lintOptions {
+        disable 'ProtectedPermissions'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+}
+
+dependencies {
+    implementation 'androidx.cardview:cardview:1.0.0'
+//    implementation project(path: ':xh_lib')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation files('libs/commons-logging-1.2.jar')
+    implementation files('libs/commons-net-3.8.0.jar')
+    implementation files('libs/ftplet-api-1.1.1.jar')
+    implementation files('libs/ftpserver-core-1.1.1-edited.jar')
+    implementation files('libs/jlan-5.jar')
+    implementation files('libs/log4j-1.2.17.jar')
+    implementation files('libs/mina-core-2.0.16.jar')
+    implementation files('libs/slf4j-api-1.7.21.jar')
+    implementation files('libs/slf4j-log4j12-1.7.21.jar')
+    implementation files('libs/commons-codec-1.10-rep.jar')
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.robolectric:robolectric:4.4"
+    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+}
+
+task versionName {
+    doLast {
+        print android.defaultConfig.versionName
+    }
+}
+
+def downloadBootstrap(String arch, String expectedChecksum, String version) {
+    def digest = java.security.MessageDigest.getInstance("SHA-256")
+
+    def localUrl = "src/main/cpp/bootstrap-" + arch + ".zip"
+    def file = new File(projectDir, localUrl)
+    if (file.exists()) {
+        def buffer = new byte[8192]
+        def input = new FileInputStream(file)
+        while (true) {
+            def readBytes = input.read(buffer)
+            if (readBytes < 0) break
+            digest.update(buffer, 0, readBytes)
+        }
+        def checksum = new BigInteger(1, digest.digest()).toString(16).padLeft(64, '0')
+        if (checksum == expectedChecksum) {
+            return
+        } else {
+            logger.quiet("Deleting old local file with wrong hash: " + localUrl)
+            file.delete()
+        }
+    }
+
+    def remoteUrl = "https://ghproxy.net/https://github.com/termux/termux-packages/releases/download/bootstrap-" + version + "/bootstrap-" + arch + ".zip"
+    logger.quiet("Downloading " + remoteUrl + " ...")
+
+    file.parentFile.mkdirs()
+    def out = new BufferedOutputStream(new FileOutputStream(file))
+
+    def connection = new URL(remoteUrl).openConnection()
+    connection.setInstanceFollowRedirects(true)
+    def digestStream = new java.security.DigestInputStream(connection.inputStream, digest)
+    out << digestStream
+    out.close()
+
+    def checksum = new BigInteger(1, digest.digest()).toString(16).padLeft(64, '0')
+    if (checksum != expectedChecksum) {
+        file.delete()
+        throw new GradleException("Wrong checksum for " + remoteUrl + ": expected: " + expectedChecksum + ", actual: " + checksum)
+    }
+}
+
+clean {
+    doLast {
+        def tree = fileTree(new File(projectDir, 'src/main/cpp'))
+        tree.include 'bootstrap-*.zip'
+        tree.each { it.delete() }
+    }
+}
+
+task downloadBootstraps() {
+    doLast {
+        def version = "2025.12.14-r1+apt.android-7"
+        downloadBootstrap("aarch64", "0e7d6ff8f99fb8ffe46df3174ec9e86e29491d5241fffc7872ae4c644257cb78", version)
+        downloadBootstrap("arm", "d2d27986de1900c89aa197e24c9c23d991238634e9fe79fb84046a61d5f8c5f2", version)
+        downloadBootstrap("i686", "2987b72ac7a78cb688d22be2d541e22e9fa92fb8566a1007aa58bb62e2482edd", version)
+        downloadBootstrap("x86_64", "3e85b11c0029e5b1a31632d73637f613779aceaf475beeaa8b411fddd09136c8", version)
+    }
+}
+
+    afterEvaluate {
+        android.applicationVariants.all { variant ->
+            variant.preBuildProvider.get().dependsOn(downloadBootstraps)
+        }
+    }
+
+repositories {
+    mavenCentral()
+}

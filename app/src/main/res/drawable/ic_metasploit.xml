@@ -1,0 +1,14 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <!-- 蓝色盾牌背景 -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M12,1L3,5v6c0,5.55 3.84,10.74 9,12c5.16,-1.26 9,-6.45 9,-12V5L12,1z"/>
+    <!-- 白色 M 字 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7,7h2l3,4l3,-4h2v10h-2v-6l-3,4l-3,-4v6H7V7z"/>
+</vector>

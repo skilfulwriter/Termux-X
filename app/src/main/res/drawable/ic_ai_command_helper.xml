@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <!-- AI Robot Icon -->
+    <!-- Antenna -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M12,2c-0.55,0 -1,0.45 -1,1v2h2V3c0,-0.55 -0.45,-1 -1,-1z"/>
+    <!-- Head -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M19,5H5C3.9,5 3,5.9 3,7v10c0,1.1 0.9,2 2,2h14c1.1,0 2,-0.9 2,-2V7C21,5.9 20.1,5 19,5z M19,17H5V7h14V17z"/>
+    <!-- Eyes -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M8,9h2v2H8V9z M14,9h2v2h-2V9z"/>
+    <!-- Mouth -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M8,14h8v2H8V14z"/>
+    <!-- Sparkles/Magic (Optional, to imply 'Assistant' or 'Smart') -->
+    <!-- I'll keep it simple as a clean robot face first -->
+</vector>

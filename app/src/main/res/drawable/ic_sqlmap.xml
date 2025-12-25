@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <!-- 数据库图标 (代表 SQLMap) -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M12,3C7.58,3 4,4.79 4,7c0,2 3,3.68 6.85,3.95L11,11v2.05C7.05,13.32 4,15.01 4,17c0,2.21 3.58,4 8,4s8,-1.79 8,-4c0,-1.99 -3.05,-3.68 -7,-3.95V11l0.15,-0.05C17,10.68 20,9 20,7C20,4.79 16.42,3 12,3z M12,9c-3.6,0 -6.65,-1.2 -7.75,-3C5.35,4.2 8.4,3 12,3s6.65,1.2 7.75,3C18.65,7.8 15.6,9 12,9z"/>
+</vector>

@@ -1,0 +1,6 @@
+{
+    "latestVersion": "0.118.3.51",
+    "downloadUrl": "https://xheishou.com/update/apk/zerotermux/zerotermux.apk",
+    "detailsUrl": "https://xheishou.com/update/zerotermux_details.html",
+    "releaseNotes": "=========v0.118.3.51==========\n\n【本次更新内容】\n\n1. 新增：应用内更新检查\n   • 启动应用时自动检测新版本\n   • 支持在线下载更新\n\n2. 修复：Kali Nethunter KeX 安装问题\n   • 修复 APK 解析错误\n   • 优化安装状态检测\n   • 支持自定义下载源\n\n3. 优化：系统兼容性\n   • 适配更高版本 Android 系统\n   • 优化文件权限处理"
+}

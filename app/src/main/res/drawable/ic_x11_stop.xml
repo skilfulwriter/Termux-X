@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <!-- XFCE Stop Icon -->
+    <!-- Dimmed X Background -->
+    <path
+        android:fillColor="#757575"
+        android:pathData="M20,6.41L17.59,4L12,9.59L6.41,4L4,6.41L9.59,12L4,17.59L6.41,20L12,14.41L17.59,20L20,17.59L14.41,12L20,6.41Z"/>
+    
+    <!-- Dimmed Mouse Body -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="M16,15c0,2.21 -1.79,4 -4,4s-4,-1.79 -4,-4c0,-1.48 0.81,-2.77 2,-3.46V15h4v-3.46C15.19,12.23 16,13.52 16,15z"/>
+    <!-- Dimmed Mouse Ears -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="M10,12c-0.83,0 -1.5,-0.67 -1.5,-1.5S9.17,9 10,9s1.5,0.67 1.5,1.5S10.83,12 10,12z M14,12c-0.83,0 -1.5,-0.67 -1.5,-1.5S13.17,9 14,9s1.5,0.67 1.5,1.5S14.83,12 14,12z"/>
+    <!-- Dimmed Mouse Tail -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="M8.5,16C7,16 6,15 5,13.5"
+        android:strokeColor="#424242"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"/>
+
+    <!-- Red Stop/Prohibited Badge -->
+    <path
+        android:fillColor="#F44336"
+        android:pathData="M19,13c-3.31,0 -6,2.69 -6,6s2.69,6 6,6 6,-2.69 6,-6 -2.69,-6 -6,-6z M19,23c-2.21,0 -4,-1.79 -4,-4 0,-0.88 0.29,-1.68 0.77,-2.33l5.56,5.56C20.68,22.71 19.88,23 19,23z M22.23,21.33l-5.56,-5.56C17.32,15.29 18.12,15 19,15c2.21,0 4,1.79 4,4 0,0.88 -0.29,1.68 -0.77,2.33z"/>
+</vector>

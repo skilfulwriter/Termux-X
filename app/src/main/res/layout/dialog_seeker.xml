@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2b2b2b"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="警告：此工具仅用于教育目的。非法使用需自行承担责任！"
+            android:textColor="#FF0000"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#333333"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="选择模板"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerTemplates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/shape_line_new_liang"
+                    android:minHeight="48dp" />
+
+                <TextView
+                    android:id="@+id/textViewInstructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="请选择一个模板以继续..."
+                    android:textSize="14sp"
+                    android:textColor="#AAAAAA" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#333333"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="模板参数配置"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- NearYou template -->
+                <LinearLayout
+                    android:id="@+id/nearYouView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="无需额外配置"
+                        android:textColor="#AAAAAA"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <!-- Google Drive template -->
+                <LinearLayout
+                    android:id="@+id/googleDriveView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="跳转后的 链接"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextGdriveUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                </LinearLayout>
+
+                <!-- Custom Link Preview template -->
+                <LinearLayout
+                    android:id="@+id/customLinkPreviewView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="网站名称"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextSitename"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="标题"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="图片链接"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextImageUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="描述"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textMultiLine"
+                        android:minLines="2" />
+
+                </LinearLayout>
+
+                <!-- Telegram template -->
+                <LinearLayout
+                    android:id="@+id/telegramView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="群组标题"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextTelegramTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="群组图片链接"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextTelegramImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="描述"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextTelegramDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textMultiLine"
+                        android:minLines="2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="成员数量"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextMembers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="在线成员数量"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextOnline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <!-- WhatsApp template -->
+                <LinearLayout
+                    android:id="@+id/whatsAppView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="群组标题"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextWhatsAppTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="群组图片链接"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextWhatsAppImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                </LinearLayout>
+
+                <!-- WhatsApp Redirect template -->
+                <LinearLayout
+                    android:id="@+id/whatsAppRedirectView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="群组标题"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextWhatsAppRedirectTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="群组图片链接"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextWhatsAppRedirectImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="重定向链接 (WhatsApp群组链接)"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextRedirect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                </LinearLayout>
+
+                <!-- Zoom template -->
+                <LinearLayout
+                    android:id="@+id/zoomView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="无需额外配置"
+                        android:textColor="#AAAAAA"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <!-- Google ReCaptcha template -->
+                <LinearLayout
+                    android:id="@+id/googleRecaptchaView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="重定向链接"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextReCaptchaRedirect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="显示链接 (可选)"
+                        android:textColor="#AAAAAA"
+                        android:textSize="12sp"/>
+                    <EditText
+                        android:id="@+id/editTextDisplayUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_line_new_liang"
+                        android:padding="8dp"
+                        android:textColor="#FFFFFF"
+                        android:inputType="textUri" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Port Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本地端口 (默认: 8080)"
+            android:textColor="#AAAAAA"
+            android:textSize="12sp"/>
+        <EditText
+            android:id="@+id/editTextLocalPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/shape_line_new_liang"
+            android:padding="8dp"
+            android:textColor="#FFFFFF"
+            android:inputType="number"
+            android:text="8080" />
+
+        <!-- Control Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/buttonStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="启动"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/buttonStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="停止"
+                android:backgroundTint="#F44336"
+                android:textColor="#FFFFFF"
+                android:enabled="false"
+                android:alpha="0.5" />
+
+            <Button
+                android:id="@+id/buttonUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="更新"
+                android:backgroundTint="#FF9800"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+        
+        <TextView
+            android:id="@+id/stopHintText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请先启动 Seeker 才能停止"
+            android:textSize="14sp"
+            android:textColor="#AAAAAA"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:visibility="visible" />
+
+        <!-- Tunnel Controls -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonTunnelStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="启动隧道"
+                android:backgroundTint="#2196F3"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/buttonTunnelStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="停止隧道"
+                android:backgroundTint="#F44336"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="使用 localhost.run 暴露本地端口"
+            android:textSize="12sp"
+            android:textColor="#AAAAAA"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+</ScrollView>

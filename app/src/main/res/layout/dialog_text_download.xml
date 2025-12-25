@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_r_3dp_161823_left"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_height="wrap_content">
+
+
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:textSize="15sp"
+           android:textStyle="bold"
+           android:id="@+id/service_name"
+           android:textColor="@color/color_48baf3"
+           android:text="@string/服务器"
+           android:layout_height="wrap_content"/>
+
+       <ImageView
+           android:layout_width="20dp"
+           android:layout_alignParentRight="true"
+           android:src="@mipmap/chongzhi_ico"
+           android:id="@+id/chongzhi_img"
+           android:visibility="gone"
+           android:layout_centerVertical="true"
+           android:layout_height="20dp"/>
+
+
+   </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:id="@+id/recycler_view"
+            android:layout_height="390dp"/>
+
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/pro"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

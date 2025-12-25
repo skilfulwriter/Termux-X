@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="internalOnly"
+    android:sharedUserId="${TERMUX_PACKAGE_NAME}"
+    android:sharedUserLabel="@string/shared_user_label">
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="true" />
+
+    <permission
+        android:name="${TERMUX_PACKAGE_NAME}.permission.RUN_COMMAND"
+        android:description="@string/permission_run_command_description"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/permission_run_command_label"
+        android:protectionLevel="dangerous" />
+
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.DUMP" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- Duplicates removed -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Duplicates removed -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+   <!-- android:debuggable="true"-->
+    <application
+        android:name=".app.TermuxApplication"
+        android:allowBackup="true"
+        android:banner="@drawable/banner"
+        android:extractNativeLibs="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TermuxApp.DayNight.DarkActionBar"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+        <service
+            android:name=".zerocore.settings.services.TimerExeService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity
+            android:name=".zerocore.settings.TimerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.settings.ZTInstallActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.settings.ZTOnlineServerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.settings.ZTAboutActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.settings.ContainerSettingsMainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.settings.ZeroTermuxSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name=".zerocore.settings.ZeroTermuxX11Settings"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name=".zerocore.settings.ZtSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <uses-library
+            android:name="org.apache.ftpserver"
+            android:required="false" />
+
+        <activity
+            android:name=".zerocore.developer.DeveloperActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".zerocore.activity.EditTextActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="com.termux.zerocore.activity.edittextactivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".zerocore.activity.ImageActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <!--
+         This (or rather, value 2.1 or higher) is needed to make the Samsung Galaxy S8
+             mark the app with "This app is optimized to run in full screen."
+        -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="10.0" />
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+        <activity
+            android:name=".app.TermuxActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.TermuxActivity.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
+        <activity-alias
+            android:name=".HomeActivity"
+            android:targetActivity=".app.TermuxActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+            <!-- Launch activity automatically on boot on Android Things devices -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.IOT_LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".app.activities.HelpActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:parentActivityName=".app.TermuxActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.activity.UncaughtExceptionHandlerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.activity.SwitchActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.activity.BackNewActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.activity.FontActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.utermux_windows.qemu.activity.RunWindowActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.activity.WebViewActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".zerocore.scrcpy.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".app.activities.SettingsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_termux_settings"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <provider
+            android:name="com.github.mjdev.libaums.storageprovider.UsbDocumentProvider"
+            android:authorities="${applicationId}.usb.documents"
+            tools:replace="android:authorities"
+            android:enabled="@bool/isAtLeastKitKat"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name="com.zzti.fengyongge.imagepicker.PhotoPreviewActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.zzti.fengyongge.imagepicker.PhotoSelectorActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.lcw.library.imagepicker.activity.ImagePickerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.lcw.library.imagepicker.activity.ImagePreActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="com.lcw.library.imagepicker.activity.BaseActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".shared.activities.ReportActivity"
+            android:documentLaunchMode="intoExisting"
+            android:theme="@style/Theme.AppCompat.TermuxReportActivity" />
+        <activity
+            android:name=".filepicker.TermuxFileReceiverActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/opne_in_zerotermux"
+            android:noHistory="true"
+            android:resizeableActivity="true"
+            android:taskAffinity="${TERMUX_PACKAGE_NAME}.filereceiver"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+            <!-- Accept multiple file types when sending. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/*" />
+                <data android:mimeType="audio/*" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="message/*" />
+                <data android:mimeType="multipart/*" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+            <!-- Accept multiple file types to let Termux be usable as generic file viewer. -->
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/*" />
+                <data android:mimeType="audio/*" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".filepicker.TermuxDocumentsProvider"
+            android:authorities="${TERMUX_PACKAGE_NAME}.documents"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${TERMUX_PACKAGE_NAME}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <service
+            android:name=".app.TermuxService"
+            android:exported="false" />
+        <service android:name=".zerocore.scrcpy.Scrcpy" />
+        <service
+            android:name=".app.RunCommandService"
+            android:exported="true"
+            android:permission="${TERMUX_PACKAGE_NAME}.permission.RUN_COMMAND">
+            <intent-filter>
+                <action android:name="${TERMUX_PACKAGE_NAME}.RUN_COMMAND" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".app.TermuxOpenReceiver" />
+        <service android:name=".zerocore.socket.ZTSocketService"/>
+
+        <service android:name=".zerocore.ftp.FsService" />
+        <service
+            android:name=".zerocore.ftp.new_ftp.services.FtpService"
+            android:exported="true" />
+        <service
+            android:name=".zerocore.ftp.new_ftp.services.MyTileService"
+            android:icon="@drawable/ic_launcher" />
+
+        <receiver
+            android:name=".shared.activities.ReportActivity$ReportActivityBroadcastReceiver"
+            android:exported="false" />
+
+        <provider
+            android:name=".app.TermuxOpenReceiver$ContentProvider"
+            android:authorities="${TERMUX_PACKAGE_NAME}.files"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:readPermission="android.permission.permRead" /> <!-- Version < 3.0. DeX Mode and Screen Mirroring support -->
+        <meta-data
+            android:name="com.samsung.android.keepalive.density"
+            android:value="true" /> <!-- Version >= 3.0. DeX Dual Mode support -->
+        <meta-data
+            android:name="com.samsung.android.multidisplay.keep_process_alive"
+            android:value="true" />
+        <meta-data
+            android:name="com.sec.android.support.multiwindow"
+            android:value="true" />
+    </application>
+
+</manifest>

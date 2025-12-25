@@ -1,0 +1,37 @@
+buildscript {
+    ext.kotlin_version = '1.9.20'
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url "https://repo.eclipse.org/content/repositories/paho-snapshots/" }
+        //maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { setUrl("https://maven.aliyun.com/repository/public") }
+        maven { setUrl("https://maven.aliyun.com/repository/google") }
+
+    }
+    dependencies {
+
+        classpath "com.android.tools.build:gradle:8.3.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url "https://repo.eclipse.org/content/repositories/paho-snapshots/" }
+        //maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { setUrl("https://maven.aliyun.com/repository/public") }
+        maven { setUrl("https://maven.aliyun.com/repository/google") }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

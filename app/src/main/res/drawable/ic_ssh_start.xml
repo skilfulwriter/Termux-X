@@ -1,0 +1,40 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <!-- SSH Start Icon: Laptop with SSH Terminal -->
+    <!-- Laptop Base -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M2,18l1,-1h18l1,1v2H2V18z"/>
+    <!-- Laptop Lid (Frame) -->
+    <path
+        android:fillColor="#9E9E9E"
+        android:pathData="M3,4h18v13H3V4z"/>
+    <!-- Screen (Black) -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M5,6h14v9H5V6z"/>
+    
+    <!-- SSH Logo Group (Green for Start) -->
+    <!-- Terminal Window -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M6,8h5v4H6V8z M6,8.5h5v0.5H6z"/>
+    <!-- Terminal Prompt >_ -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M6.5,9.5l1,1l-1,1z"/>
+    
+    <!-- Text "SSH" (Simulated) -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M12,9h3v1h-3z M12,10.5h3v1h-3z M16,9h1v3h-1z"/>
+    <!-- Better Text "SSH" -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M12,9 h2 v0.5 h-1.5 v0.5 h1.5 v0.5 h-2 v-1.5 z
+                          M14.5,9 h2 v0.5 h-1.5 v0.5 h1.5 v0.5 h-2 v-1.5 z
+                          M17,9 v1.5 h0.5 v-0.75 h1 v0.75 h0.5 v-1.5 h-0.5 v0.5 h-1 v-0.5 z"/>
+</vector>
