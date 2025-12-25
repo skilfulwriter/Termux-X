@@ -85,6 +85,7 @@
 <img src="img/shell/1.jpg" height="400" />
 <img src="img/shell/2.jpg" height="400" />
 </div>
+
 ## 📸 应用预览 (Screenshots)
 
 ### Termux-X 界面
@@ -104,6 +105,9 @@
 
 ### 开发者资源
 *   **GitHub 仓库**: [Termux-X](https://github.com/skilfulwriter/Termux-X)
+
+### 🤝 Termux-X 联系方式
+*   **X黑手技术交流频道**: [点击加入](https://pd.qq.com/s/1gc43z49k?b=9) (强烈推荐)
 
 ---
 
@@ -133,6 +137,7 @@
 *   **ZeroTermux 下载 (旧版存档)**: [链接](https://od.ixcmstudio.cn/repository/main/ZeroTermux/)
 
 ### 🤝 联系方式 (ZeroTermux 社区)
+*   **X黑手技术交流频道**: [点击加入](https://pd.qq.com/s/1gc43z49k?b=9) (强烈推荐)
 *   潜水群: 248022558 (推荐)
 *   ①群: 1062337587
 *   ②群: 885832352
