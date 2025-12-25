@@ -6,38 +6,91 @@
 
 **Termux-X** 是一款基于 **ZeroTermux** 进行二次开发（二开）的增强版终端模拟器应用。它保留了 ZeroTermux 的强大功能，并在此基础上进行了深度定制与优化，旨在为移动端渗透测试人员和极客提供更便捷、更强大的操作环境。
 
-### 🌟 核心亮点
+## 🌟 核心亮点
 
-*   **一键免 Root 运行 Kali NetHunter**：这是 Termux-X 最具杀伤力的功能。用户无需对手机进行 Root 操作，即可通过内置的一键脚本/功能，快速启动并运行完整的 Kali NetHunter 渗透测试环境，极大降低了移动安全审计的门槛。
-*   **深度定制 UI**：全新的 Material Design 风格图标与界面设计，不仅美观，更符合操作直觉。
-*   **AI 智能助手集成**：内置 AI 辅助功能，支持自然语言转 Shell 命令，不仅能解释报错，还能辅助生成 Payload 和进行代码审计。
-*   **丰富工具箱**：预装并集成了 Metasploit, Sqlmap, Seeker 等常用黑客工具的快捷入口。
+### 🔥 一键免Root运行完整Kali NetHunter
+这是Termux-X最具革新性的突破。我们解决了移动端渗透测试的核心痛点——**无需Root手机**，仅需一次点击，即可在您的智能手机上部署并启动功能完整的Kali NetHunter渗透测试环境。这一设计彻底改变了移动安全审计的可用性，让专业级的安全测试能力真正触手可及。
+
+![Kali NetHunter](img/nethunter/1.jpg)
+*(更多预览图请见下文)*
+
+### 🤖 内置AI智能安全助手
+深度整合的AI辅助引擎彻底革新了移动端安全测试的工作流。我们实现了**自然语言到专业Shell命令**的无缝转换——只需用日常语言描述您的需求，系统即可智能生成精准的可执行命令。
+
+**核心功能升级：**
+
+*   **🔍 智能错误诊断系统**
+    *   **支持 一键AI报错分析**：终端输出的任何错误信息，均可通过快捷操作实时发送至AI引擎。
+    *   **获得 结构化解决方案**：不仅解释错误原因，更提供可执行的修复步骤和预防建议。
+    *   **上下文智能关联**：AI自动分析命令历史与输出关系，提供针对性的调试建议。
+
+*   **⚡ 渗透测试智能辅助**
+    *   **自动化Payload生成**：根据目标环境参数，智能生成优化的攻击载荷。
+    *   **代码审计助手**：实时分析代码片段，识别潜在漏洞和安全风险。
+    *   **攻击链智能构建**：协助规划渗透测试流程，推荐最优工具组合。
+
+### 📦 预置专业工具库
+开箱即享专业级工具集，预装并深度集成了 **Metasploit**、**Sqlmap**、**Seeker** 等核心安全测试工具。我们提供了统一的工具入口与管理系统，让复杂的安全工具调用变得简单高效。
 
 ---
 
-## 🚀 近期更新与修改内容
+## 🖥️ 桌面环境支持
 
-针对 **Termux-X** 客户端应用进行了深度的功能增强与体验优化：
+### Termux原生图形化界面
+*   **一键启动**：深度整合Termux-X11与XFCE4桌面环境。点击“启动桌面”即可自动完成X11服务配置、环境变量设置及XFCE4桌面启动全过程，告别繁琐的手动命令输入。
+*   **智能联动**：自动唤起Termux-X11应用，实现命令行与图形界面的无缝衔接与流畅切换。
 
-### 🛠️ 品牌与界面重塑
-*   **全局品牌更名**：应用名称正式变更为 **Termux-X**。已完成启动页、设置菜单、关于页面及主界面标题的文本替换。
-*   **UI 布局调整**：
-    *   **版块重组**：调整了主页功能版块的顺序，将 **X11 功能区** 移动至 **Kali NetHunter** 版块下方，**常用功能**上方。
-    *   **界面精简**：优化了 X11 功能区按钮布局，移除了冗余按钮。
+### Kali NetHunter图形化桌面
+*   **一键KeX连接**：内置完整的NetHunter KeX支持架构。点击“启动图形化”将自动在后台启动KeX服务，并智能跳转至NetHunter KeX客户端，即刻接入完整的Kali Linux桌面环境。
+*   **智能依赖检测**：自动检测NetHunter KeX客户端安装状态，如未安装将提供清晰的引导路径，确保体验的完整性。
 
-### 🖥️ 桌面环境支持
-*   **Termux 原生图形化界面**：
-    *   **一键启动**：深度集成了 **Termux-X11** 与 **XFCE4** 桌面环境。
-    *   **智能联动**：自动唤起 Termux-X11 应用，实现从命令行到图形界面的无缝切换。
-*   **Kali NetHunter 图形化桌面**：
-    *   **一键 KeX 连接**：内置对 **NetHunter KeX** 的支持，点击即可启动服务并跳转客户端。
-    *   **依赖检测**：智能检测 NetHunter KeX 客户端安装状态。
+![Desktop Environment](img/x/1.jpg)
 
-### ⚡ 稳定性与功能增强
-*   **会话管理升级**：重构了“会话”按钮交互，支持快捷选择“新建 Termux Shell”或“Kali Shell”。
-*   **X11 桌面启动优化**：修复启动脚本竞态条件，增加等待机制；优化命令连接符提高容错率。
-*   **进程管理修复**：使用 `pkill` 精准查杀桌面进程，解决残留问题。
-*   **崩溃修复**：修复主页初始化空指针异常。
+---
+
+## 🚀 功能增强
+
+### 智能会话管理系统
+*   **交互重构**：彻底重新设计了“会话”按钮的交互逻辑，引入现代化 PopupMenu 菜单设计。
+*   **快捷切换**：支持快速选择“新建Termux Shell”或直接进入“Kali Shell”会话，实现不同工作环境的瞬时切换。
+
+---
+
+## 📸 应用预览 (Screenshots)
+
+### Termux-X 界面
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<img src="img/Termux-X/1.jpg" height="400" />
+<img src="img/Termux-X/2.jpg" height="400" />
+<img src="img/Termux-X/3.jpg" height="400" />
+<img src="img/Termux-X/4.jpg" height="400" />
+</div>
+
+### Kali NetHunter 环境
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<img src="img/nethunter/2.jpg" height="400" />
+<img src="img/nethunter/3.jpg" height="400" />
+<img src="img/nethunter/4.jpg" height="400" />
+<img src="img/nethunter/5.jpg" height="400" />
+</div>
+
+### 桌面环境与工具
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<img src="img/x/2.jpg" height="400" />
+<img src="img/x/3.jpg" height="400" />
+<img src="img/x/4.jpg" height="400" />
+</div>
+
+---
+
+## 📥 下载与资源 (Download)
+
+### 官方下载地址
+*   **Termux-X APP**: [点击下载](http://xheishou.com/download.html)
+*   **X黑手社区**: [访问社区](http://xheishou.com/)
+
+### 开发者资源
+*   **GitHub 仓库**: [Termux-X](https://github.com/skilfulwriter/Termux-X)
 
 ---
 
