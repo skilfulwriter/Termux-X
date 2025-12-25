@@ -97,7 +97,18 @@
 </div>
 ---
 
-## 📥 下载与资源 (Download)
+## � 更新日志 (Changelog)
+
+### v0.118.3.50 (2025.12.20)
+*   首次发布 基于ZeroTermux 定制版Termux-X
+*   集成 Kali Nethunter 工具集
+*   添加 Seeker 地理位置追踪工具
+*   添加 AI命令生成，命令解释工具集
+*   集成 CamPhish 摄像头钓鱼工具
+
+---
+
+## �� 下载与资源 (Download)
 
 ### 官方下载地址
 *   **Termux-X APP**: [点击下载](http://xheishou.com/download.html)
