@@ -1,153 +1,102 @@
-# 联系方式
+# Termux-X
 
-潜水群248022558（推荐先加）
-①群1062337587
-②群885832352
-# ZeroTermux
+**基于 ZeroTermux 的深度定制与增强版终端模拟器**
 
-<img src="https://raw.githubusercontent.com/hanxinhao000/ZeroTermux/main/img/6c5478a95ca60212eaee2f71f3e9f838_720.jpg" height="500" width="500">
-<img src="https://raw.githubusercontent.com/hanxinhao000/ZeroTermux/main/img/95d76c74cd49693d074d2eda75d20a03_720.jpg" height="500" width="500">
+## 📖 项目简介
 
-<img src="https://raw.githubusercontent.com/hanxinhao000/ZeroTermux/main/img/Screenshot_20210701-120322.jpg" height="720" width="360"><img src="https://raw.githubusercontent.com/hanxinhao000/ZeroTermux/main/img/Screenshot_20210620-091454.jpg"  height="720" width="360">
+**Termux-X** 是一款基于 **ZeroTermux** 进行二次开发（二开）的增强版终端模拟器应用。它保留了 ZeroTermux 的强大功能，并在此基础上进行了深度定制与优化，旨在为移动端渗透测试人员和极客提供更便捷、更强大的操作环境。
 
-## 内部通道实现的X11 aar
-https://github.com/hanxinhao000/ZeroTermux-X11-aar
+### 🌟 核心亮点
 
-# DOWNLOAD APK
-## 不想自行编译的小伙版可下载已经编译好的版本(不要直接点击,复制地址在浏览器地址栏打开)：
+*   **一键免 Root 运行 Kali NetHunter**：这是 Termux-X 最具杀伤力的功能。用户无需对手机进行 Root 操作，即可通过内置的一键脚本/功能，快速启动并运行完整的 Kali NetHunter 渗透测试环境，极大降低了移动安全审计的门槛。
+*   **深度定制 UI**：全新的 Material Design 风格图标与界面设计，不仅美观，更符合操作直觉。
+*   **AI 智能助手集成**：内置 AI 辅助功能，支持自然语言转 Shell 命令，不仅能解释报错，还能辅助生成 Payload 和进行代码审计。
+*   **丰富工具箱**：预装并集成了 Metasploit, Sqlmap, Seeker 等常用黑客工具的快捷入口。
 
-https://od.ixcmstudio.cn/repository/main/ZeroTermux/
+---
 
-## ZeroTermux 签名文件(与Utermux共用同一个签名)
-https://github.com/hanxinhao000/Termux-app-UpgradedVersion/tree/master/%E7%AD%BE%E5%90%8D%E6%96%87%E4%BB%B6
+## 🚀 近期更新与修改内容
 
-## 软件意图(Software intent)
+针对 **Termux-X** 客户端应用进行了深度的功能增强与体验优化：
 
-##  ZeroTermux 是根据 Termux 二次开发的一个非盈利性的软件 (ZeroTermux is a non-profit software developed based on Termux)
+### 🛠️ 品牌与界面重塑
+*   **全局品牌更名**：应用名称正式变更为 **Termux-X**。已完成启动页、设置菜单、关于页面及主界面标题的文本替换。
+*   **UI 布局调整**：
+    *   **版块重组**：调整了主页功能版块的顺序，将 **X11 功能区** 移动至 **Kali NetHunter** 版块下方，**常用功能**上方。
+    *   **界面精简**：优化了 X11 功能区按钮布局，移除了冗余按钮。
 
-## 语言环境(Language)
+### 🖥️ 桌面环境支持
+*   **Termux 原生图形化界面**：
+    *   **一键启动**：深度集成了 **Termux-X11** 与 **XFCE4** 桌面环境。
+    *   **智能联动**：自动唤起 Termux-X11 应用，实现从命令行到图形界面的无缝切换。
+*   **Kali NetHunter 图形化桌面**：
+    *   **一键 KeX 连接**：内置对 **NetHunter KeX** 的支持，点击即可启动服务并跳转客户端。
+    *   **依赖检测**：智能检测 NetHunter KeX 客户端安装状态。
 
-## 中文 English (Chinese English)
+### ⚡ 稳定性与功能增强
+*   **会话管理升级**：重构了“会话”按钮交互，支持快捷选择“新建 Termux Shell”或“Kali Shell”。
+*   **X11 桌面启动优化**：修复启动脚本竞态条件，增加等待机制；优化命令连接符提高容错率。
+*   **进程管理修复**：使用 `pkill` 精准查杀桌面进程，解决残留问题。
+*   **崩溃修复**：修复主页初始化空指针异常。
 
-# 区别
+---
 
-1.备份恢复
-2.容器切换
-3.源功能切换
-4.linux发行 (ubuntu kali..)
-5.等等
+## ℹ️ 关于 ZeroTermux (本项目基础)
 
+**ZeroTermux** 是根据 Termux 二次开发的一个非盈利性的软件。Termux-X 继承了 ZeroTermux 的优秀特性。
+(ZeroTermux is a non-profit software developed based on Termux.)
 
-# the difference
+### 功能区别 (相比官方 Termux)
+1.  **备份恢复**：支持快速备份和恢复容器数据。
+2.  **容器切换**：多容器管理功能。
+3.  **Linux 发行版**：内置 Ubuntu, Kali 等发行版的一键安装。
+4.  **源管理**：内置清华源与北京源切换（针对国内网络环境优化）。
 
-1. Backup and recovery
-2. Container switching
-3. Source function switching
-4. Linux distribution (ubuntu kali...)
-5. Other
+### ⚠️ 免责声明 (Statement)
 
-## 默认源为 清华源 与 北京源(需手动切换[针对国内用户,国外用户请使用官方版本!])[地址](https://github.com/termux/termux-app)
+**ZeroTermux 及 Termux-X 所有功能只能用于个人学习交流使用，不得用于商业用途及非法用途！**
 
-## The default source is Tsinghua source and Beijing source (need to switch manually [for domestic users, foreign users please use the official version!]) [Address](https://github.com/termux/termux-app)
+1.  本软件为开源软件，遵循 GPL v2.0 协议。
+2.  软件内涉及的图标及字体均来源于互联网（如阿里巴巴矢量图标库），版权归原作者所有。
+3.  **风险提示**：软件内使用的恢复包、数据包、工具脚本等均来源于互联网或社区贡献，作者无法控制其内容。使用本软件可能会直接或间接对您的设备造成损害（如数据丢失），请用户自行承担风险和法律责任。
+4.  如有侵权请联系删除。
 
-##  在使用一定程度之后,极力建议你过渡到官方termux[入门之后开始使用](https://github.com/termux/termux-app)
+### 🔗 原项目与相关链接
+*   **Termux 官方**: [GitHub](https://github.com/termux/termux-app)
+*   **ZeroTermux 签名文件**: [GitHub Link](https://github.com/hanxinhao000/Termux-app-UpgradedVersion/tree/master/%E7%AD%BE%E5%90%8D%E6%96%87%E4%BB%B6)
+*   **ZeroTermux 下载 (旧版存档)**: [链接](https://od.ixcmstudio.cn/repository/main/ZeroTermux/)
 
-## After a certain level of use, it is strongly recommended that you transition to the official termux [start using after getting started] (recommended)
+### 🤝 联系方式 (ZeroTermux 社区)
+*   潜水群: 248022558 (推荐)
+*   ①群: 1062337587
+*   ②群: 885832352
 
-## 原作者链接(Original author link)
+---
 
-# [点击访问(Go To)](https://github.com/termux/termux-app)
+## 📚 引用与致谢 (Credits)
 
-## 阿里巴巴 ico 访问链接(Alibaba ico access link)
+本项目（及 ZeroTermux）引用了以下优秀的开源项目，感谢所有作者的贡献：
 
-# [点击访问(Go To)](https://www.iconfont.cn/)
+*   [termux-app](https://github.com/termux/termux-app)
+*   [termux-tasker](https://github.com/termux/termux-tasker)
+*   [termux-api](https://github.com/termux/termux-api)
+*   [termux-styling](https://github.com/termux/termux-styling)
+*   [termux-packages](https://github.com/termux/termux-packages)
+*   [ImagePicker](https://github.com/Lichenwei-Dev/ImagePicker)
+*   [android-vshell](https://github.com/BryleHelll/android-vshell)
+*   [AgentWeb](https://github.com/Justson/AgentWeb)
+*   [XXPermissions](https://github.com/getActivity/XXPermissions)
+*   [libaums](https://github.com/magnusja/libaums)
+*   [ColorSeekBar](https://github.com/rtugeek/ColorSeekBar)
+*   [Glide](https://github.com/bumptech/glide)
+*   [ttyd](https://github.com/tsl0922/ttyd)
+*   [filebrowser](https://github.com/filebrowser/filebrowser)
+*   [ImmersionBar](https://github.com/gyf-dev/ImmersionBar)
+*   [FNetServer](https://github.com/570622566/FNetServer)
+*   [codeeditor](https://github.com/testica/codeeditor)
 
-# 声明
+*(列表可能不完全，如有遗漏请见谅)*
 
- ZeroTermux所有功能只能用于个人学习交流使用，不得用于商业用途!以及非法用途!
+---
 
-        1.本软件(ZeroTermux)为开源软件,你可以自由分发、复制、更改,但请遵循GPL协议!
-        2.软件遵循GPL协议(http://www.opensource.org/licenses/gpl-2.0.php)
-        3.本软件(ZeroTermux)的所有功能均为学习交流使用,切勿商用,如用户(使用ZeroTermux用户)的意外操作、有意操作、无意操作等由用户承担!
-        4.本软件(ZeroTermux)由第一条例一样为免费学习交流使用，软件内涉及的图标以及字体均来源于互联网。
-         4.1.字体为Android默认字体,如使用其他字体请用户(使用ZeroTermux用户)承担所有风险以及法律责任。
-         4.2.图标使用为阿里巴巴ICO公用图库，使用该图标的原则是学习与交流,并非商用,如有侵权立即删除。
-        5.在本软件(ZeroTermux)内使用的的恢复包、数据包、zip包等都有使用风险，切全部都来源于互联网，请用户酌情使用,如有造成无法挽回的损失,请用户承担风险。
-        6.所有恢复包、数据包、zip包、模块包,ZeroTermux不能控制其内容,如有包内侵权本软件作者不承担任何责任，均由恢复包、数据包、zip包制作者承担(tar.gz备份功能法律声明)。
-        7.感谢所有该项目所应用到功能的作者。
-        8.使用ZeroTermux会有直接或间接的损害你的设备,如有造成无法挽回的损失由用户承担,本软件以及作者不承担任何法律等责任
-        
- # statement
- 
-  All functions of ZeroTermux can only be used for personal learning and communication, not for commercial use! and illegal use!
-
-        1. This software (ZeroTermux) is open source software, you can freely distribute, copy, and change, but please follow the GPL agreement!
-        2. The software follows the GPL agreement (http://www.opensource.org/licenses/gpl-2.0.php)
-        3. All the functions of this software (ZeroTermux) are for learning and communication use, do not use commercially, such as accidental operations, intentional operations, unintentional operations, etc. of the user (users who use ZeroTermux) are borne by the user!
-        4. This software (ZeroTermux) is used for free learning and communication as in the first regulation. The icons and fonts involved in the software are all from the Internet. 
-         4.1. The font is the Android default font. If you use other fonts, please users (users using ZeroTermux) bear all risks and legal responsibilities. 
-         4.2. The icon is used as the public library of Alibaba ICO. The principle of using the icon is for learning and communication, not for commercial use. If there is any infringement, it will be deleted immediately. 
-        5. The recovery packages, data packages, zip packages, etc. used in this software (ZeroTermux) are all at risk. All of them are from the Internet. Please use it at your discretion. If any irreparable loss is caused, the user shall bear the risk. . 
-        6. All recovery packages, data packages,module packages, and zip packages ZeroTermux cannot control their content. If there is any infringement in the package, the author of this software does not bear any responsibility, and the creator of the recovery package, data package, and zip package shall bear the responsibility (tar.gz backup function law statement). 
-        7. Thanks to all the authors of the functions applied to this project. 
-        8.Using ZeroTermux will directly or indirectly damage your equipment. If there is any irreparable loss, the user shall bear the responsibility of the software and the author."
-
-## 使用项目:
-## use item:
-https://github.com/termux/termux-app
-
-https://github.com/termux/termux-tasker
-
-https://github.com/termux/termux-api
-
-https://github.com/termux/termux-styling
-
-https://github.com/termux/termux-packages
-
-https://github.com/termux/termux-styling
-
-https://github.com/Lichenwei-Dev/ImagePicker
-
-https://github.com/BryleHelll/android-vshell
-
-https://github.com/Justson/AgentWeb
-
-https://github.com/getActivity/XXPermissions
-
-https://github.com/magnusja/libaums
-
-https://github.com/rtugeek/ColorSeekBar
-
-https://github.com/jeasonlzy/ImagePicker
-
-https://github.com/bumptech/glide
-
-https://github.com/tsl0922/ttyd
-
-https://github.com/filebrowser/filebrowser
-
-https://www.iconfont.cn/
-
-https://github.com/ppareit/swiftp
-
-https://github.com/gyf-dev/ImmersionBar
-
-https://github.com/570622566/FNetServer
-
-https://github.com/testica/codeeditor
-
-
-## ZeroTermux鸣谢所有在此项目当中引用的作者，项目展示可能不完全，请谅解。
-## ZeroTermux thanks all the authors cited in this project, the project presentation may not be complete, please understand.
-
-## 如果项目对你有用，请支持下吧~~~
-
-<img src="https://raw.githubusercontent.com/hanxinhao000/ZeroTermux/main/img/alipay.png" height="360" width="360"><img src="https://raw.githubusercontent.com/hanxinhao000/ZeroTermux/main/img/wechat.png" height="360" width="360">
-
-
-
- 
- 
-
-
-
+**如果项目对你有用，请支持一下原作者和 Termux 社区！**
