@@ -11,7 +11,11 @@
 ### 🔥 一键免Root运行完整Kali NetHunter
 这是Termux-X最具革新性的突破。我们解决了移动端渗透测试的核心痛点——**无需Root手机**，仅需一次点击，即可在您的智能手机上部署并启动功能完整的Kali NetHunter渗透测试环境。这一设计彻底改变了移动安全审计的可用性，让专业级的安全测试能力真正触手可及。
 
-![Kali NetHunter](img/nethunter/1.jpg)
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<img src="img/nethunter/1.jpg" height="400" />
+<img src="img/nethunter/2.jpg" height="400" />
+</div>
+ 
  
 ### 🤖 内置AI智能安全助手
 深度整合的AI辅助引擎彻底革新了移动端安全测试的工作流。我们实现了**自然语言到专业Shell命令**的无缝转换——只需用日常语言描述您的需求，系统即可智能生成精准的可执行命令。
