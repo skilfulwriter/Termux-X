@@ -6,6 +6,10 @@
 
 **Termux-X** 是一款基于 **ZeroTermux** 进行二次开发（二开）的增强版终端模拟器应用。它保留了 ZeroTermux 的强大功能，并在此基础上进行了深度定制与优化，旨在为移动端渗透测试人员和极客提供更便捷、更强大的操作环境。
 
+### 官方下载地址
+*   **Termux-X APP**: [点击下载](http://xheishou.com/download.html)
+*   **X黑手社区**: [访问社区](http://xheishou.com/)
+
 ## 🌟 核心亮点
 
 ### 🔥 一键免Root运行完整Kali NetHunter
@@ -112,24 +116,31 @@
 *   **优化**：优化菜单栏布局，调整功能分类
 *   **优化**：诸多性能优化及细节调整
 *   **修复**：修复已反馈的 Bug（如 SnowView 空指针异常等）
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
 <img src="img/update/1.jpg" height="400" />
 <img src="img/update/2.jpg" height="400" />
 <img src="img/update/3.jpg" height="400" />
 <img src="img/update/3.png" height="400" />
+</div>
 ### v0.118.3.57 (2026.01.10)
 *   **新增**：在线脚本下载运行逻辑优化，支持自动识别当前环境。若在 Kali Shell 中运行 Termux 脚本，会自动切换至 Termux 会话执行，避免环境错误
 *   **新增**：在线脚本支持 Kali Root 环境自动部署。下载的脚本会自动复制到 Kali Root 目录并赋予权限执行，解决路径权限问题
 *   **新增**：菜单栏新增“Kali换源”快捷入口，支持一键切换 Kali Linux 软件源（官方、清华、中科大、阿里云），自动进入 Root 环境执行
 *   **新增**：在线脚本下载完成后自动识别python脚本文件， 并自动 执行
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
  <img src="img/update/1.png" height="400" />
 <img src="img/update/2.png" height="400" />
+</div>
 
 ### v0.118.3.56 (2026.01.06)
 *   **新增**：集成 **Dirb** 目录扫描工具图形化界面，支持自定义字典、代理、Cookie 及高级扫描选项，自动调用 Kali NetHunter Root 环境执行
 *   **优化**：**Nmap** 扫描配置升级，移除 Root 权限强依赖选项，新增免 Root 常用扫描模式（-Pn, -sV, -sC），提升非 Root 环境下的可用性
 *   **修复**：优化 Kali 工具调用逻辑，自动检测并安装缺失工具，修复命令执行时的 Shell 兼容性问题
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
  <img src="img/update/4.jpg" height="400" />
 <img src="img/update/5.jpg" height="400" />
+</div>
+
 ### v0.118.3.56 (2026.01.06)
 *   **优化**：QEMU/UTermux 界面中“显示环境”安装逻辑优化，未安装 VNC 插件时自动跳转至下载站
 *   **修复**：更新脚本和下载站链接，下载站更新VNC 插件和kali Nethunetr基础包+gemini cli +iflow cli系统包，恢复即用
