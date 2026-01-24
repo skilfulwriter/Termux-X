@@ -117,10 +117,10 @@
 *   **优化**：诸多性能优化及细节调整
 *   **修复**：修复已反馈的 Bug（如 SnowView 空指针异常等）
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-<img src="img/update/1.jpg" height="400" />
-<img src="img/update/2.jpg" height="400" />
-<img src="img/update/3.jpg" height="400" />
-<img src="img/update/3.png" height="400" />
+<img src="img/update/1.jpg" height="300" />
+<img src="img/update/2.jpg" height="300" />
+<img src="img/update/3.jpg" height="300" />
+<img src="img/update/3.png" height="300" />
 </div>
 ### v0.118.3.57 (2026.01.10)
 *   **新增**：在线脚本下载运行逻辑优化，支持自动识别当前环境。若在 Kali Shell 中运行 Termux 脚本，会自动切换至 Termux 会话执行，避免环境错误
