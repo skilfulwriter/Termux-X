@@ -41,7 +41,7 @@ class OTGManager {
                 UUtils.getString(R.string.检测到OTG设备)
             )
         }
-        val devices = UsbMassStorageDevice.getMassStorageDevices(mContext!!)
+        val devices = UsbMassStorageDevice.getMassStorageDevices(mContext)
         LogUtils.d(TAG, "initOtg OTG size(" + devices.size + ")")
         if (get().mRefFileList != null) {
             try {

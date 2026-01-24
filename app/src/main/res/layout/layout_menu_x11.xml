@@ -296,6 +296,38 @@
                     android:textSize="10sp" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:id="@+id/code_ll"
+                android:gravity="center"
+                android:layout_height="80dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:src="@mipmap/code_view"
+                    android:layout_height="32dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:padding="2dp"
+                    android:paddingLeft="10dp"
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/切换源"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

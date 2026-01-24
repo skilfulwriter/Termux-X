@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2b2b2b"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nmap 扫描"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Target Input and Scan Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            
+            <Button
+                android:id="@+id/buttonScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="扫描"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF" />
+
+            <EditText
+                android:id="@+id/editTextTarget"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="scanme.nmap.org, 192.168.0.1"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="高级选项"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="8dp"/>
+                
+            <Switch
+                android:id="@+id/switchAdvanced"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutAdvancedOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="扫描类型"
+                android:textColor="#4CAF50"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"/>
+
+            <CheckBox
+                android:id="@+id/checkAllAdvanced"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务版本与脚本扫描 (-sV -sC)"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkPingScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ping 扫描 (-sn)"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkServiceVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务/版本检测 (-sV)"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkSkipDiscovery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="跳过主机发现 (-Pn)"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkNoDNS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="不解析 DNS (-n)"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkIPv6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="启用 IPv6 (-6)"
+                android:textColor="#FFFFFF"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="端口"
+                android:textColor="#4CAF50"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"/>
+                
+            <CheckBox
+                android:id="@+id/checkTopPorts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="前 20 个端口"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkFastMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="快速模式 (更少端口) (-F)"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkNoRandomize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="不随机扫描端口 (-r)"
+                android:textColor="#FFFFFF"/>
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间模板"
+                android:textColor="#4CAF50"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"/>
+                
+            <Spinner
+                android:id="@+id/spinnerTiming"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:minHeight="40dp"/>
+
+        </LinearLayout>
+        
+        <Button
+            android:id="@+id/buttonStop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="停止扫描"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp"/>
+            
+        <TextView
+            android:id="@+id/stopHintText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="无扫描正在运行"
+            android:textColor="#888888"
+            android:gravity="center"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+</ScrollView>

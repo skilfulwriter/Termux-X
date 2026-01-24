@@ -17,6 +17,30 @@ import com.termux.R;
 import com.termux.app.TermuxActivity;
 import com.termux.view.TerminalView;
 
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.TypefaceSpan;
+import androidx.annotation.NonNull;
+
+import android.content.DialogInterface;
+
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonSpansFactory;
+import io.noties.markwon.MarkwonVisitor;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import org.commonmark.node.Code;
+import org.commonmark.node.FencedCodeBlock;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import android.widget.LinearLayout;
+import android.view.Gravity;
+import android.view.ViewGroup;
+
 public class AIAssistantManager {
     private static final String PREFS_NAME = "com.termux.ai_prefs";
     private static final String KEY_AI_API_KEY = "ai_api_key";
@@ -205,7 +229,32 @@ public class AIAssistantManager {
         dialog.show();
     }
 
-    public void showExplanationDialog(String textToExplain) {
+    private void handleCodeClick(String command, String sessionName, DialogInterface dialogToDismiss) {
+        if (mContext instanceof TermuxActivity) {
+            TermuxActivity activity = (TermuxActivity) mContext;
+
+            new AlertDialog.Builder(mContext)
+                    .setTitle("执行命令")
+                    .setMessage("您想要执行此命令吗？\n\n" + command)
+                    .setPositiveButton("执行", (dialog, which) -> {
+                        activity.ensureSessionAndRunCommand(sessionName, command);
+                        Toast.makeText(mContext, "命令已发送到终端", Toast.LENGTH_SHORT).show();
+                        if (dialogToDismiss != null) {
+                            dialogToDismiss.dismiss();
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .setNeutralButton("复制", (dialog, which) -> {
+                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        android.content.ClipData clip = android.content.ClipData.newPlainText("Command", command);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "已复制到剪贴板", Toast.LENGTH_SHORT).show();
+                    })
+                    .show();
+        }
+    }
+
+    public void showExplanationDialog(String textToExplain, String sessionName) {
         String apiKey = prefs.getString(KEY_AI_API_KEY, "");
         String apiUrl = prefs.getString(KEY_AI_API_URL, "https://api.openai.com/v1");
         String modelName = prefs.getString(KEY_AI_MODEL_NAME, "gpt-3.5-turbo");
@@ -219,68 +268,221 @@ public class AIAssistantManager {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
         builder.setTitle(mContext.getString(R.string.ai_ask));
 
+        // Main Container
+        LinearLayout mainLayout = new LinearLayout(mContext);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLayout.setPadding(20, 20, 20, 20);
+
+        // Chat History ScrollView
         android.widget.ScrollView scrollView = new android.widget.ScrollView(mContext);
-        android.widget.LinearLayout layout = new android.widget.LinearLayout(mContext);
-        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
-        layout.setPadding(50, 40, 50, 40);
-        scrollView.addView(layout);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        scrollView.setLayoutParams(scrollParams);
 
-        TextView tvQuery = new TextView(mContext);
-        tvQuery.setText("Query: " + textToExplain);
-        tvQuery.setTypeface(null, android.graphics.Typeface.BOLD);
-        tvQuery.setTextColor(android.graphics.Color.BLACK);
-        layout.addView(tvQuery);
+        // Chat Content Container
+        LinearLayout chatContentLayout = new LinearLayout(mContext);
+        chatContentLayout.setOrientation(LinearLayout.VERTICAL);
+        chatContentLayout.setPadding(10, 10, 10, 10);
+        scrollView.addView(chatContentLayout);
+        mainLayout.addView(scrollView);
 
-        TextView tvResponse = new TextView(mContext);
-        tvResponse.setText("Waiting for AI response...");
-        tvResponse.setPadding(0, 30, 0, 0);
-        tvResponse.setTextColor(android.graphics.Color.BLACK);
-        tvResponse.setTextIsSelectable(true);
-        layout.addView(tvResponse);
+        // Input Area
+        LinearLayout inputLayout = new LinearLayout(mContext);
+        inputLayout.setOrientation(LinearLayout.HORIZONTAL);
+        inputLayout.setPadding(0, 20, 0, 0);
+        inputLayout.setGravity(Gravity.CENTER_VERTICAL);
 
-        builder.setView(scrollView);
+        EditText etInput = new EditText(mContext);
+        LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        etInput.setLayoutParams(inputParams);
+        etInput.setHint("输入问题继续对话...");
+        inputLayout.addView(etInput);
+
+        Button btnSend = new Button(mContext);
+        btnSend.setText("发送");
+        inputLayout.addView(btnSend);
+
+        mainLayout.addView(inputLayout);
+
+        builder.setView(mainLayout);
         builder.setPositiveButton(mContext.getString(android.R.string.ok), (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        String systemPrompt = "You are a helpful assistant. Explain the following terminal command or text concisely. Please answer in Chinese.";
+        // Chat History State
+        JSONArray messages = new JSONArray();
+        String systemPrompt = "你是一个专业的 Termux-x 和 Linux 专家。请用中文回答。如果用户提供的是报错信息，请解释原因并给出具体的解决命令。如果用户询问如何操作，请给出详细步骤和可执行的代码。注意：涉及 Python 时请使用 python3。不要只解释，要给出解决方案。";
+        try {
+            JSONObject systemMsg = new JSONObject();
+            systemMsg.put("role", "system");
+            systemMsg.put("content", systemPrompt);
+            messages.put(systemMsg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        AIClient.sendMessage(systemPrompt, textToExplain, apiKey, apiUrl, modelName, new AIClient.AIResponseListener() {
-            private boolean isFirstChunk = true;
+        // Helper to add message bubble
+        Runnable addMessageBubble = () -> {
+            // This is just a placeholder, logic below
+        };
 
-            @Override
-            public void onNext(String chunk) {
-                if (mContext instanceof TermuxActivity) {
-                    ((TermuxActivity) mContext).runOnUiThread(() -> {
-                        if (isFirstChunk) {
-                            tvResponse.setText("");
-                            isFirstChunk = false;
-                        }
-                        tvResponse.append(chunk);
-                    });
-                }
+        Markwon markwon = Markwon.builder(mContext)
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+                        builder.on(FencedCodeBlock.class, (visitor, fencedCodeBlock) -> {
+                            CharSequence code = fencedCodeBlock.getLiteral().trim();
+                            int start = visitor.length();
+                            visitor.builder().append(code);
+                            int end = visitor.length();
+
+                            visitor.builder().setSpan(new BackgroundColorSpan(0xFFEEEEEE), start, end);
+                            visitor.builder().setSpan(new TypefaceSpan("monospace"), start, end);
+                            visitor.builder().setSpan(new ClickableSpan() {
+                                @Override
+                                public void onClick(@NonNull View widget) {
+                                    handleCodeClick(code.toString(), sessionName, dialog);
+                                }
+
+                                @Override
+                                public void updateDrawState(@NonNull TextPaint ds) {
+                                    ds.setColor(0xFFC2185B);
+                                    ds.setUnderlineText(false);
+                                }
+                            }, start, end);
+
+                            visitor.ensureNewLine();
+                        });
+                    }
+
+                    @Override
+                    public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
+                        builder.setFactory(Code.class, (configuration, props) -> new Object[]{
+                                new BackgroundColorSpan(0xFFEEEEEE),
+                                new TypefaceSpan("monospace"),
+                                new ClickableSpan() {
+                                    @Override
+                                    public void onClick(@NonNull View widget) {
+                                        TextView tv = (TextView) widget;
+                                        Spanned spanned = (Spanned) tv.getText();
+                                        int start = spanned.getSpanStart(this);
+                                        int end = spanned.getSpanEnd(this);
+                                        CharSequence code = spanned.subSequence(start, end);
+                                        handleCodeClick(code.toString(), sessionName, dialog);
+                                    }
+
+                                    @Override
+                                    public void updateDrawState(@NonNull TextPaint ds) {
+                                        super.updateDrawState(ds);
+                                        ds.setUnderlineText(false);
+                                        ds.setColor(0xFFC2185B);
+                                    }
+                                }
+                        });
+                    }
+                })
+                .build();
+
+        // Logic to send message
+        View.OnClickListener sendAction = v -> {
+            String userInput = (v == null) ? textToExplain : etInput.getText().toString().trim();
+            if (userInput.isEmpty()) return;
+
+            if (v != null) etInput.setText(""); // Clear input if button clicked
+
+            // Add User Message to UI
+            TextView tvUser = new TextView(mContext);
+            tvUser.setText("我: " + userInput);
+            tvUser.setTypeface(null, android.graphics.Typeface.BOLD);
+            tvUser.setTextColor(android.graphics.Color.BLACK);
+            tvUser.setPadding(0, 20, 0, 10);
+            chatContentLayout.addView(tvUser);
+
+            // Add to history
+            try {
+                JSONObject userMsg = new JSONObject();
+                userMsg.put("role", "user");
+                userMsg.put("content", userInput);
+                messages.put(userMsg);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onSuccess(String response) {
-                 if (mContext instanceof TermuxActivity) {
-                    ((TermuxActivity) mContext).runOnUiThread(() -> {
-                        if (isFirstChunk) {
-                             tvResponse.setText(response.trim());
-                        }
-                    });
-                }
-            }
+            // Prepare AI Response UI
+            TextView tvAI = new TextView(mContext);
+            tvAI.setText("AI 思考中...");
+            tvAI.setTextColor(android.graphics.Color.DKGRAY);
+            tvAI.setTextIsSelectable(true);
+            tvAI.setMovementMethod(LinkMovementMethod.getInstance());
+            tvAI.setPadding(0, 0, 0, 20);
+            chatContentLayout.addView(tvAI);
+            
+            // Auto scroll to bottom
+            scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
 
-            @Override
-            public void onError(String error) {
-                 if (mContext instanceof TermuxActivity) {
-                    ((TermuxActivity) mContext).runOnUiThread(() -> {
-                        tvResponse.setText("Error: " + error);
-                    });
+            btnSend.setEnabled(false);
+
+            AIClient.sendMessage(messages, apiKey, apiUrl, modelName, new AIClient.AIResponseListener() {
+                private boolean isFirstChunk = true;
+                private StringBuilder fullResponseBuilder = new StringBuilder();
+
+                @Override
+                public void onNext(String chunk) {
+                    fullResponseBuilder.append(chunk);
+                    if (mContext instanceof TermuxActivity) {
+                        ((TermuxActivity) mContext).runOnUiThread(() -> {
+                            if (isFirstChunk) {
+                                tvAI.setText("");
+                                isFirstChunk = false;
+                            }
+                            tvAI.append(chunk);
+                            // Optional: auto scroll
+                            // scrollView.fullScroll(View.FOCUS_DOWN); 
+                        });
+                    }
                 }
-            }
-        });
+
+                @Override
+                public void onSuccess(String response) {
+                    String finalResponse = (response != null && !response.isEmpty()) ? response : fullResponseBuilder.toString();
+                    
+                    if (mContext instanceof TermuxActivity) {
+                        ((TermuxActivity) mContext).runOnUiThread(() -> {
+                             markwon.setMarkdown(tvAI, finalResponse);
+                             btnSend.setEnabled(true);
+                             scrollView.fullScroll(View.FOCUS_DOWN);
+                        });
+                    }
+                    
+                    // Add to history
+                    try {
+                        JSONObject aiMsg = new JSONObject();
+                        aiMsg.put("role", "assistant");
+                        aiMsg.put("content", finalResponse);
+                        messages.put(aiMsg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    if (mContext instanceof TermuxActivity) {
+                        ((TermuxActivity) mContext).runOnUiThread(() -> {
+                            tvAI.setText("错误: " + error);
+                            btnSend.setEnabled(true);
+                        });
+                    }
+                }
+            });
+        };
+
+        btnSend.setOnClickListener(sendAction);
+
+        // Trigger initial message
+        sendAction.onClick(null);
     }
 }

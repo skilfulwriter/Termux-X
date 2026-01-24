@@ -28,7 +28,7 @@ object RunShell {
 
         val start = processBuilder.start()!!
         val data = ByteArray(1024)
-        var len = 0
+        var len: Int
         while (-1 != start.getInputStream().read(data).also { len = it }) {
             val str = String(data, 0, len, Charset.forName("UTF-8"))
           LogUtils.d(TAG, "shell $str")

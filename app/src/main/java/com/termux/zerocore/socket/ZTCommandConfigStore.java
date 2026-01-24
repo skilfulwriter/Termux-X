@@ -10,6 +10,7 @@ import com.termux.zerocore.socket.config.HelpConfig;
 import com.termux.zerocore.socket.config.KnowConfig;
 import com.termux.zerocore.socket.config.LnConfig;
 import com.termux.zerocore.socket.config.RebootConfig;
+import com.termux.zerocore.socket.config.AskAIConfig;
 import com.termux.zerocore.socket.config.ToastConfig;
 import com.termux.zerocore.socket.config.VersionConfig;
 import com.termux.zerocore.socket.config.X11CommandHideConfig;
@@ -61,6 +62,9 @@ public class ZTCommandConfigStore {
         map_array_command.put(ZTKeyConstants.ZT_COMMAND_X11_KEYBOARD_HIDE, ZTKeyConstants.ZT_ID_X11_KEYBOARD_HIDE);
         map_array_command.put(ZTKeyConstants.ZT_COMMAND_X11_KEYBOARD_HIDE_1, ZTKeyConstants.ZT_ID_X11_KEYBOARD_HIDE);
 
+        map_array_command.put(ZTKeyConstants.ZT_COMMAND_ASK_AI, ZTKeyConstants.ZT_ID_ASK_AI);
+        map_array_command.put(ZTKeyConstants.ZT_COMMAND_ASK_AI_1, ZTKeyConstants.ZT_ID_ASK_AI);
+
         // 需要在此添加你的config，否则找不到config
         register(new ToastConfig());
         register(new HelpConfig());
@@ -76,6 +80,7 @@ public class ZTCommandConfigStore {
         register(new X11StatusConfig());
         register(new X11KeyBoardShowConfig());
         register(new X11KeyBoardHideConfig());
+        register(new AskAIConfig());
     }
     private static void register(ZTConfig ztConfig) {
         sparse_array_config.append(ztConfig.getId(), ztConfig);

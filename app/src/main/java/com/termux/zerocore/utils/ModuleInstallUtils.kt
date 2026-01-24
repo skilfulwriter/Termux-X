@@ -43,7 +43,6 @@ object ModuleInstallUtils {
             return
         }
         val lines: List<String> = mFile.readLines()
-        var size = lines.size
         var index = 0
         stringBuilder.append(UUtils.getString(R.string.module_install_pro))
         mInstallModuleMsg?.msg(stringBuilder.toString(), false, null)
@@ -86,8 +85,8 @@ object ModuleInstallUtils {
                                // mInstallModuleMsg?.msg(UUtils.getString(R.string.create_folder) + ":${mainFile.absolutePath}", false, null)
                                 mainFile.mkdirs()
                             } else {
-                                if (mainFile.parentFile != null && !(mainFile.parentFile.exists())) {
-                                    mainFile.parentFile.mkdirs()
+                                if (mainFile.parentFile != null && !(mainFile.parentFile!!.exists())) {
+                                    mainFile.parentFile!!.mkdirs()
                                   //  mInstallModuleMsg?.msg(UUtils.getString(R.string.create_folder) + ":${mainFile.absolutePath}", false, null)
                                 }
                             }

@@ -130,7 +130,7 @@ class BackViewModel : BackupClickListener {
         switchDialog.createSwitchDialog(UUtils.getString(R.string.backup_msg_dialog))
         switchDialog.ok?.setOnClickListener {
             switchDialog.dismiss()
-            var mLoadingDialog: LoadingDialog? = null
+            var mLoadingDialog: LoadingDialog?
             MainScope().launch {
                 withContext(Dispatchers.Main) {
                     mLoadingDialog = LoadingDialog(mContext!!)

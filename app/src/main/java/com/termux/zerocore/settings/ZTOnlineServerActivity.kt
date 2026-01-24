@@ -23,7 +23,7 @@ class ZTOnlineServerActivity : AppCompatActivity() {
     private fun initUrlData() {
         val ztUserBean = UserSetManage.Companion.get().getZTUserBean()
         var serverJsonString = ztUserBean.serverJsonString
-        var dataServers: UserSetManage.DataServers? = null
+        var dataServers: UserSetManage.DataServers?
         if (serverJsonString.isNullOrEmpty()) {
             dataServers = UserSetManage.Companion.get().defServerIPName()
         } else {

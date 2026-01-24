@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Switch
 import android.widget.TextView
@@ -138,10 +139,10 @@ class BeautifySettingDialog : BaseDialogDown {
             SaveData.saveStringOther("back_color_progress","$progress")
 
         }
-        back_color_ap?.setOnAlphaChangeListener { progress, alpha ->
+        back_color_ap?.setOnAlphaChangeListener { _, _ ->
         }
 
-        back_ap?.setOnCheckedChangeListener { compoundButton, b ->
+        back_ap?.setOnCheckedChangeListener { _, b ->
             Logger.logDebug(LOG_TAG, "change:$b")
             mOnChangeTextView?.onChange(b)
             if(b){
@@ -151,7 +152,7 @@ class BeautifySettingDialog : BaseDialogDown {
             }
         }
 
-        back_text_show_switch?.setOnCheckedChangeListener { compoundButton, b ->
+        back_text_show_switch?.setOnCheckedChangeListener { _, b ->
             mOnTextCheckedChangeListener?.onChange(b)
             if(b){
                 SaveData.saveStringOther("change_text_show","def")
@@ -163,7 +164,7 @@ class BeautifySettingDialog : BaseDialogDown {
 
         img_rl?.setOnClickListener {
             val intent = Intent(mContext as Activity, ImageActivity::class.java)
-            intent.action = ImageActivity.ImageActivityFlgh.IMAGE_FLGH
+            intent.action = ImageActivity.ImageActivityFlgh.VIDEO_FLGH
             mContext.startActivity(intent)
         }
         def_tv?.setOnClickListener {

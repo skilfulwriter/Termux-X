@@ -79,8 +79,8 @@ public class SeekerDialog extends BaseDialogCentre {
         setupTemplateSpinner();
         
         // Initial state
-        // 默认启用停止按钮，或者可以通过检查进程状态来决定
-        // 这里为了简单起见，我们默认让它是启用的，或者可以添加逻辑去检查
+        // 默认启用停止按钮，以便用户可以随时停止可能正在运行的进程
+        // 即使当前 APP 实例没有启动它，后台也可能已经在运行
         updateStopButtonState(true);
     }
 
@@ -358,14 +358,27 @@ public class SeekerDialog extends BaseDialogCentre {
         executeInRootKali(updateCmd, "Kali-Seeker");
     }
 
+    private void sendCtrlCToSession(String sessionName) {
+        if (mContext instanceof TermuxActivity) {
+            TermuxActivity activity = (TermuxActivity) mContext;
+            TermuxService mTermuxService = activity.mTermuxService;
+            
+            if (mTermuxService != null) {
+                List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+                for (int i = 0; i < sessions.size(); i++) {
+                    TerminalSession session = sessions.get(i).getTerminalSession();
+                    if (sessionName.equals(session.mSessionName)) {
+                        session.write("\003"); // Send Ctrl+C
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     private void stopSeeker() {
-        // Since we run in "Kali-Seeker" session, we can kill the process there or just pkill globally in nethunter
-        // Using generic pkill in a new/existing session is safer to ensure it reaches the process
-        // But better: execute pkill in "Kali-Seeker" session if it exists.
-        
-        // 尝试多种方式停止 Seeker 进程，优先使用 SIGINT (模拟 Ctrl+C)
-        String stopCmd = "pkill -SIGINT -f seeker.py || kill -2 $(pgrep -f seeker.py) || pkill -f seeker.py || pkill -9 -f seeker.py";
-        executeInRootKali(stopCmd, "Kali-Seeker");
+        // 发送 Ctrl+C 到 Kali-Seeker 会话，模拟用户手动停止
+        sendCtrlCToSession("Kali-Seeker");
         updateStopButtonState(false);
     }
 
@@ -378,9 +391,8 @@ public class SeekerDialog extends BaseDialogCentre {
     }
 
     private void stopLocalTunnel() {
-        // 尝试多种方式停止隧道进程，优先使用 SIGINT (模拟 Ctrl+C)
-        String stopCmd = "pkill -SIGINT -f 'ssh -R 80:localhost' || kill -2 $(pgrep -f 'ssh -R 80:localhost') || pkill -f 'ssh -R 80:localhost'";
-        executeInRootKali(stopCmd, "Kali-Tunnel");
+        // 发送 Ctrl+C 到 Kali-Tunnel 会话
+        sendCtrlCToSession("Kali-Tunnel");
     }
     
     private void updateStopButtonState(boolean running) {

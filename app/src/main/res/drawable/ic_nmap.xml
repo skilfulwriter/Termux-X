@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <!-- 眼睛外轮廓 -->
+    <path
+        android:fillColor="#00C0F0"
+        android:pathData="M12,4C7,4 2.73,7.11 1,11.5C2.73,15.89 7,19 12,19C17,19 21.27,15.89 23,11.5C21.27,7.11 17,4 12,4ZM12,16.5C9.24,16.5 7,14.26 7,11.5C7,8.74 9.24,6.5 12,6.5C14.76,6.5 17,8.74 17,11.5C17,14.26 14.76,16.5 12,16.5Z"/>
+    
+    <!-- 瞳孔/瞄准中心 -->
+    <path
+        android:fillColor="#00C0F0"
+        android:pathData="M12,9C10.62,9 9.5,10.12 9.5,11.5C9.5,12.88 10.62,14 12,14C13.38,14 14.5,12.88 14.5,11.5C14.5,10.12 13.38,9 12,9ZM12,12.5C11.45,12.5 11,12.05 11,11.5C11,10.95 11.45,10.5 12,10.5C12.55,10.5 13,10.95 13,11.5C13,12.05 12.55,12.5 12,12.5Z"/>
+        
+    <!-- 瞄准十字线 (模拟 Nmap Logo 的科技感) -->
+    <path
+        android:fillColor="#00C0F0"
+        android:pathData="M11.5,11.5 L12.5,11.5 L12.5,6.5 L11.5,6.5 Z" />
+    <path
+        android:fillColor="#00C0F0"
+        android:pathData="M11.5,16.5 L12.5,16.5 L12.5,11.5 L11.5,11.5 Z" />
+    <path
+        android:fillColor="#00C0F0"
+        android:pathData="M6.5,11 L6.5,12 L11.5,12 L11.5,11 Z" />
+    <path
+        android:fillColor="#00C0F0"
+        android:pathData="M12.5,11 L12.5,12 L17.5,12 L17.5,11 Z" />
+</vector>

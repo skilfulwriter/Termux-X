@@ -85,7 +85,7 @@ class TimerActivity : AppCompatActivity(), LibSuManage.TimerListener, View.OnCli
         linearLayout.setOnClickListener {
             switchCompat.isChecked = !(switchCompat.isChecked)
         }
-        switchCompat.setOnCheckedChangeListener { buttonView, isChecked ->
+        switchCompat.setOnCheckedChangeListener { _, _ ->
             when (switchCompat) {
                 mStartTimerSwitch -> {
                     if (mStartTimerSwitch.isChecked) {

@@ -377,7 +377,9 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
     @Override
     public void onAskAI(String text) {
         if (text != null && !text.trim().isEmpty()) {
-            new AIAssistantManager(mActivity).showExplanationDialog(text);
+            com.termux.terminal.TerminalSession session = mActivity.getCurrentSession();
+            String sessionName = (session != null && session.mSessionName != null) ? session.mSessionName : "Termux";
+            new AIAssistantManager(mActivity).showExplanationDialog(text, sessionName);
         }
     }
 

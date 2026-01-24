@@ -45,6 +45,11 @@ import java.util.concurrent.TimeUnit;
 
 import cn.hotapk.fastandrutils.utils.FUtils;
 import okhttp3.OkHttpClient;
+import com.davik.adbtools.adb.Adb;
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+import android.os.Build;
+import org.conscrypt.Conscrypt;
+import java.security.Security;
 
 // ZeroTermux add {@
 //public class TermuxApplication extends Application {
@@ -52,11 +57,28 @@ public class TermuxApplication extends XHApplication {
 // @}
     private static final String LOG_TAG = "TermuxApplication";
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                HiddenApiBypass.addHiddenApiExemptions("L");
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onCreate() {
         super.onCreate();
+        try {
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         // ZeroTermux add {@
         FUtils.init(this);
+        Adb.init(this);
 		// @}
 
 
@@ -140,7 +162,7 @@ public class TermuxApplication extends XHApplication {
 
                 Intent intent = new Intent(TermuxApplication.this, UncaughtExceptionHandlerActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("error", collectExceptionInfo((Exception) e));
+                intent.putExtra("error", collectExceptionInfo(e));
                 TermuxApplication.this.startActivity(intent);
                 System.exit(1);//关闭已奔溃的app进程
 
@@ -151,12 +173,13 @@ public class TermuxApplication extends XHApplication {
 
         new ClipBoardUtil().registerClipEvents();
 
-/*        new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                BusyBoxManager.INSTANCE.init();
+                // Initialize BusyBox for offline capabilities
+                com.termux.zerocore.bosybox.BusyBoxManager.INSTANCE.init();
             }
-        }).start();*/
+        }).start();
 		// @}
 
     }
@@ -171,7 +194,7 @@ public class TermuxApplication extends XHApplication {
     }
 
    // ZeroTermux add {@
-    private String collectExceptionInfo(Exception extra) {
+    private String collectExceptionInfo(Throwable extra) {
 
 
         ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();

@@ -109,7 +109,7 @@ class RestoreViewModel {
                             return@setOnClickListener
                         }
                         mBackupStoreDialogCloseListener?.backupStoreDismiss()
-                        var mLoadingDialog: LoadingDialog? = null
+                        var mLoadingDialog: LoadingDialog?
                         MainScope().launch {
                             withContext(Dispatchers.Main) {
                                 mLoadingDialog = LoadingDialog(mContext!!)

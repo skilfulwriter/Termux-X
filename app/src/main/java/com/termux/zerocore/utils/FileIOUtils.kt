@@ -52,8 +52,8 @@ object FileIOUtils {
     public const val MB100 = 1024 * 1024 * 100
 
     public fun commendSave(nameString:String, commitString:String, isChecked:Boolean) {
-        val commi22 = SaveData.getData(COMMEND_KEY)
-        if (commi22 == null || commi22.isEmpty() || commi22 == COMMEND_DEF) {
+        val commi22: String? = SaveData.getData(COMMEND_KEY)
+        if (commi22.isNullOrEmpty() || commi22 == COMMEND_DEF) {
             val minLBean = MinLBean()
             val data = MinLBean.Data()
             minLBean.data = data
@@ -122,14 +122,14 @@ object FileIOUtils {
         val data = SaveData.getData(CLIP_BOARD_KEY)
         if (isEmpty(data)) {
             val clipboardBean = ClipboardBean()
-            val data = ClipboardBean.Data()
+            val clipboardData = ClipboardBean.Data()
             var list:ArrayList<ClipboardBean.Clipboard> = ArrayList()
             val dataNum = ClipboardBean.Clipboard()
             dataNum.name = value
             dataNum.index = 0
             list.add(dataNum)
-            data.list = list
-            clipboardBean.data = data
+            clipboardData.list = list
+            clipboardBean.data = clipboardData
             val s = Gson().toJson(clipboardBean)
             SaveData.saveData(CLIP_BOARD_KEY, s)
             LogUtils.d(TAG, "setClipBoardString ClipBoard is Empty,save data :$s")
@@ -197,24 +197,19 @@ object FileIOUtils {
         var extension = ""
         if (contains) {
             val i: Int = fileName.lastIndexOf('.')
-            if (i > 0) {
-                return fileName.substring(i + 1)
-            } else {
-                return "N/A"
-            }
-        } else {
-            return "N/A"
+            val start = i + 1
+            extension = fileName.substring(start, fileName.length)
         }
+        return extension
     }
 
     fun formatFileSize(fileS: Long): String? {
         val df = DecimalFormat("#.00")
-        var fileSizeString = ""
         val wrongSize = "0B"
         if (fileS == 0L) {
             return wrongSize
         }
-        fileSizeString = if (fileS < 1024) {
+        val fileSizeString = if (fileS < 1024) {
             df.format(fileS.toDouble()) + "B"
         } else if (fileS < 1048576) {
             df.format(fileS.toDouble() / 1024) + "KB"
@@ -252,7 +247,7 @@ object FileIOUtils {
     public fun getStoragePath(mContext: Context): String {
         return mContext.filesDir.absolutePath + "/home/storage"
     }
-    public fun getTermuxPathFile(mContext: Context): File {
+    public fun getTermuxPathFile(): File {
         return File("/data/data/com.termux/")
     }
 
@@ -292,14 +287,18 @@ object FileIOUtils {
     }
 
     public fun getConfigFilePath() :String {
-        return TERMUX_XINHAO_CONFIG
+        return "${UUtils.getContext().filesDir.absolutePath}/config"
     }
 
     public fun createSystem(mContext: Context, name: String): File? {
-        val mFile = getTermuxPathFile(mContext)
-        var createFile: File? = null
-        val files: Array<File> = mFile.listFiles()
-        if (files.size == 1) {
+        val mFile = getTermuxPathFile()
+        if (!mFile.exists()) {
+            Toast.makeText(mContext, UUtils.getString(R.string.system_create_container_fail_not_termux), Toast.LENGTH_SHORT).show()
+            return null
+        }
+        val files: Array<File>? = mFile.listFiles()
+        var createFile: File?
+        if (files == null || files.isEmpty()) {
             createFile = File(mFile, "files1")
             createFile.mkdirs()
             val createSystemBean = CreateSystemBean()

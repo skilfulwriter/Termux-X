@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.AssetManager
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.text.TextUtils
 import android.view.View
@@ -30,7 +31,7 @@ import com.termux.zerocore.dialog.*
 import com.termux.zerocore.dialog.CommonCommandsDialog.CommonCommandsDialogConstant.ITEM_CLICK_DATA_MSG
 import com.termux.zerocore.dialog.view_holder.ItemMenuViewHolder
 import com.termux.zerocore.keybord.KeyBordManage
-import com.termux.zerocore.scrcpy.MainActivity
+// import com.termux.zerocore.scrcpy.MainActivity
 import com.termux.zerocore.url.FileUrl
 import com.termux.zerocore.url.FileUrl.zeroTermuxApk
 import com.termux.zerocore.url.FileUrl.zeroTermuxCommand
@@ -53,9 +54,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.io.File
 
 
+@OptIn(DelicateCoroutinesApi::class)
 class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
     private val TAG:String = "ItemMenuAdapter"
     private var mList:ArrayList<ItemMenuBean.Data>? = null
@@ -66,13 +69,17 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
     private var mClearStyleListener: ClearStyleListener? = null
     private var mCommonCommandsDialogDismissListener: CommonCommandsDialogDismissListener? = null
     private var mKeyViewListener: KeyViewListener? = null
-    private val mHandler: Handler = object : Handler() {
+    
+    // Getter for mKeyViewListener
+    public fun getKeyViewListener(): KeyViewListener? {
+        return mKeyViewListener
+    }
+    private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val obj = msg.obj
             if (obj != null && obj is CardView) {
-                val cardView = obj as CardView
-                cardView.setCardBackgroundColor(cardView.context.getColor(R.color.color_55000000))
+                obj.setCardBackgroundColor(obj.context.getColor(R.color.color_55000000))
             }
         }
     }
@@ -103,7 +110,7 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
         }
         holder.itemView.setOnClickListener {
             LogUtils.d(TAG, "onBindViewHolder itemView click key is:${mList!![position].key}")
-            clickItem(mList!![position].key, holder.itemView)
+            clickItem(mList!![position].key)
         }
     }
 
@@ -115,37 +122,16 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
         this.mContext = mContext
     }
 
-    private fun clickItem(id: Int, itemView: View) {
+    private fun clickItem(id: Int) {
         when (id) {
-            CommonCommandsDialog.CommonCommandsDialogConstant.VIDEO_KEY -> {
-                UsbFileData.get().setImageFileCheckListener(object :UsbFileData.ImageFileCheckListener{
-                    override fun imageFile(file: File) {
-                        LogUtils.d(TAG, "imageFile file path is:${file.absolutePath}")
-                        LogUtils.d(TAG, "imageFile mCommonDialogListener is:${mCommonDialogListener}")
-                        val fileImg = File("${FileUrl.mainConfigImg}/back.jpg")
-                        if(fileImg.exists()){
-                            fileImg.delete()
-                        }
-                        FileIOUtils.setPathVideo(file)
-                        mCommonDialogListener?.video(file)
-                    }
-                })
-                val intent = Intent(mContext as Activity, ImageActivity::class.java)
-                intent.action = ImageActivity.ImageActivityFlgh.VIDEO_FLGH
-                mContext?.startActivity(intent)
-            }
             CommonCommandsDialog.CommonCommandsDialogConstant.KEYBOARD_KEY -> {
                 keyBord()
             }
             CommonCommandsDialog.CommonCommandsDialogConstant.X86_ALPINE_KEY -> {
                 runQemuOs(mContext)
             }
-            CommonCommandsDialog.CommonCommandsDialogConstant.CLEAR_STYLE -> {
-                FileIOUtils.clearStyle()
-                mClearStyleListener?.clear()
-            }
             CommonCommandsDialog.CommonCommandsDialogConstant.WEB_LINUX -> {
-                var replace = ""
+                val replace: String
                 if (FileIOUtils.isBinFileExists("ttyd")) {
                     replace = UUtils.getString(R.string.ttyd_install_complete)
                         .replace("0.0.0.0", UUtils.getHostIP())
@@ -170,7 +156,7 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
                 installFileBrowser()
             }
             CommonCommandsDialog.CommonCommandsDialogConstant.ITEM_CLICK_FTP -> {
-                startFTP(itemView)
+                startFTP()
             }
             CommonCommandsDialog.CommonCommandsDialogConstant.ITEM_CLICK_SOFT_LINKS -> {
                 commonShortcuts()
@@ -249,20 +235,8 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
                 mContext?.startActivity(intent)
             }
 
-            CommonCommandsDialog.CommonCommandsDialogConstant.ITEM_CLICK_START_MSG -> {
-                val intent = Intent(mContext, EditTextActivity::class.java)
-                intent.putExtra("edit_path", FileUrl.smsMotdFile)
-                mContext?.startActivity(intent)
-            }
-            CommonCommandsDialog.CommonCommandsDialogConstant.ITEM_CLICK_DOCKER_CHECK -> {
-                mCommonCommandsDialogDismissListener?.dismiss()
-                UUtils.writerFile("runcommand/check-config.sh", File(FileUrl.mainHomeUrl, "/check-config.sh"))
-                TermuxActivity.mTerminalView.sendTextToTerminal(CodeString.runDocker)
-            }
-            CommonCommandsDialog.CommonCommandsDialogConstant.ITEM_CLICK_REMOTE_CONNECTION -> {
-                val intent = Intent(mContext, MainActivity::class.java)
-                mContext?.startActivity(intent)
-            }
+
+
         }
     }
 
@@ -313,7 +287,7 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
             return
         }
 
-        val mHandler = object :Handler() {
+        val mHandler = object :Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 LogUtils.d(TAG, "handleMessage handler what: ${msg.what}")
@@ -325,8 +299,9 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
                         fileString += "\n echo '" + UUtils.getString(R.string.filebrowser已运行) + "'"
                         UUtils.setFileString(smsBashrcFile,fileString)
                     }
-                    if (msg?.obj != null) {
-                        TermuxActivity.mTerminalView.sendTextToTerminal(msg!!.obj as String?)
+                    val obj = msg.obj
+                    if (obj != null) {
+                        TermuxActivity.mTerminalView.sendTextToTerminal(obj as String?)
                     }
                 }
             }
@@ -345,7 +320,12 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
         }
     }
 
-    private fun startFTP(itemView: View) {
+    private fun startFTP() {
+        val versionName = ZeroCoreManage.getVersionName()
+        if (TextUtils.isEmpty(versionName)) {
+            UUtils.showMsg(UUtils.getString(R.string.zero_eg_not_install))
+            return
+        }
         val popupFtpWindows = FtpWindowsDialog(mContext!!)
         popupFtpWindows.show()
     }
@@ -384,7 +364,7 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
         }
 
 
-        val handler = object : Handler() {
+        val handler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 when (msg.what) {
@@ -404,46 +384,112 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
     }
 
     private fun keyBord() {
-        val versionName = ZeroCoreManage.getVersionName()
-        if (TextUtils.isEmpty(versionName)) {
-            UUtils.showMsg(UUtils.getString(R.string.zero_eg_not_install))
-            return
-        }
-        val handler = object : Handler() {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-                when (msg.what) {
-                    KeyBordManage.KEY_DEF -> {
-                        LogUtils.d(TAG, "handleMessage DEF:${msg.obj}")
-                        if (msg.obj != null) {
-                            TermuxActivity.mTerminalView.sendTextToTerminal(msg.obj as String?)
-                        }
-                    }
-                    KeyBordManage.KEY_ALT -> {
-                        LogUtils.d(TAG, "handleMessage ALT:${msg.obj}")
-                        if (msg.obj != null) {
-                            TermuxActivity.mTerminalView.sendTextToTerminalAlt(msg.obj as String?, true)
-                        }
-                    }
-                    KeyBordManage.KEY_CTRL -> {
-                        LogUtils.d(TAG, "handleMessage CTRL:${msg.obj}")
-                        if (msg.obj != null) {
-                            TermuxActivity.mTerminalView.sendTextToTerminalCtrl(msg.obj as String?, true)
-                        }
-                    }
-                    KeyBordManage.KEY_OTHER -> {
-                        LogUtils.d(TAG, "handleMessage OTHER:${msg.obj}")
-                        if (msg.obj != null) {
-                            TermuxActivity.mTermuxTerminalExtraKeys.onTerminalExtraKeyButtonClick(null, msg.obj as String?, false ,false ,false , false)
+        try {
+            LogUtils.d(TAG, "keyBord() called")
+            val versionName = ZeroCoreManage.getVersionName()
+            LogUtils.d(TAG, "versionName: $versionName")
+            if (TextUtils.isEmpty(versionName)) {
+                UUtils.showMsg(UUtils.getString(R.string.zero_eg_not_install))
+                return
+            }
+            if (mKeyViewListener == null) {
+                if (mCommonCommandsDialog != null && mCommonCommandsDialog!!.getKeyViewListener() != null) {
+                    mKeyViewListener = mCommonCommandsDialog!!.getKeyViewListener()
+                    LogUtils.d(TAG, "keyBord: recovered listener from dialog")
+                }
+            }
+            if (mKeyViewListener == null) {
+                LogUtils.e(TAG, "keyBord: mKeyViewListener is still null, trying reflection fallback")
+                // 终极方案：如果监听器还是空，我们尝试直接操作 Activity
+                if (mContext is TermuxActivity) {
+                    val activity = mContext as TermuxActivity
+                    mKeyViewListener = object : KeyViewListener {
+                        override fun view(mView: View?) {
+                            LogUtils.d(TAG, "Fallback listener invoked")
+                             if (mView == null) {
+                                LogUtils.d(TAG, "key View is null, return.")
+                                UUtils.showMsg("内置键盘启动失败，请检查插件是否正常安装")
+                                return
+                            }
+                            // 这里我们不能直接访问 activity.key_bord 因为它是私有的或者需要 ViewBinding
+                            // 但是我们可以尝试通过 findViewById 查找
+                            val keyBordLayout = activity.findViewById<ViewGroup>(R.id.key_bord)
+                            val terminalToolbarViewPager = activity.findViewById<View>(R.id.terminal_toolbar_view_pager)
+                            val terminalView = TermuxActivity.mTerminalView
+
+                            if (keyBordLayout != null) {
+                                if (keyBordLayout.childCount > 0) {
+                                    keyBordLayout.removeAllViews()
+                                    terminalToolbarViewPager?.visibility = View.VISIBLE
+                                    terminalView?.stopTextSelectionMode()
+                                    com.termux.shared.view.KeyboardUtils.clearDisableSoftKeyboardFlags(activity)
+                                    com.termux.shared.view.KeyboardUtils.toggleSoftKeyboard(activity)
+                                } else {
+                                    try {
+                                        keyBordLayout.addView(mView)
+                                        terminalToolbarViewPager?.visibility = View.GONE
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                        keyBordLayout.removeAllViews()
+                                    }
+                                    com.termux.shared.view.KeyboardUtils.disableSoftKeyboard(activity, terminalView)
+                                }
+                            }
+                            mCommonCommandsDialog?.dismiss()
                         }
                     }
                 }
-
-
             }
+            
+            if (mKeyViewListener == null) {
+                 LogUtils.e(TAG, "keyBord: mKeyViewListener is null after fallback")
+                 UUtils.showMsg("内部错误：监听器未初始化")
+                 return
+            }
+
+            val handler = object : Handler(Looper.getMainLooper()) {
+                override fun handleMessage(msg: Message) {
+                    super.handleMessage(msg)
+                    when (msg.what) {
+                        KeyBordManage.KEY_DEF -> {
+                            LogUtils.d(TAG, "handleMessage DEF:${msg.obj}")
+                            if (msg.obj != null) {
+                                TermuxActivity.mTerminalView.sendTextToTerminal(msg.obj as String?)
+                            }
+                        }
+                        KeyBordManage.KEY_ALT -> {
+                            LogUtils.d(TAG, "handleMessage ALT:${msg.obj}")
+                            if (msg.obj != null) {
+                                TermuxActivity.mTerminalView.sendTextToTerminalAlt(msg.obj as String?, true)
+                            }
+                        }
+                        KeyBordManage.KEY_CTRL -> {
+                            LogUtils.d(TAG, "handleMessage CTRL:${msg.obj}")
+                            if (msg.obj != null) {
+                                TermuxActivity.mTerminalView.sendTextToTerminalCtrl(msg.obj as String?, true)
+                            }
+                        }
+                        KeyBordManage.KEY_OTHER -> {
+                            LogUtils.d(TAG, "handleMessage OTHER:${msg.obj}")
+                            if (msg.obj != null) {
+                                TermuxActivity.mTermuxTerminalExtraKeys.onTerminalExtraKeyButtonClick(null, msg.obj as String?, false ,false ,false , false)
+                            }
+                        }
+                    }
+                }
+            }
+            LogUtils.d(TAG, "keyBord: initKeyBord start")
+            KeyBordManage.getInstance().initKeyBord(handler)
+            LogUtils.d(TAG, "keyBord: initKeyBord end")
+            
+            val keyView = KeyBordManage.getInstance().keyBordView
+            LogUtils.d(TAG, "keyBord: keyView is $keyView")
+            mKeyViewListener?.view(keyView)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            LogUtils.e(TAG, "keyBord error: $e")
+            UUtils.showMsg("启动键盘发生错误: ${e.message}")
         }
-        KeyBordManage.getInstance().initKeyBord(handler)
-        mKeyViewListener?.view(KeyBordManage.getInstance().keyBordView)
     }
 
     private fun commonShortcuts() {
@@ -513,7 +559,7 @@ class ItemMenuAdapter :RecyclerView.Adapter<ItemMenuViewHolder> {
         mingLShowDialog.setOnDismissListener {
             val text = mingLShowDialog.edit_text.text
             //设置自动保存，关闭Dialog之后也会自动保存
-            GlobalScope.launch {
+            GlobalScope.launch(Dispatchers.IO) {
                 withContext(Dispatchers.IO) {
                     if (!text.isNullOrEmpty()) {
                         FileIOUtils.saveDataMessageFileString(text.toString())

@@ -60,6 +60,17 @@ public class FileListDialog extends BaseDialogCentre {
             files1Array = new ArrayList<>(Arrays.asList(files));
             ListFileAdapter listFileAdapter = new ListFileAdapter(files1Array);
             list_view.setAdapter(listFileAdapter);
+            
+            list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(mOnItemFileClickListener!= null){
+                        if(position >= 0 && position < files1Array.size()){
+                             mOnItemFileClickListener.onItemClick(files1Array.get(position));
+                        }
+                    }
+                }
+            });
         }else{
             tv_empty.setVisibility(View.VISIBLE);
             tv_empty.setText(UUtils.getString(R.string.当前目录下没有配置文件));

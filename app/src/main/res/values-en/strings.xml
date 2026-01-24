@@ -715,7 +715,7 @@ Reset successfully</string>
 
     <string name="image_size_error">file too large</string>
 
-    <string name="zero_eg_not_install">ZeroTermux Engine not install. Please download the engine at the download site</string>
+    <string name="zero_eg_not_install">ZNo Zero Engine installed. Please go to ZT Settings -> About Termux-x -> ZeroCoreManage to download it.</string>
 
     <string name="install_environment">Install the required environment?</string>
 
@@ -1007,7 +1007,7 @@ Reset successfully</string>
     <string name="zt_particle_animation">particle animation</string>
 
     <!-- X11 Features Module -->
-    <string name="x11_features">X11 Features</string>
+    <string name="x11_features">Termux Features</string>
     <string name="x11_features_settings">X11 Settings</string>
     <string name="x11_features_settings_internal">Internal Channel X11 Settings</string>
     <string name="x11_features_settings_summary">Advanced (Native) Settings: Resolution, Bottom Keyboard Display, etc.</string>

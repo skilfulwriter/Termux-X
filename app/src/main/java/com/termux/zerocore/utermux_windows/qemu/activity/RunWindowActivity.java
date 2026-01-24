@@ -15,6 +15,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import java.util.List;
+import java.util.HashMap;
+import android.os.Message;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +35,17 @@ import com.termux.zerocore.utermux_windows.qemu.dialog.FileListDialog;
 import com.termux.zerocore.utermux_windows.qemu.dialog.FileNameDialog;
 import com.termux.zerocore.utermux_windows.qemu.dialog.SwitchQemuDialog;
 import com.termux.zerocore.utils.SaveData;
+import com.termux.zerocore.http.HTTPIP;
+import com.hjq.permissions.XXPermissions;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.OnPermissionCallback;
+import com.blockchain.ub.utils.httputils.BaseHttpUtils;
+import com.blockchain.ub.utils.httputils.HttpResponseListenerBase;
+import com.termux.zerocore.dialog.DownLoadDialogBoom;
+import com.termux.zerocore.bean.ZDYDataBean;
+import com.google.gson.Gson;
+import com.lzy.okgo.model.Response;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -747,7 +763,7 @@ public class RunWindowActivity extends AppCompatActivity implements TermuxData.I
             @Override
             public void onClick(View v) {
 
-               UUtils.showMsg(UUtils.getString(R.string.请在下载站下载VNC插件));
+               startHttp1(HTTPIP.IP);
 
 
             }
@@ -992,13 +1008,78 @@ public class RunWindowActivity extends AppCompatActivity implements TermuxData.I
 
 
 
+
+    public void startHttp1(String ip) {
+        XXPermissions.with(RunWindowActivity.this)
+            .permission(Permission.WRITE_EXTERNAL_STORAGE)
+            .permission(Permission.READ_EXTERNAL_STORAGE)
+            .request(new OnPermissionCallback() {
+
+                @Override
+                public void onGranted(List<String> permissions, boolean all) {
+                    if (all) {
+
+                        LoadingDialog loadingDialog = new LoadingDialog(RunWindowActivity.this);
+
+                        loadingDialog.getMsg().setText(UUtils.getString(R.string.正在连接到下载站服务器));
+
+                        loadingDialog.show();
+
+
+                        new BaseHttpUtils().getUrl(ip + "/main.json", new HttpResponseListenerBase() {
+                            @Override
+                            public void onSuccessful(@NotNull Message msg, int mWhat) {
+                                loadingDialog.dismiss();
+                                //    UUtils.showLog("连接成功:" + msg.obj);
+
+                                try {
+                                    ZDYDataBean zdyDataBean = new Gson().fromJson((String) msg.obj, ZDYDataBean.class);
+
+                                    DownLoadDialogBoom downLoadDialogBoom = new DownLoadDialogBoom(RunWindowActivity.this);
+                                    downLoadDialogBoom.setIP(ip + "/main.json");
+                                    downLoadDialogBoom.show();
+                                    downLoadDialogBoom.setCancelable(true);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    UUtils.showMsg(UUtils.getString(R.string.服务器数据格式不正确));
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(@org.jetbrains.annotations.Nullable Response<String> response, @NotNull String msg, int mWhat) {
+                                loadingDialog.dismiss();
+                                UUtils.showMsg(UUtils.getString(R.string.无法连接到下载站服务器));
+                            }
+                        }, new HashMap<>(), 5555);
+
+
+                    } else {
+
+                        UUtils.showMsg(UUtils.getString(R.string.没有权限));
+                    }
+                }
+
+                @Override
+                public void onDenied(List<String> permissions, boolean never) {
+                    if (never) {
+                        UUtils.showMsg(UUtils.getString(R.string.没有权限));
+                        // 如果是被永久拒绝就跳转到应用权限系统设置页面
+                        XXPermissions.startPermissionActivity(RunWindowActivity.this, permissions);
+                    } else {
+                        UUtils.showMsg(UUtils.getString(R.string.没有权限));
+                    }
+                }
+            });
+    }
+
     private void getIso(){
 
         AlertDialog.Builder ab = new AlertDialog.Builder(RunWindowActivity.this);
 
         ab.setTitle(UUtils.getString(R.string.获取镜像));
 
-        //链接: https://pan.baidu.com/s/17l6_bJ3EQN41I7Axs0USvQ 提取码: bxht
+        //链接: https://pan.baidu.com/s/114S8VNUJiN2qjFjqj9ks5g?pwd=6b7w
 
         ab.setMessage(UUtils.getString(R.string.是否前往下载系统));
 
@@ -1009,7 +1090,7 @@ public class RunWindowActivity extends AppCompatActivity implements TermuxData.I
                 ab.create().dismiss();
 
                 Intent intent = new Intent();
-                intent.setData(Uri.parse("https://pan.baidu.com/s/18Ro-q9XMkowNZ1MWrTWCPw"));//Url 就是你要打开的网址
+                intent.setData(Uri.parse("https://pan.baidu.com/s/114S8VNUJiN2qjFjqj9ks5g?pwd=6b7w"));//Url 就是你要打开的网址
                 intent.setAction(Intent.ACTION_VIEW);
                 startActivity(intent); //启动浏览器
 
@@ -1028,6 +1109,34 @@ public class RunWindowActivity extends AppCompatActivity implements TermuxData.I
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkVncStatus();
+    }
+
+    private void checkVncStatus() {
+        Intent intent = new Intent("com.utermux.action.vnc");
+        boolean isInstalled = false;
+        try {
+            PackageManager packageManager = getPackageManager();
+            List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+            isInstalled = activities.size() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (isInstalled) {
+            dis_state.setText(UUtils.getString(R.string.显示环境开));
+            dis_state.setVisibility(View.VISIBLE);
+            dis_install.setVisibility(View.GONE);
+        } else {
+            dis_state.setText(UUtils.getString(R.string.显示环境关));
+            dis_state.setVisibility(View.VISIBLE);
+            dis_install.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void onDestroy() {

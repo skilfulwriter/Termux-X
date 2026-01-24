@@ -31,9 +31,15 @@ public class MenuLeftPopuListWindow :BasePuPuWindow{
     }
 
 
+    private var spanCount = 2
+
+    public fun setSpanCount(count: Int) {
+        this.spanCount = count
+    }
+
     public fun setListData(mList:ArrayList<MenuLeftPopuListData>){
 
-        recycler_view?.layoutManager = GridLayoutManager(UUtils.getContext(),2)
+        recycler_view?.layoutManager = GridLayoutManager(UUtils.getContext(), spanCount)
 
         recycler_view?.adapter = MenuLeftPopuListWindowAdapter(mList,mItemClickPopuListener,this)
 
@@ -42,7 +48,7 @@ public class MenuLeftPopuListWindow :BasePuPuWindow{
 
     class MenuLeftPopuListWindowAdapter:RecyclerView.Adapter<MenuLeftPopuListWindowViewHolder>{
 
-        private lateinit var mList:ArrayList<MenuLeftPopuListData>
+        private var mList:ArrayList<MenuLeftPopuListData>
         private var mItemClickPopuListener:ItemClickPopuListener? = null
         private var mMenuLeftPopuListWindow:MenuLeftPopuListWindow? = null
         constructor(mList:ArrayList<MenuLeftPopuListData>,mItemClickPopuListener:ItemClickPopuListener?,mMenuLeftPopuListWindow:MenuLeftPopuListWindow) : super(){
@@ -101,8 +107,8 @@ public class MenuLeftPopuListWindow :BasePuPuWindow{
 
     class MenuLeftPopuListWindowViewHolder:RecyclerView.ViewHolder{
 
-        public lateinit var img:ImageView
-        public lateinit var title:TextView
+        public var img:ImageView
+        public var title:TextView
 
         constructor(itemView: View) : super(itemView){
             img = itemView.findViewById(R.id.img)

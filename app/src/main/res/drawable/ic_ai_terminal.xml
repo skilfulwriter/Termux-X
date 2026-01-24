@@ -1,0 +1,43 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+  <!-- Background: Rounded Rectangle with Gradient -->
+  <path
+      android:pathData="M8,4h32a8,8 0 0,1 8,8v24a8,8 0 0,1 -8,8h-32a8,8 0 0,1 -8,-8v-24a8,8 0 0,1 8,-8z">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startX="0" 
+          android:startY="0" 
+          android:endX="48" 
+          android:endY="48"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#42A5F5"/>
+        <item android:offset="0.5" android:color="#BA68C8"/>
+        <item android:offset="1.0" android:color="#FF9800"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  
+  <!-- Symbol > -->
+  <path
+      android:pathData="M14,15 L24,24 L14,33"
+      android:strokeWidth="4"
+      android:strokeColor="#FFFFFF"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round"
+      android:fillColor="#00000000"/>
+      
+  <!-- Symbol _ -->
+  <path
+      android:pathData="M28,33 L38,33"
+      android:strokeWidth="4"
+      android:strokeColor="#FFFFFF"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round"
+      android:fillColor="#00000000"/>
+      
+</vector>

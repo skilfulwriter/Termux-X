@@ -8,6 +8,7 @@ import android.os.Binder
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import com.example.xh_lib.utils.UUtils
 import com.termux.R
@@ -41,7 +42,7 @@ class TimerExeService : Service(), LibSuManage.TimerListener {
     }
 
     private val mHandler1: Handler =
-    object : Handler() {
+    object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             LogUtils.e(TAG, "startTimerNum  sendHandler.....RUN")
@@ -58,7 +59,7 @@ class TimerExeService : Service(), LibSuManage.TimerListener {
     }
 
     private val mHandler2: Handler =
-    object : Handler() {
+    object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val cachedShell = Shell.getCachedShell()
@@ -141,7 +142,7 @@ class TimerExeService : Service(), LibSuManage.TimerListener {
     //开始计时
     private fun startTimerNum() {
         mLibSuManage?.stop()
-        var time = 0L
+        val time: Long
         if (TimerSetManage.get().getZTTimerBean().timerNumber == TimerBean.TIMER_OTHER) {
             time = mTimerBean!!.timerOtherNumber
         } else {

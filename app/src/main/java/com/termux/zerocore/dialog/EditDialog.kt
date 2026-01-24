@@ -29,7 +29,7 @@ class EditDialog : BaseDialogCentre {
         ok = mView?.findViewById(R.id.ok)
         cancel = mView?.findViewById(R.id.cancel)
 
-        edit_text?.setOnFocusChangeListener { v, hasFocus ->
+        edit_text?.setOnFocusChangeListener { _, _ ->
 
 
             val list = getList("")

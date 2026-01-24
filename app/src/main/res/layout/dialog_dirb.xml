@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2b2b2b"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dirb 目录扫描"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Target Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="目标 URL"
+            android:textColor="#FF9800"
+            android:layout_marginBottom="4dp"/>
+            
+        <EditText
+            android:id="@+id/editTextTarget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="http://example.com/"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Wordlist Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="字典路径 (留空使用默认)"
+            android:textColor="#FF9800"
+            android:layout_marginBottom="4dp"/>
+            
+        <EditText
+            android:id="@+id/editTextWordlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="/usr/share/dirb/wordlists/common.txt"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Extensions Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="文件扩展名 (例如: .php,.html)"
+            android:textColor="#FF9800"
+            android:layout_marginBottom="4dp"/>
+            
+        <EditText
+            android:id="@+id/editTextExtensions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=".php,.txt,.zip"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选项"
+            android:textColor="#FF9800"
+            android:layout_marginBottom="8dp"/>
+
+        <CheckBox
+            android:id="@+id/checkNotRecursive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="不递归扫描 (-r)"
+            android:textColor="#FFFFFF"/>
+
+        <CheckBox
+            android:id="@+id/checkIgnoreRedirects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忽略重定向 (-w)"
+            android:textColor="#FFFFFF"/>
+            
+        <CheckBox
+            android:id="@+id/checkCaseInsensitive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="不区分大小写 (-i)"
+            android:textColor="#FFFFFF"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高级设置"
+            android:textColor="#FF9800"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忽略状态码 (-N)"
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/editTextIgnoreStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="例如: 404"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="仅显示状态码 (-S)"
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/editTextShowStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="例如: 200,301,302"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="延迟 (毫秒) (-z)"
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/editTextDelay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="例如: 100"
+            android:inputType="number"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="代理 URL (-p)"
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/editTextProxy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="例如: http://127.0.0.1:8080"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="自定义 Cookie (-c)"
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/editTextCookie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint='例如: "session=abc123"'
+            android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/buttonScan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始扫描"
+            android:backgroundTint="#FF9800"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp"/>
+            
+        <Button
+            android:id="@+id/buttonStop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="停止扫描"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp"/>
+            
+        <TextView
+            android:id="@+id/stopHintText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="停止按钮仅在扫描运行时可用"
+            android:textColor="#AAAAAA"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -3,6 +3,7 @@ package com.termux.zerocore.popuwindow
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
 import android.view.View
@@ -33,7 +34,7 @@ class EditPromptWindow :BasePuPuWindow {
     private var del_img: ImageView? = null
 
     @SuppressLint("HandlerLeak")
-    private val mHandler: Handler = object : Handler() {
+    private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
 
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
@@ -43,7 +44,7 @@ class EditPromptWindow :BasePuPuWindow {
             BaseHttpUtils().getUrl("${mList!![i].ip}/repository/main.json",object :HttpResponseListenerBase{
                 override fun onSuccessful(msg: Message, mWhat: Int) {
                     try {
-                        val test = Gson().fromJson(msg.obj as String, ZDYDataBean::class.java)
+                        Gson().fromJson(msg.obj as String, ZDYDataBean::class.java)
                         UUtils.showLog("连接测试:成功")
                         mList!![i].connection = 1
                     } catch (e: Exception) {
@@ -88,7 +89,7 @@ class EditPromptWindow :BasePuPuWindow {
 
 
     @SuppressLint("HandlerLeak")
-    private val mHandler2: Handler = object : Handler() {
+    private val mHandler2: Handler = object : Handler(Looper.getMainLooper()) {
 
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
@@ -98,7 +99,7 @@ class EditPromptWindow :BasePuPuWindow {
             BaseHttpUtils().getUrl("${mList!![i].ip}/repository/main.json",object :HttpResponseListenerBase{
                 override fun onSuccessful(msg: Message, mWhat: Int) {
                     try {
-                        val test = Gson().fromJson(msg.obj as String, ZDYDataBean::class.java)
+                        Gson().fromJson(msg.obj as String, ZDYDataBean::class.java)
                         mList!![i].connection = 1
                         UUtils.showLog("连接测试:成功")
                     } catch (e: Exception) {

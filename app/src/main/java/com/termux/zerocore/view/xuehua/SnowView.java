@@ -55,11 +55,13 @@ public class SnowView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (run) {
+        if (run && snowflakes != null) {
             for (SnowFlake snowFlake : snowflakes) {
                 snowFlake.draw(canvas);
             }
-            getHandler().postDelayed(runnable, DELAY);
+            if (getHandler() != null) {
+                getHandler().postDelayed(runnable, DELAY);
+            }
         }
     }
 

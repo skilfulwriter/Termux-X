@@ -28,6 +28,28 @@ public class AIClient {
     }
 
     public static void sendMessage(String systemPrompt, String userMessage, String apiKey, String baseUrl, String modelName, AIResponseListener listener) {
+        JSONArray messages = new JSONArray();
+        try {
+            if (systemPrompt != null && !systemPrompt.isEmpty()) {
+                JSONObject systemMsg = new JSONObject();
+                systemMsg.put("role", "system");
+                systemMsg.put("content", systemPrompt);
+                messages.put(systemMsg);
+            }
+
+            JSONObject userMsg = new JSONObject();
+            userMsg.put("role", "user");
+            userMsg.put("content", userMessage);
+            messages.put(userMsg);
+        } catch (Exception e) {
+            listener.onError("Error building messages: " + e.getMessage());
+            return;
+        }
+
+        sendMessage(messages, apiKey, baseUrl, modelName, listener);
+    }
+
+    public static void sendMessage(JSONArray messages, String apiKey, String baseUrl, String modelName, AIResponseListener listener) {
         executor.execute(() -> {
             try {
                 // Assuming OpenAI compatible endpoint: POST /chat/completions
@@ -56,20 +78,6 @@ public class AIClient {
                 payload.put("model", model);
                 payload.put("stream", true); // Enable streaming
                 
-                JSONArray messages = new JSONArray();
-                
-                if (systemPrompt != null && !systemPrompt.isEmpty()) {
-                    JSONObject systemMsg = new JSONObject();
-                    systemMsg.put("role", "system");
-                    systemMsg.put("content", systemPrompt);
-                    messages.put(systemMsg);
-                }
-
-                JSONObject userMsg = new JSONObject();
-                userMsg.put("role", "user");
-                userMsg.put("content", userMessage);
-                messages.put(userMsg);
-
                 payload.put("messages", messages);
 
                 try (OutputStream os = conn.getOutputStream()) {

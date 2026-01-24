@@ -85,8 +85,8 @@ class BoomCommandDialog : BaseDialogDown {
     fun shuaxingML() {
         try {
             minglArrayList!!.clear()
-            val commi22: String = SaveData.getData("commi22")
-            if (commi22 == null || commi22.isEmpty() || commi22 == "def") {
+            val commi22: String? = SaveData.getData("commi22")
+            if (commi22.isNullOrEmpty() || commi22 == "def") {
                 return
             }
             val minLBean = Gson().fromJson(commi22, MinLBean::class.java)

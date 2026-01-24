@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    
+    <!-- Background: Dark Rounded Rect -->
+    <path
+        android:pathData="M8,4h32a4,4 0 0,1 4,4v32a4,4 0 0,1 -4,4h-32a4,4 0 0,1 -4,-4v-32a4,4 0 0,1 4,-4z"
+        android:fillColor="#1E1E2E"/>
+        
+    <!-- Border: Purple Gradient (Simulated with stroke) -->
+    <path
+        android:pathData="M8,4h32a4,4 0 0,1 4,4v32a4,4 0 0,1 -4,4h-32a4,4 0 0,1 -4,-4v-32a4,4 0 0,1 4,-4z"
+        android:strokeWidth="2"
+        android:strokeColor="#BB86FC"
+        android:fillColor="#00000000"/>
+
+    <!-- Symbol: Greater Than '>' -->
+    <path
+        android:pathData="M16,14 L34,24 L16,34"
+        android:strokeWidth="4"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"/>
+</vector>

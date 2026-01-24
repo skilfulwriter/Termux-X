@@ -32,7 +32,9 @@ import com.termux.zerocore.activity.adapter.SSHAdapter;
 import com.termux.zerocore.bean.MinLBean;
 import com.termux.zerocore.bean.SSHDeviceBean;
 import com.termux.zerocore.code.CodeString;
+import com.termux.zerocore.dialog.BoomCommandDialog;
 import com.termux.zerocore.dialog.CommandDialog;
+import com.termux.zerocore.dialog.CommonCommandsDialog;
 import com.termux.zerocore.url.FileUrl;
 import com.termux.zerocore.utils.SaveData;
 import com.termux.zerocore.utils.WindowsUtils;
@@ -69,6 +71,9 @@ public class BoomWindow {
     public LinearLayout popu_windows_jianpan;
     public LinearLayout popu_windows_huihua;
     public LinearLayout popu_windows_ssh;
+    public LinearLayout popu_windows_tools;
+    public LinearLayout popu_windows_clipboard;
+    public LinearLayout layout_cmd_def;
     public LinearLayout layout_add_ssh;
     public TextView ssh_text;
 
@@ -95,6 +100,9 @@ public class BoomWindow {
         popu_windows_jianpan = mView.findViewById(R.id.popu_windows_jianpan);
         popu_windows_huihua = mView.findViewById(R.id.popu_windows_huihua);
         popu_windows_ssh = mView.findViewById(R.id.popu_windows_ssh);
+        popu_windows_tools = mView.findViewById(R.id.popu_windows_tools);
+        popu_windows_clipboard = mView.findViewById(R.id.popu_windows_clipboard);
+        layout_cmd_def = mView.findViewById(R.id.layout_cmd_def);
         layout_add_ssh = mView.findViewById(R.id.layout_add_ssh);
         ssh_text = mView.findViewById(R.id.ssh_text);
         qiehuan_command_zidong.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +115,41 @@ public class BoomWindow {
                 commandDialog.setCancelable(false);
             }
         });
+        if (popu_windows_tools != null) {
+            popu_windows_tools.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                    CommonCommandsDialog mCommonCommandsDialog = new CommonCommandsDialog(termuxActivity);
+                    mCommonCommandsDialog.show();
+                    mCommonCommandsDialog.selectIndex(1); // 1 is OTHER_SELECT
+                    mCommonCommandsDialog.setCancelable(true);
+                }
+            });
+        }
+        if (popu_windows_clipboard != null) {
+            popu_windows_clipboard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                    CommonCommandsDialog mCommonCommandsDialog = new CommonCommandsDialog(termuxActivity);
+                    mCommonCommandsDialog.show();
+                    mCommonCommandsDialog.selectIndex(0); // 0 is CLIPBOARD_SELECT
+                    mCommonCommandsDialog.setCancelable(true);
+                }
+            });
+        }
+        if (layout_cmd_def != null) {
+            layout_cmd_def.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                    BoomCommandDialog boomCommandDialog = new BoomCommandDialog(termuxActivity);
+                    boomCommandDialog.show();
+                    boomCommandDialog.setCancelable(true);
+                }
+            });
+        }
         //SSH按钮点击事件
         if (popu_windows_ssh != null) {
             popu_windows_ssh.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +236,7 @@ public class BoomWindow {
 
     private void showSSHView(BoomMinLAdapter.CloseLiftListener closeLiftListener) {
         if (layout_add_ssh != null) layout_add_ssh.setVisibility(View.VISIBLE);
+        if (layout_cmd_def != null) layout_cmd_def.setVisibility(View.GONE);
         title.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
 
@@ -216,6 +260,7 @@ public class BoomWindow {
 
     private void showBoomView (BoomMinLAdapter.CloseLiftListener closeLiftListener) {
         if (layout_add_ssh != null) layout_add_ssh.setVisibility(View.GONE);
+        if (layout_cmd_def != null) layout_cmd_def.setVisibility(View.VISIBLE);
         String zidong1226 = SaveData.getData("zidong1226");
         if (zidong1226 == null || zidong1226.isEmpty() || zidong1226.equals("def")){
             String commi22 = SaveData.getData("commi22");

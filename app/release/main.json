@@ -1,20 +1,52 @@
 {
     "code": 0,
-    "ip": "http://od.ixcmstudio.cn/",
-    "home": "/repository/main/",
-	"versionName": "0.118.36.1",
-	"engineName": "0.1.20221116",
-	"serviceName": "IXCM工作室公益下载站(IXCM Studio)",
-	"msg": "【更新内容】\n【update content】\n0.118.36.1:\n1.优化多个BUG，增加ADB远程屏幕连接",
+    "ip": "https://down.xheishou.top/directlink/down/在线脚本",
+    "home": "/在线脚本/",
+    "serviceName": "X黑手脚本站",
+    "versionName": "1.0.0",
+    "msg": "欢迎使用X黑手脚本站",
     "data": [
-	{
-            "name": "点击上方蓝色字体，进入网页下载站",
-            "download": "/repository/main/ZeroTermux/ZeroTermux-0.1",
-            "size": "http://d.icdown.club/",
-			"fileName": "ZeroTermux-0.118.32.apk",
-			"type": "apk",
-			"isDownload": "1",
-			"note": "点击上方蓝色字体，进入网页下载站\nClick on the blue font above to go to the web download site"
+        {
+            "name": "【学习专用】安装msf",
+            "download": "/msf_install.sh",
+            "isDownload": "0",
+            "note": "直接在Termux-X中安装msf"
+        },
+        {
+            "name": "恢复环境变量autofix_bashrc",
+            "download": "/on_line_sh/main/autofix_bashrc.sh",
+            "isDownload": "0",
+            "note": "修复或恢复因缺少关键环境变量导致的命令失效问题\nFixes or reset command failures caused by missing key environment variables."
+        },
+        {
+            "name": "【学习专用】安装msf",
+            "download": "/on_line_sh/main/msf_install.sh",
+            "isDownload": "0",
+            "note": "直接在TermuxOS中安装msf\nInstall msf"
+        },
+        {
+            "name": "【学习专用】metasploit特定地区安装脚本",
+            "download": "/on_line_sh/main/metasploit_installer.sh",
+            "isDownload": "0",
+            "note": "在大陆地区安装metasploit\nInstall metasploit only China `https://github.com/UtermuxBlog/termux-metasploit` "
+        },
+        {
+            "name": "【学习专用】映射SD卡脚本",
+            "download": "/on_line_sh/main/termux-setup-storage",
+            "isDownload": "0",
+            "note": "默认的termux映射SD卡脚本\nDefault termux mapping SD card script"
+        },
+        {
+            "name": "【学习专用】安装rish",
+            "download": "/on_line_sh/main/Rish_install.sh",
+            "isDownload": "0",
+            "note": "安装rish，执行之前需要打开shizuku\nyou can useful to use"
+        },
+        {
+            "name": "【学习专用】卸载rish",
+            "download": "/on_line_sh/main/Rish_uninstall.sh",
+            "isDownload": "0",
+            "note": "卸载rish\nI do not want to have rish"
         }
     ]
 }

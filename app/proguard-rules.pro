@@ -7,7 +7,7 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
--dontobfuscate
+# -dontobfuscate
 #-renamesourcefileattribute SourceFile
 #-keepattributes SourceFile,LineNumberTable
 
@@ -72,6 +72,20 @@
 # 保护数据模型
 -keep class com.termux.zerocore.bean.** { *; }
 
-# 保护 TypeToken 的匿名子类，防止 R8 移除泛型信息导致运行时崩溃
--keep class com.google.gson.reflect.TypeToken { *; }
--keep class * extends com.google.gson.reflect.TypeToken
+# 忽略 R8 缺失类警告 (由第三方库依赖引起)
+-dontwarn com.trilead.ssh2.**
+-dontwarn dalvik.annotation.optimization.**
+-dontwarn kotlinx.parcelize.**
+-dontwarn kotlinx.serialization.**
+
+# 保持这些类不被混淆，因为它们可能被反射使用或 R8 误判
+-keep class com.trilead.ssh2.** { *; }
+-keep class dalvik.annotation.optimization.** { *; }
+-keep class kotlinx.parcelize.** { *; }
+-keep class kotlinx.serialization.** { *; }
+
+# Conscrypt rules
+-dontwarn org.conscrypt.**
+-keep class org.conscrypt.** { *; }
+-dontwarn com.android.org.conscrypt.**
+-dontwarn org.apache.harmony.xnet.provider.jsse.**

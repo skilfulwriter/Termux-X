@@ -1,23 +1,94 @@
-#!/data/data/com.termux/files/usr/bin/sh
+#!/data/data/com.termux/files/usr/bin/bash
 
 JAVA_HOST="127.0.0.1"
 JAVA_PORT=19951
-SHELL_PORT=19952
 
-# 基本检查
-# 如果要自定义命令，请在：java/com/termux/zerocore/socket/ZTSocketService.java#157 按照提示添加
-# 基础原理为 socket 连接
-# 自动安装 nc
-command -v nc >/dev/null 2>&1 || {
-    echo "自动安装 nc..."
-    pkg install netcat-openbsd -y >/dev/null 2>&1 || {
-        echo "安装失败，请手动运行: pkg install netcat-openbsd"
-        exit 1
-    }
+# 使用 Bash 内置的 /dev/tcp 进行 Socket 通信
+# 这样可以摆脱对 nc (netcat) 或 busybox 的依赖，实现完全的“开箱即用”
+send_socket_request() {
+    local request_data="$1"
+    local response_data=""
+    
+    # 尝试建立连接 (文件描述符 3)
+    if ! exec 3<>/dev/tcp/$JAVA_HOST/$JAVA_PORT; then
+        echo "Termux-x 服务未就绪，请尝试重启 App。"
+        return 1
+    fi
+
+    # 发送请求
+    echo "$request_data" >&3
+
+    # 读取响应 (直到服务端关闭连接)
+    # 使用 cat 读取流
+    cat <&3
+    
+    # 关闭连接
+    exec 3<&-
+    exec 3>&-
 }
-nc -z -w 1 "$JAVA_HOST" "$JAVA_PORT" 2>/dev/null || { echo "Java服务未运行"; exit 1; }
 
-# 直接启动监听，收到连接后自动退出
-nc -l -p $SHELL_PORT -q 0 &
-sleep 1
-echo "$*" | nc -w 10 "$JAVA_HOST" "$JAVA_PORT"
+# 简单的连通性检查 (可选，为了快速反馈)
+# if ! exec 3<>/dev/tcp/$JAVA_HOST/$JAVA_PORT 2>/dev/null; then
+#    echo "Termux-x 服务未就绪，请尝试重启 App。"
+#    exit 1
+# fi
+# exec 3<&-
+# exec 3>&-
+
+# 如果是 ask 命令，注入当前 shell PID 并处理交互
+if [ "$1" = "ask" ] || [ "$1" = "ai" ]; then
+    cmd_type="$1"
+    shift
+    
+    # 创建临时文件用于捕获完整响应
+    TEMP_RESPONSE=$(mktemp)
+    
+    # 获取响应 (直接调用 bash socket 函数)
+    # 使用 tee 将输出分流：
+    # 1. 写入临时文件 (用于后续提取命令)
+    # 2. 通过管道传给 sed 去除标记后显示在屏幕上 (实现流式输出且隐藏内部标记)
+    send_socket_request "$cmd_type --pid=$PPID $*" | tee "$TEMP_RESPONSE" | sed 's/@@@EXEC@@@//g'
+    
+    # 确保最后有换行
+    echo ""
+    
+    # 读取完整响应
+    response=$(cat "$TEMP_RESPONSE")
+    rm "$TEMP_RESPONSE"
+    
+    # 使用 sed 将 @@@EXEC@@@ 替换为不可见字符 (Group Separator \035)，以便 awk 稳定处理
+    # Android/Busybox awk 可能不支持多字符 RS，这种方式更兼容
+    SEP=$(printf '\035')
+    clean_response=$(echo "$response" | sed "s/@@@EXEC@@@/$SEP/g")
+    
+    # 提取命令块 (偶数记录) 
+    exec_cmd=$(echo "$clean_response" | awk -v RS="$SEP" 'NR%2==0 {print}' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    
+    # display_text 已经在流式输出中显示了，这里不再重复显示
+    # display_text=$(echo "$clean_response" | awk -v RS="$SEP" 'NR%2==1 {printf "%s", $0}')
+    # echo "$display_text"
+    
+    if [ -n "$exec_cmd" ]; then
+        echo ""
+        echo -e "\033[1;33m[AI 建议执行]\033[0m"
+        echo -e "\033[1;36m$exec_cmd\033[0m"
+        echo ""
+        
+        # 检查是否包含 cd 命令并提示 (使用 grep 增强匹配)
+        if echo "$exec_cmd" | grep -q -E "(^|[[:space:];&])cd([[:space:]]|$)"; then
+             echo -e "\033[1;31m注意: 此命令包含 'cd'，但在 AI 助手中执行只会临时生效，无法改变您当前 Shell 的路径。\033[0m"
+        fi
+
+        printf "\033[1;32m是否立即执行? [y/N] \033[0m"
+        read -r confirm
+        if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+            echo "执行中..."
+            eval "$exec_cmd"
+        else
+            echo "已取消。"
+        fi
+    fi
+else
+    # 普通命令转发
+    send_socket_request "$*"
+fi

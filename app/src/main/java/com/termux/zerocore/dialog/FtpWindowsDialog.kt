@@ -98,7 +98,7 @@ class FtpWindowsDialog : BaseDialogCentre {
          * 初始化配置文件
          */
         initDefUser()
-        GlobalScope.launch {
+        MainScope().launch {
             withContext(Dispatchers.Main) {
                 FtpService.stopService()
                 it.visibility = View.INVISIBLE
@@ -127,7 +127,7 @@ class FtpWindowsDialog : BaseDialogCentre {
     }
 
     private fun switchOff(it:SwitchView) {
-        GlobalScope.launch {
+        MainScope().launch {
             withContext(Dispatchers.Main) {
                 FtpService.stopService()
                 it.visibility = View.INVISIBLE

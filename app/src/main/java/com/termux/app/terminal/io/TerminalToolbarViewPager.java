@@ -11,8 +11,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.termux.R;
 import com.termux.app.TermuxActivity;
+import com.termux.shared.termux.extrakeys.ExtraKeysConstants;
+import com.termux.shared.termux.extrakeys.ExtraKeysInfo;
 import com.termux.shared.termux.extrakeys.ExtraKeysView;
+import com.termux.shared.termux.settings.properties.TermuxPropertyConstants;
 import com.termux.terminal.TerminalSession;
+
+import org.json.JSONException;
 
 public class TerminalToolbarViewPager {
 
@@ -28,6 +33,10 @@ public class TerminalToolbarViewPager {
 
         @Override
         public int getCount() {
+            String extraKeys2 = (String) mActivity.getProperties().getInternalPropertyValue(TermuxPropertyConstants.KEY_EXTRA_KEYS_2, true);
+            if (extraKeys2 != null && !extraKeys2.equals("[]") && !extraKeys2.isEmpty()) {
+                return 3;
+            }
             return 2;
         }
 
@@ -41,6 +50,10 @@ public class TerminalToolbarViewPager {
         public Object instantiateItem(@NonNull ViewGroup collection, int position) {
             LayoutInflater inflater = LayoutInflater.from(mActivity);
             View layout;
+            
+            String extraKeys2 = (String) mActivity.getProperties().getInternalPropertyValue(TermuxPropertyConstants.KEY_EXTRA_KEYS_2, true);
+            boolean hasExtraKeys2 = extraKeys2 != null && !extraKeys2.equals("[]") && !extraKeys2.isEmpty();
+
             if (position == 0) {
                 layout = inflater.inflate(R.layout.view_terminal_toolbar_extra_keys, collection, false);
                 ExtraKeysView extraKeysView = (ExtraKeysView) layout;
@@ -55,6 +68,21 @@ public class TerminalToolbarViewPager {
                     FullScreenWorkAround.apply(mActivity);
                 }
 
+            } else if (hasExtraKeys2 && position == 1) {
+                layout = inflater.inflate(R.layout.view_terminal_toolbar_extra_keys, collection, false);
+                ExtraKeysView extraKeysView = (ExtraKeysView) layout;
+                extraKeysView.setExtraKeysViewClient(mActivity.getTermuxTerminalExtraKeys());
+                extraKeysView.setButtonTextAllCaps(mActivity.getProperties().shouldExtraKeysTextBeAllCaps());
+                // We don't call mActivity.setExtraKeysView(extraKeysView) here to avoid overwriting the main one
+                
+                try {
+                     ExtraKeysInfo info = new ExtraKeysInfo(extraKeys2, 
+                         (String) mActivity.getProperties().getInternalPropertyValue(TermuxPropertyConstants.KEY_EXTRA_KEYS_STYLE, true),
+                         ExtraKeysConstants.CONTROL_CHARS_ALIASES);
+                     extraKeysView.reload(info, mActivity.getTerminalToolbarDefaultHeight());
+                } catch (JSONException e) {
+                    // Ignore error
+                }
             } else {
                 layout = inflater.inflate(R.layout.view_terminal_toolbar_text_input, collection, false);
                 final EditText editText = layout.findViewById(R.id.terminal_toolbar_text_input);
@@ -104,11 +132,15 @@ public class TerminalToolbarViewPager {
 
         @Override
         public void onPageSelected(int position) {
-            if (position == 0) {
-                mActivity.getTerminalView().requestFocus();
-            } else {
+            String extraKeys2 = (String) mActivity.getProperties().getInternalPropertyValue(TermuxPropertyConstants.KEY_EXTRA_KEYS_2, true);
+            boolean hasExtraKeys2 = extraKeys2 != null && !extraKeys2.equals("[]") && !extraKeys2.isEmpty();
+            int textInputPosition = hasExtraKeys2 ? 2 : 1;
+
+            if (position == textInputPosition) {
                 final EditText editText = mTerminalToolbarViewPager.findViewById(R.id.terminal_toolbar_text_input);
                 if (editText != null) editText.requestFocus();
+            } else {
+                mActivity.getTerminalView().requestFocus();
             }
         }
 

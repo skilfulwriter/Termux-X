@@ -1,6 +1,6 @@
 {
-    "latestVersion": "0.118.3.51",
-    "downloadUrl": "https://xheishou.com/update/apk/zerotermux/zerotermux.apk",
-    "detailsUrl": "https://xheishou.com/update/zerotermux_details.html",
-    "releaseNotes": "=========v0.118.3.51==========\n\n【本次更新内容】\n\n1. 新增：应用内更新检查\n   • 启动应用时自动检测新版本\n   • 支持在线下载更新\n\n2. 修复：Kali Nethunter KeX 安装问题\n   • 修复 APK 解析错误\n   • 优化安装状态检测\n   • 支持自定义下载源\n\n3. 优化：系统兼容性\n   • 适配更高版本 Android 系统\n   • 优化文件权限处理"
+    "latestVersion": "0.118.3.57",
+    "downloadUrl": "https://cos.x10001.com/X黑手文件下载站/Termux-x-APP下载/Termux-X-0.118.3.57.apk",
+    "detailsUrl": "https://pd.qq.com/s/b62vvr4zs",
+    "releaseNotes": "=========v0.118.3.57==========\n\n【本次更新内容】\n\n*   **新增**：在线脚本下载运行逻辑优化，支持自动识别当前环境。若在 Kali Shell 中运行 Termux 脚本，会自动切换至 Termux 会话执行，避免环境错误\n*   **新增**：在线脚本支持 Kali Root 环境自动部署。下载的脚本会自动复制到 Kali Root 目录并赋予权限执行，解决路径权限问题\n*   **新增**：菜单栏新增“Kali换源”快捷入口，支持一键切换 Kali Linux 软件源（官方、清华、中科大、阿里云），自动进入 Root 环境执行\n*   **新增**：在线脚本下载完成后自动识别python脚本文件， 并自动 执行"
 }

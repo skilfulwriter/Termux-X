@@ -101,9 +101,8 @@ public class ZTSocketService extends Service {
                 String command = in.readLine();
                 LogUtils.d(TAG, "收到命令: " + command);
 
-                String result = processCommand(command);
-                out.println(result);
-                LogUtils.d(TAG, "返回结果: " + result);
+                processCommand(command, out);
+                // LogUtils.d(TAG, "返回结果: " + result);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -118,28 +117,31 @@ public class ZTSocketService extends Service {
             }
         }
 
-        private String processCommand(String command) {
+        private void processCommand(String command, PrintWriter out) {
             try {
                 LogUtils.i(TAG, "processCommand command: " + command);
                 // 如果什么命令都没有则返回帮助
                 if (TextUtils.isEmpty(command)) {
-                    return new HelpConfig().getCommand(getApplicationContext(), command);
+                    new HelpConfig().execute(getApplicationContext(), command, out);
+                    return;
                 }
                 // 判断是否是 多段命令
                 // 示例： xxx yyy 例如: toast hello
                 String[] commands = command.trim().split(" ");
                 if (commands.length >= 2) {
-                    return askConfig(command, commands[0]);
+                    askConfig(command, commands[0], out);
+                    return;
                 }
                 // 转发到termux页面
                 if (isForWard(command, null)) {
                     sendMessageToActivity(command);
-                    return getOkJson();
+                    out.println(getOkJson());
+                    return;
                 }
-                return askConfig(command, null);
+                askConfig(command, null, out);
             } catch (Exception e) {
                 e.printStackTrace();
-                return getJson(1, e.toString(), "");
+                out.println(getJson(1, e.toString(), ""));
             }
         }
     }
@@ -152,11 +154,10 @@ public class ZTSocketService extends Service {
      * @param commandID 有些命令行是 xx yy，示例：toast hello 这种格式的，传入的时候只需要传入 xx即可,
      *                  如果是单一的命令，看个人情况是否传递，此参数会传递到
      *                  你的 config -> public String getCommand(Context context, String command)
-     * @return 返回自定义CONFIG的执行结果
      */
-    private String askConfig(String command, String commandID) {
-        return ZTCommandConfigStore.getConfig(TextUtils.isEmpty(commandID) ? command : commandID)
-            .getCommand(getApplicationContext(), command);
+    private void askConfig(String command, String commandID, PrintWriter out) {
+        ZTCommandConfigStore.getConfig(TextUtils.isEmpty(commandID) ? command : commandID)
+            .execute(getApplicationContext(), command, out);
     }
     // 是否需要转发到 TermuxActivity 页面
     private boolean isForWard(String command, String commandID) {

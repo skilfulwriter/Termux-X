@@ -13,7 +13,7 @@ import com.billy.android.swipe.consumer.SlidingConsumer
 import com.example.xh_lib.utils.UUtils
 import com.termux.R
 import com.termux.shared.file.FileUtils
-import com.termux.zerocore.adb.dialog.AdbWindowsDialog
+// import com.termux.zerocore.adb.dialog.AdbWindowsDialog
 import com.termux.zerocore.url.FileUrl
 import com.termux.zerocore.zip.ZipUtils
 import com.termux.zerocore.zip.ZipUtils.ZipNameListener
@@ -27,7 +27,7 @@ class DeveloperActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_developer)
         findViewById<Button>(R.id.create_files).setOnClickListener {
-            val file = File(FileUrl.mainAppUrl, "files1")
+            // val file = File(FileUrl.mainAppUrl, "files1")
             val file1 = File(FileUrl.zeroTermuxHome, "files")
             if (!file1.exists()) {
                 file1.mkdirs()
@@ -41,8 +41,8 @@ class DeveloperActivity : AppCompatActivity() {
             }
 
         }
-
-        val findViewById = findViewById<SmartSwipeWrapper>(R.id.smart_swipe)
+        
+        // val findViewById = findViewById<SmartSwipeWrapper>(R.id.smart_swipe)
 
 
         findViewById<Button>(R.id.samba_create).setOnClickListener {
@@ -103,8 +103,7 @@ class DeveloperActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.adb_connect).setOnClickListener {
-
-            AdbWindowsDialog().initWindowView(this)
+            // AdbWindowsDialog().initWindowView(this)
         }
     }
 }

@@ -2,6 +2,7 @@ package com.termux.zerocore.dialog
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.widget.LinearLayout
@@ -41,8 +42,7 @@ class CommonCommandsDialog : BaseDialogDown {
         public val ITEM_CLICK_DEF_BASH = 1012
         public val ITEM_CLICK_BASH_CHANGE = 1013
         public val ITEM_CLICK_START_MSG = 1014
-        public val ITEM_CLICK_DOCKER_CHECK = 1015
-        public val ITEM_CLICK_REMOTE_CONNECTION = 1016
+
     }
 
     private val CLIPBOARD_SELECT = 0
@@ -63,7 +63,7 @@ class CommonCommandsDialog : BaseDialogDown {
     private var mKeyViewListener: ItemMenuAdapter.KeyViewListener? = null
     private var mClearStyleListener: ItemMenuAdapter.ClearStyleListener? = null
     private var mList:ArrayList<ItemMenuBean.Data> = ArrayList()
-    private val mHandlerNotifyDataSetChanged: Handler = object : Handler() {
+    private val mHandlerNotifyDataSetChanged: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val key = msg.obj as Int
@@ -127,35 +127,6 @@ class CommonCommandsDialog : BaseDialogDown {
             mChangBash.isEg = false
             mChangBash.key = CommonCommandsDialogConstant.ITEM_CLICK_BASH_CHANGE
             mList.add(mChangBash)
-
-            /**
-             * 修改欢迎语
-             */
-            var mChangStartMsg: ItemMenuBean.Data = ItemMenuBean.Data()
-            mChangStartMsg.title = UUtils.getString(R.string.start_msg)
-            mChangStartMsg.id = R.mipmap.start_msg_ico
-            mChangStartMsg.isEg = false
-            mChangStartMsg.key = CommonCommandsDialogConstant.ITEM_CLICK_START_MSG
-            mList.add(mChangStartMsg)
-            /**
-             * 视屏背景
-             */
-            var mVideoBackData: ItemMenuBean.Data = ItemMenuBean.Data()
-            mVideoBackData.title = UUtils.getString(R.string.vedio_select_name)
-            mVideoBackData.id = R.mipmap.video_img_menu
-            mVideoBackData.isEg = false
-            mVideoBackData.key = CommonCommandsDialogConstant.VIDEO_KEY
-            mList.add(mVideoBackData)
-
-            /**
-             * 清空美化
-             */
-            var mClearStyleBackData: ItemMenuBean.Data = ItemMenuBean.Data()
-            mClearStyleBackData.title = UUtils.getString(R.string.clear_style_dialog)
-            mClearStyleBackData.id = R.mipmap.clear_style
-            mClearStyleBackData.isEg = false
-            mClearStyleBackData.key = CommonCommandsDialogConstant.CLEAR_STYLE
-            mList.add(mClearStyleBackData)
 
             /*   *
                 * 内置键盘*/
@@ -257,29 +228,9 @@ class CommonCommandsDialog : BaseDialogDown {
             mUnInstall.backColor = UUtils.getColor(R.color.color_8850b397)
             mUnInstall.key = CommonCommandsDialogConstant.ITEM_CLICK_UNINSTALL
             mList.add(mUnInstall)
-            /**
-             * 检查是否可以安装docker
-             *
-             */
-            var mDocker: ItemMenuBean.Data = ItemMenuBean.Data()
-            mDocker.title = UUtils.getString(R.string.docker_check)
-            mDocker.id = R.mipmap.docker
-            mDocker.isEg = false
-            mDocker.backColor = UUtils.getColor(R.color.color_8850b397)
-            mDocker.key = CommonCommandsDialogConstant.ITEM_CLICK_DOCKER_CHECK
-            mList.add(mDocker)
 
-            /**
-             * 远程连接
-             *
-             */
-            var mRemoteConnection: ItemMenuBean.Data = ItemMenuBean.Data()
-            mRemoteConnection.title = UUtils.getString(R.string.remote_connection)
-            mRemoteConnection.id = R.mipmap.yc_connect
-            mRemoteConnection.isEg = false
-            mRemoteConnection.backColor = UUtils.getColor(R.color.color_8850b397)
-            mRemoteConnection.key = CommonCommandsDialogConstant.ITEM_CLICK_REMOTE_CONNECTION
-            mList.add(mRemoteConnection)
+
+
         } else {
             mList.forEach { data ->
                 // 禁止切换选项背景持续闪烁
@@ -300,20 +251,38 @@ class CommonCommandsDialog : BaseDialogDown {
         val gridLayoutManager = GridLayoutManager(UUtils.getContext(), getGridNumber())
         item_menu_rec?.layoutManager = gridLayoutManager
         item_menu_rec?.adapter = mItemMenuAdapter
-
+        checkListener()
     }
 
     public fun setCommonDialogListener(mCommonDialogListener: ItemMenuAdapter.CommonDialogListener) {
         this.mCommonDialogListener = mCommonDialogListener
+        mItemMenuAdapter?.setCommonDialogListener(mCommonDialogListener)
     }
     public fun setVShellDialogListener(mVShellDialogListener: ItemMenuAdapter.VShellDialogListener) {
         this.mVShellDialogListener = mVShellDialogListener
+        mItemMenuAdapter?.setVShellDialogListener(mVShellDialogListener)
     }
+    public fun getKeyViewListener(): ItemMenuAdapter.KeyViewListener? {
+        return mKeyViewListener
+    }
+
     public fun setKeyViewListener( mKeyViewListener: ItemMenuAdapter.KeyViewListener?) {
         this.mKeyViewListener = mKeyViewListener
+        mItemMenuAdapter?.setKeyViewListener(mKeyViewListener)
+    }
+
+    private fun checkListener() {
+        if (mItemMenuAdapter != null) {
+            if (mItemMenuAdapter!!.getKeyViewListener() == null) {
+                 if (mKeyViewListener != null) {
+                      mItemMenuAdapter!!.setKeyViewListener(mKeyViewListener)
+                 }
+            }
+        }
     }
     public fun setClearStyleListener(mClearStyleListener: ItemMenuAdapter.ClearStyleListener?) {
         this.mClearStyleListener = mClearStyleListener
+        mItemMenuAdapter?.setClearStyleListener(mClearStyleListener)
     }
     private fun initClick() {
         select_1_ll?.setOnClickListener {

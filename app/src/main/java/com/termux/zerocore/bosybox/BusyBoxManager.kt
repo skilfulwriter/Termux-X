@@ -108,7 +108,7 @@ object BusyBoxManager : StartTarGzListener{
             val mReader = BufferedReader(InputStreamReader(mProcess.inputStream))
             val mRespBuff = StringBuffer()
             val buff = CharArray(1024)
-            var ch = 0
+            var ch: Int
             while (mReader.read(buff).also { ch = it } != -1) {
                 mRespBuff.append(buff, 0, ch)
             }

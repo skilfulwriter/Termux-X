@@ -18,13 +18,34 @@ public class ZeroCoreManage {
     public static final int INSTALL_COMPLETE = 10003;
     public static Context mContext;
     public static Class<?> ZERO_ENGINE_CLASS;
+    private static Object mEngineInstance;
+
+    private static Object getObject() throws Exception {
+        if (mEngineInstance == null) {
+            if (ZERO_ENGINE_CLASS != null) {
+                mEngineInstance = ZERO_ENGINE_CLASS.newInstance();
+            } else {
+                LogUtils.e(TAG, "getObject: ZERO_ENGINE_CLASS is null, trying to re-init");
+                initEngineManage();
+                if (ZERO_ENGINE_CLASS != null) {
+                    mEngineInstance = ZERO_ENGINE_CLASS.newInstance();
+                } else {
+                    LogUtils.e(TAG, "getObject: Re-init failed, ZERO_ENGINE_CLASS is still null");
+                }
+            }
+        }
+        return mEngineInstance;
+    }
+
     public static void initEngineManage() {
         try {
+            mEngineInstance = null;
             mContext = UUtils.getContext().createPackageContext(ZERO_ENGINE_PACKAGE,
                     Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
             ZERO_ENGINE_CLASS = Class.forName(ZERO_ENGINE_PACKAGE_CLASS, true, mContext.getClassLoader());
             ZeroCoreManage.setContext();
             ZeroCoreManage.setEngineContext();
+            LogUtils.d(TAG, "initEngineManage success");
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e(TAG, "initEngineManage error:" + e);
@@ -33,7 +54,8 @@ public class ZeroCoreManage {
 
     public static ArrayList<String> getEnvironment() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return null;
             Method mMethod = object.getClass().getMethod("getEnvironment");
             return (ArrayList<String>) mMethod.invoke(object);
         } catch (Exception e) {
@@ -45,7 +67,8 @@ public class ZeroCoreManage {
 
     public static ArrayList<String> getProcessArgs() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return null;
             Method mMethod = object.getClass().getMethod("getProcessArgs");
             return (ArrayList<String>) mMethod.invoke(object);
         } catch (Exception e) {
@@ -57,7 +80,8 @@ public class ZeroCoreManage {
 
     public static String getDataDirectory() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return null;
             Method mMethod = object.getClass().getMethod("getDataDirectory");
             return (String) mMethod.invoke(object);
         } catch (Exception e) {
@@ -69,7 +93,8 @@ public class ZeroCoreManage {
 
     public static void setContext() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return;
             Method mMethod = object.getClass().getMethod("setContext", Context.class);
             mMethod.invoke(object, UUtils.getContext());
         } catch (Exception e) {
@@ -80,7 +105,8 @@ public class ZeroCoreManage {
 
     public static void setEngineContext() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return;
             Method mMethod = object.getClass().getMethod("setEngineContext", Context.class);
             mMethod.invoke(object, mContext);
         } catch (Exception e) {
@@ -91,7 +117,8 @@ public class ZeroCoreManage {
 
     public static void install(Handler mHandler) {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return;
             Method mMethod = object.getClass().getMethod("install", Handler.class);
             mMethod.invoke(object, mHandler);
         } catch (Exception e) {
@@ -102,7 +129,8 @@ public class ZeroCoreManage {
 
     public static String getVersionName() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return "";
             Method mMethod = object.getClass().getMethod("getVersionName", Context.class);
             return (String) mMethod.invoke(object, mContext);
         } catch (Exception e) {
@@ -114,7 +142,8 @@ public class ZeroCoreManage {
 
     public static void setRunHandler(Handler mHandler) {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return;
             Method mMethod = object.getClass().getMethod("setRunHandler", Handler.class);
             mMethod.invoke(object, mHandler);
         } catch (Exception e) {
@@ -125,7 +154,8 @@ public class ZeroCoreManage {
 
     public static void setKeyHandler(Handler mHandler) {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return;
             Method mMethod = object.getClass().getMethod("setKeyHandler", Handler.class);
             mMethod.invoke(object, mHandler);
         } catch (Exception e) {
@@ -137,7 +167,8 @@ public class ZeroCoreManage {
 
     public static void installFileBrowser(Handler mInstallHandler) {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) return;
             Method mMethod = object.getClass().getMethod("installFileBrowser", Context.class, Context.class, Handler.class);
             mMethod.invoke(object, UUtils.getContext(), mContext, mInstallHandler);
         } catch (Exception e) {
@@ -149,9 +180,14 @@ public class ZeroCoreManage {
 
     public static void initKeyView() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) {
+                LogUtils.e(TAG, "initKeyView: object is null");
+                return;
+            }
             Method mMethod = object.getClass().getMethod("initKeyView");
             mMethod.invoke(object);
+            LogUtils.d(TAG, "initKeyView success");
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e(TAG, "initKeyView error:" + e);
@@ -160,9 +196,15 @@ public class ZeroCoreManage {
 
     public static View getKeyView() {
         try {
-            Object object = ZERO_ENGINE_CLASS.newInstance();
+            Object object = getObject();
+            if (object == null) {
+                LogUtils.e(TAG, "getKeyView: object is null");
+                return null;
+            }
             Method mMethod = object.getClass().getMethod("getKeyView");
-            return (View) mMethod.invoke(object);
+            View view = (View) mMethod.invoke(object);
+            LogUtils.d(TAG, "getKeyView result: " + view);
+            return view;
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.e(TAG, "getKeyView error:" + e);

@@ -64,7 +64,7 @@ class TermuxFileReceiverActivity : ComponentActivity() {
                     val loadingDialog = LoadingDialog(this)
                     loadingDialog.show()
                     TermuxInstaller.setupStorageSymlinks(this)
-                    GlobalScope.launch(Dispatchers.IO) {
+                    CoroutineScope(Dispatchers.IO).launch {
                         delay(3000)
                         withContext(Dispatchers.Main) {
                             InstallTarData.installTar(this@TermuxFileReceiverActivity, realPathFromURI)
@@ -119,7 +119,7 @@ class TermuxFileReceiverActivity : ComponentActivity() {
                     val fileInputStream = FileInputStream(mFile!!)
                     image_view.visibility = View.GONE
                     pro.visibility = View.VISIBLE
-                    GlobalScope.launch(Dispatchers.IO) {
+                    CoroutineScope(Dispatchers.IO).launch {
                         showText(file, fileInputStream)
                     }
                 } catch (e: Exception) {

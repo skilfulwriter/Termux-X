@@ -48,6 +48,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import java.util.HashMap;
+import java.util.Map;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,6 +88,7 @@ import com.termux.shared.activity.media.AppCompatActivityUtils;
 import com.termux.shared.android.PermissionUtils;
 import com.termux.shared.data.DataUtils;
 import com.termux.shared.data.IntentUtils;
+import com.termux.shared.file.FileUtils;
 import com.termux.shared.termux.TermuxConstants;
 import com.termux.shared.termux.TermuxConstants.TERMUX_APP.TERMUX_ACTIVITY;
 import com.termux.app.activities.HelpActivity;
@@ -102,6 +105,7 @@ import com.termux.shared.termux.extrakeys.ExtraKeysView;
 import com.termux.shared.termux.interact.TextInputDialogUtils;
 import com.termux.shared.termux.settings.preferences.TermuxAppSharedPreferences;
 import com.termux.shared.termux.settings.properties.TermuxAppSharedProperties;
+import com.termux.shared.termux.settings.properties.TermuxPropertyConstants;
 import com.termux.shared.termux.theme.TermuxThemeUtils;
 import com.termux.shared.theme.NightMode;
 import com.termux.shared.view.KeyboardUtils;
@@ -116,6 +120,7 @@ import com.termux.x11.CmdEntryPoint;
 import com.termux.x11.DemoActivity;
 import com.termux.x11.MainActivity;
 import com.termux.zerocore.ai.AIAssistantManager;
+import com.termux.zerocore.activity.EditTextActivity;
 import com.termux.zerocore.activity.FontActivity;
 import com.termux.zerocore.activity.SwitchActivity;
 import com.termux.zerocore.activity.WebViewActivity;
@@ -131,18 +136,21 @@ import com.termux.zerocore.broadcast.LocalReceiver;
 import com.termux.zerocore.code.CodeString;
 import com.termux.zerocore.dialog.BeautifySettingDialog;
 import com.termux.zerocore.dialog.CamphishDialog;
+// import com.termux.zerocore.dialog.ADBToolDialog;
 import com.termux.zerocore.dialog.SeekerDialog;
 import com.termux.zerocore.dialog.SqlmapDialog;
 import com.termux.zerocore.dialog.MetasploitDialog;
-import com.termux.zerocore.dialog.BoomCommandDialog;
-import com.termux.zerocore.dialog.BoomZeroTermuxDialog;
+import com.termux.zerocore.dialog.NmapDialog;
+import com.scottyab.rootbeer.RootBeer;
+import com.termux.zerocore.shell.ExeCommand;
+import com.termux.zerocore.dialog.DirbDialog;
 import com.termux.zerocore.dialog.CommonCommandsDialog;
 import com.termux.zerocore.dialog.DownLoadDialogBoom;
 import com.termux.zerocore.dialog.EditDialog;
 import com.termux.zerocore.dialog.LoadingDialog;
+import com.termux.zerocore.dialog.MingLShowDialog;
 import com.termux.zerocore.dialog.OnLineShDialog;
 import com.termux.zerocore.dialog.ProtocolDialog;
-import com.termux.zerocore.dialog.SYFunBoomDialog;
 import com.termux.zerocore.dialog.SwitchDialog;
 import com.termux.zerocore.dialog.VNCConnectionDialog;
 import com.termux.zerocore.dialog.adapter.ItemMenuAdapter;
@@ -163,8 +171,6 @@ import com.termux.zerocore.utils.AppUpdateChecker;
 import com.termux.zerocore.utils.FileHttpUtils;
 import com.termux.zerocore.utils.FileIOUtils;
 import com.termux.zerocore.utils.IsInstallCommand;
-import com.termux.zerocore.utils.PhoneUtils;
-import com.termux.zerocore.utils.SmsUtils;
 import com.termux.zerocore.utils.StartRunCommandUtils;
 import com.termux.zerocore.utils.UUUtils;
 import com.termux.zerocore.utils.VideoUtils;
@@ -197,6 +203,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import org.json.JSONArray;
 
 /**
  * A terminal emulator activity.
@@ -501,6 +511,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         TermuxUtils.sendTermuxOpenedBroadcast(this);
         ZeroCoreManage.initEngineManage();
         createFiles();
+        initCommand();
         initZeroView();
         initColorConfig();
         initStatue();
@@ -585,7 +596,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             .setShadowColor(0xFFFFFF)
             .addListener(listener)
             //set edge size to swipe to 20dp (default is 0: whole range of the contentView bounds)
-            .setEdgeSize(SmartSwipe.dp2px(20, this))
+            .setEdgeSize(0)
             .as(SlidingConsumer.class);
         mSlidingConsumer.setRelativeMoveFactor(100);
         SmartSwipe.wrap(this)
@@ -607,12 +618,12 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             }
         });
 
-        mTerminalView.setActionPointer2ClickListener(new TerminalView.ActionPointer2ClickListener() {
-            @Override
-            public void pointer2Click() {
-                openToolDialog(true, 0, -1);
-            }
-        });
+        // mTerminalView.setActionPointer2ClickListener(new TerminalView.ActionPointer2ClickListener() {
+        //     @Override
+        //     public void pointer2Click() {
+        //         openToolDialog(true, 0, -1);
+        //     }
+        // });
     }
 
     private void openToolDialog(boolean isShowToolDialog, int index, int findKey) {
@@ -623,6 +634,39 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         }
         final LoadingDialog[] loadingDialog = {null};
         CommonCommandsDialog mCommonCommandsDialog = new CommonCommandsDialog(TermuxActivity.this);
+        mCommonCommandsDialog.setKeyViewListener(new ItemMenuAdapter.KeyViewListener() {
+            @Override
+            public void view(@NonNull View mView) {
+                if (mView == null) {
+                    LogUtils.d(TAG, "key View is null, return.");
+                    UUtils.showMsg("内置键盘启动失败，请检查插件是否正常安装");
+                    return;
+                }
+                LogUtils.d(TAG, "key View received: " + mView.getClass().getName() + ", w=" + mView.getWidth() + ", h=" + mView.getHeight());
+                if (key_bord.getChildCount() > 0) {
+                    key_bord.removeAllViews();
+                    getTerminalToolbarViewPager().setVisibility(View.VISIBLE);
+                    mTerminalView.stopTextSelectionMode();
+
+                    KeyboardUtils.clearDisableSoftKeyboardFlags(TermuxActivity.this);
+                    KeyboardUtils.toggleSoftKeyboard(TermuxActivity.this);
+                } else {
+                    try {
+                        key_bord.addView(mView);
+                        getTerminalToolbarViewPager().setVisibility(View.GONE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        key_bord.removeAllViews();
+                    }
+
+                    KeyboardUtils.disableSoftKeyboard(TermuxActivity.this, mTerminalView);
+                }
+                if (mCommonCommandsDialog != null && mCommonCommandsDialog.isShowing()) {
+                    mCommonCommandsDialog.dismiss();
+                }
+
+            }
+        });
         mCommonCommandsDialog.show();
         mCommonCommandsDialog.setCancelable(true);
         mCommonCommandsDialog.setFindKey(findKey);
@@ -653,37 +697,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 if (mCommonCommandsDialog != null && mCommonCommandsDialog.isShowing()) {
                     mCommonCommandsDialog.dismiss();
                 }
-            }
-        });
-        mCommonCommandsDialog.setKeyViewListener(new ItemMenuAdapter.KeyViewListener() {
-            @Override
-            public void view(@NonNull View mView) {
-                if (mView == null) {
-                    LogUtils.d(TAG, "key View is null, return.");
-                    return;
-                }
-                if (key_bord.getChildCount() > 0) {
-                    key_bord.removeAllViews();
-                    getTerminalToolbarViewPager().setVisibility(View.VISIBLE);
-                    mTerminalView.stopTextSelectionMode();
-
-                    KeyboardUtils.clearDisableSoftKeyboardFlags(TermuxActivity.this);
-                    KeyboardUtils.toggleSoftKeyboard(TermuxActivity.this);
-                } else {
-                    try {
-                        key_bord.addView(mView);
-                        getTerminalToolbarViewPager().setVisibility(View.GONE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        key_bord.removeAllViews();
-                    }
-
-                    KeyboardUtils.disableSoftKeyboard(TermuxActivity.this, mTerminalView);
-                }
-                if (mCommonCommandsDialog != null && mCommonCommandsDialog.isShowing()) {
-                    mCommonCommandsDialog.dismiss();
-                }
-
             }
         });
         mCommonCommandsDialog.setVShellDialogListener(new ItemMenuAdapter.VShellDialogListener() {
@@ -891,6 +904,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         // ZeroTermux add {@
         VideoUtils.getInstance().onResume();
         initUserData();
+        initCommand();
         setEgInstallStatus();
         checkAppUpdateOnStartup();
         if (mInternalPassage && mMainActivity != null) {
@@ -1796,18 +1810,20 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
     private CardView ip_card;
     private ImageView open_image;
     private CardView info_card;
+    private LinearLayout adb_remote;
+    private LinearLayout adb_net_root;
+    private LinearLayout adb_net_root_close;
+    private LinearLayout docker_check;
     private LinearLayout rongqi;
     private LinearLayout back_res;
     private LinearLayout linux_online;
     private LinearLayout qemu;
     private LinearLayout cmd_command;
     private LinearLayout moe;
-    private LinearLayout msg;
     private LinearLayout files_mulu;
     private TextView version;
     private TextView eg_tv;
     private TextView text_start;
-    private LinearLayout github;
     private LinearLayout start_command;
     private LinearLayout xuanfu;
     private LinearLayout ziti;
@@ -1816,13 +1832,14 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
     private LinearLayout vnc_start;
     private LinearLayout xue_hua;
     private LinearLayout rain_back;
-    private LinearLayout video_back_menu;
+    private LinearLayout clear_style;
+    private LinearLayout start_msg;
+    private LinearLayout command_key_ll;
     private LinearLayout quanping;
-    private LinearLayout zero_fun;
     private LinearLayout yuyan;
     private LinearLayout timer;
-    private LinearLayout shiyan_fun;
     private LinearLayout zerotermux_bbs;
+    private LinearLayout feedback_suggestion;
     private LinearLayout key_bord;
     private TextView service_status;
     private TextView service_eg;
@@ -1844,6 +1861,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
     private LinearLayout x11_features_settings;
     private LinearLayout x11_environment;
+    // private LinearLayout adb_tool;
     private LinearLayout install_x11_apk;
 
     private LinearLayout kali_install;
@@ -1877,23 +1895,26 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         ip_card = findViewById(R.id.ip_card);
         open_image = findViewById(R.id.open_image);
         info_card = findViewById(R.id.info_card);
+        adb_remote = findViewById(R.id.adb_remote);
+        adb_net_root = findViewById(R.id.adb_net_root);
+        adb_net_root_close = findViewById(R.id.adb_net_root_close);
+        docker_check = findViewById(R.id.docker_check);
         frame_file = findViewById(R.id.frame_file);
         session_rl = findViewById(R.id.session_rl);
         telegram_group_tv = findViewById(R.id.telegram_group_tv);
         qq_group_tv = findViewById(R.id.qq_group_tv);
         zerotermux_bbs = findViewById(R.id.zerotermux_bbs);
+        feedback_suggestion = findViewById(R.id.feedback_suggestion);
         rongqi = findViewById(R.id.rongqi);
         layout_menu = findViewById(R.id.layout_menu);
         back_res = findViewById(R.id.back_res);
         linux_online = findViewById(R.id.linux_online);
         qemu = findViewById(R.id.qemu);
-        cmd_command = findViewById(R.id.cmd_command);
+        // cmd_command = findViewById(R.id.cmd_command);
         moe = findViewById(R.id.moe);
-        msg = findViewById(R.id.msg);
         files_mulu = findViewById(R.id.files_mulu);
         version = findViewById(R.id.version);
         eg_tv = findViewById(R.id.eg_tv);
-        github = findViewById(R.id.github);
         start_command = findViewById(R.id.start_command);
         text_start = findViewById(R.id.text_start);
         xuanfu = findViewById(R.id.xuanfu);
@@ -1909,14 +1930,14 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         firework_view = findViewById(R.id.firework_view);
         xue_hua = findViewById(R.id.xue_hua);
         rain_back = findViewById(R.id.rain_back);
-        video_back_menu = findViewById(R.id.video_back_menu);
+        clear_style = findViewById(R.id.clear_style);
+        start_msg = findViewById(R.id.start_msg);
+        command_key_ll = findViewById(R.id.command_key_ll);
         xue_hua_start = findViewById(R.id.xue_hua_start);
         timer = findViewById(R.id.timer);
         quanping = findViewById(R.id.quanping);
         yuyan = findViewById(R.id.yuyan);
         ip_status = findViewById(R.id.ip_status);
-        zero_fun = findViewById(R.id.zero_fun);
-        shiyan_fun = findViewById(R.id.shiyan_fun);
         double_tishi = findViewById(R.id.double_tishi);
         online_sh = findViewById(R.id.online_sh);
         beautify = findViewById(R.id.beautify);
@@ -1927,9 +1948,57 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
         x11_features_settings = findViewById(R.id.x11_features_settings);
         x11_environment = findViewById(R.id.x11_environment);
+        // adb_tool = findViewById(R.id.adb_tool);
+
+        if (x11_features_settings != null) x11_features_settings.setOnClickListener(this);
+        if (x11_environment != null) x11_environment.setOnClickListener(this);
+        // if (adb_tool != null) adb_tool.setOnClickListener(this);
 
         try {
-            double_tishi.setText(double_tishi.getText() + "\n" + TermuxInstaller.determineTermuxArchName().toUpperCase());
+            String fullText = double_tishi.getText() + "\n" + TermuxInstaller.determineTermuxArchName().toUpperCase();
+            
+            // 创建 SpannableString
+            android.text.SpannableString spannableString = new android.text.SpannableString(fullText);
+            
+            // 找到 "Termux-X" 的位置
+            String targetText = "Termux-X";
+            int startIndex = fullText.indexOf(targetText);
+            
+            if (startIndex != -1) {
+                int endIndex = startIndex + targetText.length();
+                
+                // 创建渐变色 Span
+                android.text.style.ReplacementSpan gradientSpan = new android.text.style.ReplacementSpan() {
+                    @Override
+                    public int getSize(android.graphics.Paint paint, CharSequence text, int start, int end, android.graphics.Paint.FontMetricsInt fm) {
+                        return Math.round(paint.measureText(text, start, end));
+                    }
+
+                    @Override
+                    public void draw(android.graphics.Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, android.graphics.Paint paint) {
+                        android.graphics.Shader originalShader = paint.getShader();
+                        int originalAlpha = paint.getAlpha();
+                        
+                        float width = paint.measureText(text, start, end);
+                        paint.setShader(new android.graphics.LinearGradient(
+                            x, 0, x + width, 0,
+                            new int[]{0xFFFF0000, 0xFF0000FF}, // 红色到蓝色渐变
+                            null,
+                            android.graphics.Shader.TileMode.CLAMP
+                        ));
+                        paint.setAlpha(255);
+                        
+                        canvas.drawText(text, start, end, x, y, paint);
+                        
+                        paint.setShader(originalShader);
+                        paint.setAlpha(originalAlpha);
+                    }
+                };
+                
+                spannableString.setSpan(gradientSpan, startIndex, endIndex, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            
+            double_tishi.setText(spannableString);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1948,6 +2017,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         kali_stop_gui.setOnClickListener(this);
         kali_passwd.setOnClickListener(this);
         kali_root.setOnClickListener(this);
+        findViewById(R.id.kali_install_tools).setOnClickListener(this);
         x11_environment.setOnClickListener(this);
         x11_features_settings.setOnClickListener(this);
         code_ll.setOnClickListener(this);
@@ -1955,7 +2025,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         back_res.setOnClickListener(this);
         linux_online.setOnClickListener(this);
         qemu.setOnClickListener(this);
-        cmd_command.setOnClickListener(this);
+        // cmd_command.setOnClickListener(this);
         moe.setOnClickListener(this);
         
         // AI Assistant
@@ -1965,21 +2035,24 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         
         if (aiConfig != null) aiConfig.setOnClickListener(this);
         if (aiCommandHelper != null) aiCommandHelper.setOnClickListener(this);
-        findViewById(R.id.ai_other).setOnClickListener(this);
+        if (aiOther != null) aiOther.setOnClickListener(this);
         
         // Penetration Testing
         findViewById(R.id.pentest_metasploit).setOnClickListener(this);
+        findViewById(R.id.kali_tools_menu).setOnClickListener(this);
         findViewById(R.id.pentest_sqlmap).setOnClickListener(this);
         findViewById(R.id.pentest_seeker).setOnClickListener(this);
         findViewById(R.id.pentest_camphish).setOnClickListener(this);
+        findViewById(R.id.pentest_nmap).setOnClickListener(this);
+        findViewById(R.id.pentest_dirb).setOnClickListener(this);
+        findViewById(R.id.kali_change_source).setOnClickListener(this);
         
-        msg.setOnClickListener(this);
         online_sh.setOnClickListener(this);
         zerotermux_bbs.setOnClickListener(this);
+        feedback_suggestion.setOnClickListener(this);
         telegram_group_tv.setOnClickListener(this);
         qq_group_tv.setOnClickListener(this);
         files_mulu.setOnClickListener(this);
-        github.setOnClickListener(this);
         start_command.setOnClickListener(this);
         xuanfu.setOnClickListener(this);
         ziti.setOnClickListener(this);
@@ -1988,12 +2061,16 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         vnc_start.setOnClickListener(this);
         xue_hua.setOnClickListener(this);
         rain_back.setOnClickListener(this);
-        video_back_menu.setOnClickListener(this);
+        adb_remote.setOnClickListener(this);
+        adb_net_root.setOnClickListener(this);
+        adb_net_root_close.setOnClickListener(this);
+        docker_check.setOnClickListener(this);
+        clear_style.setOnClickListener(this);
+        start_msg.setOnClickListener(this);
+        command_key_ll.setOnClickListener(this);
         quanping.setOnClickListener(this);
-        zero_fun.setOnClickListener(this);
         yuyan.setOnClickListener(this);
         beautify.setOnClickListener(this);
-        shiyan_fun.setOnClickListener(this);
         timer.setOnClickListener(this);
         mTerminalView.setOnFocusChangeListener(this);
 
@@ -2134,12 +2211,45 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 menuLeftPopuListData.add(heb);
 
                 showMenuDialog(menuLeftPopuListData, code_ll);
+            } else if (id == R.id.kali_change_source) {
+                ArrayList<MenuLeftPopuListWindow.MenuLeftPopuListData> kaliSourceList = new ArrayList<>();
+                kaliSourceList.add(new MenuLeftPopuListWindow.MenuLeftPopuListData(R.mipmap.guanfang, "Kali 官方源", 6001));
+                kaliSourceList.add(new MenuLeftPopuListWindow.MenuLeftPopuListData(R.mipmap.qinghua_ico, "Kali 清华源", 6002));
+                kaliSourceList.add(new MenuLeftPopuListWindow.MenuLeftPopuListData(R.mipmap.mingl_ico, "Kali 中科大", 6003));
+                kaliSourceList.add(new MenuLeftPopuListWindow.MenuLeftPopuListData(R.mipmap.mingl_ico, "Kali 阿里云", 6004));
+                showMenuDialog(kaliSourceList, findViewById(R.id.kali_change_source));
             } else if (id == R.id.kali_install) {
-                mTerminalView.sendTextToTerminal("termux-setup-storage && pkg install wget -y && wget -O install-nethunter-termux https://offs.ec/2MceZWr && chmod +x install-nethunter-termux && ./install-nethunter-termux\n");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                         try {
+                             File kaliFile = new File(TermuxConstants.TERMUX_HOME_DIR_PATH, "kali.sh");
+                             UUtils.writerFile("linux/kali.sh", kaliFile);
+                             UUtils.chmod(kaliFile);
+                             
+                             runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     mTerminalView.sendTextToTerminal("termux-setup-storage && chmod +x kali.sh && ./kali.sh\n");
+                                 }
+                             });
+                         } catch (Exception e) {
+                             e.printStackTrace();
+                             runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     UUtils.showMsg("安装脚本准备失败: " + e.getMessage());
+                                 }
+                             });
+                         }
+                    }
+                }).start();
             } else if (id == R.id.kali_start) {
-                mTerminalView.sendTextToTerminal("nethunter\n");
+                //mTerminalView.sendTextToTerminal("nethunter\n");
+                mTermuxTerminalSessionActivityClient.addNewSession(false, "nethunter", null, new String[]{"-c", "nethunter; exit"});
             } else if (id == R.id.kali_gui) {
-                mTerminalView.sendTextToTerminal("nethunter kex &\n");
+                //mTerminalView.sendTextToTerminal("nethunter kex &\n");
+                mTermuxTerminalSessionActivityClient.addNewSession(false, "nethunter kex", null, new String[]{"-c", "nethunter kex & echo '按回车键关闭窗口...'; read; exit"});
                 try {
                     getPackageManager().getPackageInfo("com.offsec.nethunter.kex", 0);
                     Intent intent = getPackageManager().getLaunchIntentForPackage("com.offsec.nethunter.kex");
@@ -2162,11 +2272,14 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                         .show();
                 }
             } else if (id == R.id.kali_stop_gui) {
-                mTerminalView.sendTextToTerminal("nethunter kex stop\n");
+                //mTerminalView.sendTextToTerminal("nethunter kex stop\n");
+                mTermuxTerminalSessionActivityClient.addNewSession(false, "stop kex", null, new String[]{"-c", "nethunter kex stop; echo '执行完毕，按回车键关闭窗口...'; read; exit"});
             } else if (id == R.id.kali_passwd) {
-                mTerminalView.sendTextToTerminal("nethunter kex passwd\n");
+                //mTerminalView.sendTextToTerminal("nethunter kex passwd\n");
+                mTermuxTerminalSessionActivityClient.addNewSession(false, "kex passwd", null, new String[]{"-c", "nethunter kex passwd; echo '执行完毕，按回车键关闭窗口...'; read; exit"});
             } else if (id == R.id.kali_root) {
-                mTerminalView.sendTextToTerminal("nethunter -r\n");
+                //mTerminalView.sendTextToTerminal("nethunter -r\n");
+                mTermuxTerminalSessionActivityClient.addNewSession(false, "nethunter root", null, new String[]{"-c", "nethunter -r; exit"});
             } else if (id == R.id.vnc_start) {
                 ArrayList<MenuLeftPopuListWindow.MenuLeftPopuListData> menuLeftPopuListDatavnc = new ArrayList<>();
                 //快速vnc
@@ -2229,15 +2342,22 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 menuLeftPopuListData1.add(winXpData);
 
                 showMenuDialog(menuLeftPopuListData1, qemu);
-            } else if (id == R.id.cmd_command) {
-                BoomCommandDialog boomCommandDialog = new BoomCommandDialog(TermuxActivity.this);
-                boomCommandDialog.show();
-                boomCommandDialog.setCancelable(true);
-            } else if (id == R.id.zerotermux_bbs) {
+            }
+            // else if (id == R.id.cmd_command) {
+            //     BoomCommandDialog boomCommandDialog = new BoomCommandDialog(TermuxActivity.this);
+            //     boomCommandDialog.show();
+            //     boomCommandDialog.setCancelable(true);
+            // }
+            else if (id == R.id.zerotermux_bbs) {
                 Intent intent2 = new Intent(this, WebViewActivity.class);
-                intent2.putExtra("title", "ZeroTermux 论坛");
+                intent2.putExtra("title", "Termux-X 社区交流");
                 intent2.putExtra("content", HTTPIP.ZERO_BBS);
                 startActivity(intent2);
+            } else if (id == R.id.feedback_suggestion) {
+                Intent intent = new Intent();
+                intent.setData(Uri.parse("https://pd.qq.com/s/g6hj1xy48?b=9"));
+                intent.setAction(Intent.ACTION_VIEW);
+                startActivity(intent);
             } else if (id == R.id.moe) {
                 SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.zt_moe_remove));
                 switchDialog.getCancel().setOnClickListener(v1 -> switchDialog.dismiss());
@@ -2245,13 +2365,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                     switchDialog.dismiss();
                     mTerminalView.sendTextToTerminal(CodeString.INSTANCE.getRunMoeSh());
                 });
-            } else if (id == R.id.msg) {
-                ArrayList<MenuLeftPopuListWindow.MenuLeftPopuListData> menuphoneMsg = new ArrayList<>();
-
-                MenuLeftPopuListWindow.MenuLeftPopuListData msg_phone = new MenuLeftPopuListWindow.MenuLeftPopuListData(R.mipmap.install_msg_phone, UUtils.getString(R.string.安装短信读取工具), 6);
-                menuphoneMsg.add(msg_phone);
-
-                showMenuDialog(menuphoneMsg, msg);
             } else if (id == R.id.files_mulu) {
                 try {
                     Intent intent = new Intent();
@@ -2261,13 +2374,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                     e.printStackTrace();
                     UUtils.showMsg(UUtils.getString(R.string.zt_install_file));
                 }
-            } else if (id == R.id.github) {
-                // SendJoinUtils.INSTANCE.sendJoin(this);
-
-                Intent intent = new Intent();
-                intent.setData(Uri.parse("https://github.com/hanxinhao000/ZeroTermux"));//Url 就是你要打开的网址
-                intent.setAction(Intent.ACTION_VIEW);
-                startActivity(intent); //启动浏览器
             } else if (id == R.id.start_command) {
                 //refStartCommandStat()
                 if (StartRunCommandUtils.INSTANCE.isRun()) {
@@ -2330,10 +2436,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                     ztUserBean.setSnowflakeShow(false);
                     UserSetManage.Companion.get().setZTUserBean(ztUserBean);
                 }
-            } else if (id == R.id.video_back_menu) {
-                getDrawer().smoothClose();
-                openToolDialog(false, 1,
-                    CommonCommandsDialog.CommonCommandsDialogConstant.VIDEO_KEY);
             } else if (id == R.id.rain_back) {
                 ZTUserBean ztRainUserBean = UserSetManage.Companion.get().getZTUserBean();
                 ztRainUserBean.setSnowflakeShow(false);
@@ -2347,6 +2449,62 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                     ztRainUserBean.setRainShow(false);
                     UserSetManage.Companion.get().setZTUserBean(ztRainUserBean);
                 }
+            } else if (id == R.id.adb_remote) {
+                Intent intent = new Intent(this, com.davik.adbtools.AdbToolsActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.adb_net_root) {
+                RootBeer rootBeer = new RootBeer(this);
+                if (rootBeer.isRooted()) {
+                    runRootAdbHttp();
+                } else {
+                    SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.没有找到本机的ROOT权限));
+                    switchDialog.show();
+                    switchDialog.setCancelable(false);
+                    switchDialog.getCancel().setOnClickListener(v1 -> switchDialog.dismiss());
+                    switchDialog.getOk().setOnClickListener(v1 -> {
+                        switchDialog.dismiss();
+                        runRootAdbHttp();
+                    });
+                }
+            } else if (id == R.id.adb_net_root_close) {
+                RootBeer rootBeer = new RootBeer(this);
+                if (rootBeer.isRooted()) {
+                    runRootAdbHttpClose();
+                } else {
+                    SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.没有找到本机的ROOT权限));
+                    switchDialog.show();
+                    switchDialog.setCancelable(false);
+                    switchDialog.getCancel().setOnClickListener(v1 -> switchDialog.dismiss());
+                    switchDialog.getOk().setOnClickListener(v1 -> {
+                        switchDialog.dismiss();
+                        runRootAdbHttpClose();
+                    });
+                }
+            } else if (id == R.id.docker_check) {
+                 RootBeer rootBeer = new RootBeer(this);
+                 if (rootBeer.isRooted()) {
+                     UUtils.writerFile("runcommand/check-config.sh", new java.io.File(com.termux.zerocore.url.FileUrl.INSTANCE.getMainHomeUrl(), "/check-config.sh"));
+                     mTerminalView.sendTextToTerminal(com.termux.zerocore.code.CodeString.INSTANCE.getRunDocker());
+                 } else {
+                     SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.没有找到本机的ROOT权限));
+                     switchDialog.show();
+                     switchDialog.setCancelable(false);
+                     switchDialog.getCancel().setOnClickListener(v1 -> switchDialog.dismiss());
+                     switchDialog.getOk().setOnClickListener(v1 -> {
+                         switchDialog.dismiss();
+                         UUtils.writerFile("runcommand/check-config.sh", new java.io.File(com.termux.zerocore.url.FileUrl.INSTANCE.getMainHomeUrl(), "/check-config.sh"));
+                         mTerminalView.sendTextToTerminal(com.termux.zerocore.code.CodeString.INSTANCE.getRunDocker());
+                     });
+                 }
+            } else if (id == R.id.clear_style) {
+                FileIOUtils.INSTANCE.clearStyle();
+                recreate();
+            } else if (id == R.id.start_msg) {
+                Intent intent = new Intent(this, EditTextActivity.class);
+                intent.putExtra("edit_path", FileUrl.INSTANCE.getSmsMotdFile());
+                startActivity(intent);
+            } else if (id == R.id.command_key_ll) {
+                showCommandKeyDialog();
             } else if (id == R.id.quanping) {
                 if (quanping.getTag() == null) {
                     WindowUtils.setFullScreen(this);
@@ -2369,21 +2527,72 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 yuyan_list.add(msg_en);
 
                 showMenuDialog(yuyan_list, yuyan);
-            } else if (id == R.id.zero_fun) {
-                BoomZeroTermuxDialog boomZeroTermuxDialog = new BoomZeroTermuxDialog(this);
-                boomZeroTermuxDialog.show();
-                boomZeroTermuxDialog.setCancelable(true);
-            } else if (id == R.id.shiyan_fun) {
-                SYFunBoomDialog syFunBoomDialog = new SYFunBoomDialog(this);
-                syFunBoomDialog.show();
-                syFunBoomDialog.setCancelable(true);
             } else if (id == R.id.online_sh) {
                 OnLineShDialog mOnLineShDialog = new OnLineShDialog(this);
 
                 mOnLineShDialog.setOnItemClickListener(new OnLineShDialog.OnItemClickListener() {
                     @Override
-                    public void click(@NotNull String msg) {
-                        mTerminalView.sendTextToTerminal(msg + "\n");
+                    public void click(@NotNull String msg, String mode) {
+                        boolean isKali = "1".equals(mode) || "true".equalsIgnoreCase(mode);
+                        boolean isSu = "su".equalsIgnoreCase(mode);
+
+                        if (isKali) {
+                            try {
+                                // msg format: "cd ~ && chmod 777 fileName && runCmd"
+                                String[] parts = msg.split(" && ");
+                                if (parts.length >= 3) {
+                                    String fileName = parts[1].substring("chmod 777 ".length());
+                                    String termuxHomePath = TermuxConstants.TERMUX_HOME_DIR_PATH + "/" + fileName;
+                                    String kaliRootPath = TermuxConstants.TERMUX_HOME_DIR_PATH + "/kali-arm64/root/" + fileName;
+                                    
+                                    // Copy file from Termux home to Kali root
+                                    FileUtils.copyRegularFile("KaliScriptCopy", termuxHomePath, kaliRootPath, false);
+                                    
+                                    // Construct new command for Kali
+                                    // cd /root is equivalent to ~ in Kali root shell
+                                    String runCmd = parts[2];
+                                    String kaliMsg = "cd /root && chmod 777 " + fileName + " && " + runCmd;
+                                    executeInRootKali(kaliMsg, "Kali-Root");
+                                } else {
+                                    // Fallback if format doesn't match
+                                    mTerminalView.sendTextToTerminal("nethunter -r\n");
+                                    mTerminalView.sendTextToTerminal(msg + "\n");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Logger.logError(LOG_TAG, "Error preparing Kali script: " + e.getMessage());
+                                mTerminalView.sendTextToTerminal("nethunter -r\n");
+                                mTerminalView.sendTextToTerminal(msg + "\n");
+                            }
+                        } else if (isSu) {
+                             // Termux Root 环境执行
+                             // 1. 切换到 Termux 会话
+                             // 2. 使用 su -c 执行命令，避免交互式 Shell 的时序问题
+                             // 3. 执行修正路径后的命令 (cd ~ -> cd /data/data/com.termux/files/home)
+                             
+                             String suMsg = msg.replace("cd ~", "cd " + TermuxConstants.TERMUX_HOME_DIR_PATH);
+                             
+                             // 使用 su -c "command" 模式
+                             // 这样可以确保命令直接传递给 Root Shell 执行，而不需要等待 Shell 初始化
+                             String finalCmd = "su -c \"" + suMsg + "\"";
+                             
+                             executeInTermux(finalCmd);
+                        } else {
+                            // Check if current session is Kali
+                            TerminalSession currentSession = getCurrentSession();
+                            boolean isKaliSession = false;
+                            if (currentSession != null && currentSession.mSessionName != null) {
+                                if (currentSession.mSessionName.contains("Kali") || currentSession.mSessionName.contains("nethunter")) {
+                                    isKaliSession = true;
+                                }
+                            }
+
+                            if (isKaliSession) {
+                                executeInTermux(msg);
+                            } else {
+                                mTerminalView.sendTextToTerminal(msg + "\n");
+                            }
+                        }
                         mOnLineShDialog.dismiss();
                     }
                 });
@@ -2404,7 +2613,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             } else if (id == R.id.ai_command_helper) {
                 new AIAssistantManager(this).showCommandHelperDialog();
             } else if (id == R.id.ai_other) {
-                 UUtils.showMsg("More features coming soon");
+                 showAiTerminalMenu(v);
             } else if (id == R.id.pentest_metasploit) {
                 // Metasploit
                 new MetasploitDialog(this).show();
@@ -2417,6 +2626,12 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             } else if (id == R.id.pentest_camphish) {
             // Camphish
             new CamphishDialog(this).show();
+        } else if (id == R.id.pentest_nmap) {
+            // Nmap
+            new NmapDialog(this).show();
+        } else if (id == R.id.pentest_dirb) {
+            // Dirb
+            new DirbDialog(this).show();
         } else if (id == R.id.timer) {
                 startActivity(new Intent(this, TimerActivity.class));
             } else if (id == R.id.beautify) {
@@ -2500,6 +2715,11 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             } else if (id == R.id.x11_features_settings) {
                 //X11 设置
                 startActivity(new Intent(TermuxActivity.this, ZeroTermuxX11Settings.class));
+            // } else if (id == R.id.adb_tool) {
+                // ADBToolDialog adbToolDialog = new ADBToolDialog(this);
+                // adbToolDialog.show();
+                // adbToolDialog.setCancelable(true);
+                // startActivity(new Intent(TermuxActivity.this, com.davik.adbtools.AdbToolsActivity.class));
             } else if (id == R.id.x11_environment) {
                 // 复制环境
                 // am start -a android.intent.action.zt.termux.x11
@@ -2630,9 +2850,42 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 // 执行 SSH 停止命令
                 String cmd = "/etc/init.d/ssh stop && echo \"SSH service stopped\"\n";
                 mTerminalView.sendTextToTerminal(cmd);
+            } else if (id == R.id.kali_install_tools) {
+                // 安装工具集
+                String sessionName = "Kali-Root";
+                TerminalSession targetSession = null;
+
+                if (mTermuxService != null) {
+                    List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+                    for (int i = 0; i < sessions.size(); i++) {
+                        TerminalSession session = sessions.get(i).getTerminalSession();
+                        if (sessionName.equals(session.mSessionName)) {
+                            targetSession = session;
+                            break;
+                        }
+                    }
+                }
+
+                if (targetSession != null) {
+                    mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
+                } else {
+                    mTermuxTerminalSessionActivityClient.addNewSession(false, sessionName);
+                }
+
+                // 确保进入 Root 权限的 Kali 环境
+                mTerminalView.sendTextToTerminal("nethunter -r\n");
+                // 执行安装命令
+                // 排除 postgresql 升级
+                mTerminalView.sendTextToTerminal("apt-mark hold postgresql* && apt update && apt install kali-linux-default -y && apt upgrade -y\n");
+            } else if (id == R.id.kali_tools_menu) {
+                // 显示常用Kali工具分类菜单
+                showKaliToolsCategoryDialog();
+            } else if (id == R.id.ai_other) {
+                // AI Terminal Popup
+                showAiTerminalMenu(v);
             } else if (id == R.id.set_password) {
                 // 设置密码
-                mTerminalView.sendTextToTerminal("passwd\n");
+                mTerminalView.sendTextToTerminal("if ! command -v passwd &> /dev/null; then pkg install termux-auth -y; fi; passwd\n");
             } else if (id == R.id.start_desktop) {
                 // 启动桌面
                 try {
@@ -2653,6 +2906,267 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 // 停止桌面
                 mTerminalView.sendTextToTerminal("pkill -f com.termux.x11\n");
             }
+    }
+
+    private void showKaliToolsCategoryDialog() {
+        final String[] categories = {
+            "信息收集", "漏洞扫描", "Web应用", "密码破解", 
+            "无线安全", "网络嗅探", "漏洞利用", "后渗透", 
+            "取证工具", "逆向工程", "匿名工具", "移动安全", "社会工程"
+        };
+        
+        final Map<String, String[]> toolsMap = new HashMap<>();
+        toolsMap.put("信息收集", new String[]{"nmap", "theharvester", "recon-ng", "dnsenum", "dnsrecon", "amass", "sublist3r"});
+        toolsMap.put("漏洞扫描", new String[]{"nikto", "openvas", "nessus", "lynis"});
+        toolsMap.put("Web应用", new String[]{"sqlmap", "burpsuite", "zaproxy", "dirb", "gobuster", "wpscan", "joomscan"});
+        toolsMap.put("密码破解", new String[]{"john", "hashcat", "hydra", "medusa", "crunch", "cewl"});
+        toolsMap.put("无线安全", new String[]{"aircrack-ng", "kismet", "reaver", "bully", "wifite", "fern-wifi"});
+        toolsMap.put("网络嗅探", new String[]{"wireshark", "tshark", "ettercap", "dsniff", "netsniff-ng"});
+        toolsMap.put("漏洞利用", new String[]{"metasploit", "searchsploit", "exploitdb", "beef-xss"});
+        toolsMap.put("后渗透", new String[]{"empire", "powersploit", "mimikatz", "responder", "evil-winrm"});
+        toolsMap.put("取证工具", new String[]{"autopsy", "foremost", "binwalk", "volatility"});
+        toolsMap.put("逆向工程", new String[]{"radare2", "ghidra", "ollydbg", "jadx"});
+        toolsMap.put("匿名工具", new String[]{"tor", "proxychains", "macchanger", "anonsurf"});
+        toolsMap.put("移动安全", new String[]{"apktool", "jadx", "drozer", "frida"});
+        toolsMap.put("社会工程", new String[]{"setoolkit", "phishing-framework"});
+
+        new AlertDialog.Builder(this)
+            .setTitle("常用Kali工具分类")
+            .setItems(categories, (dialog, which) -> {
+                String selectedCategory = categories[which];
+                String[] tools = toolsMap.get(selectedCategory);
+                if (tools != null) {
+                    showKaliToolsListDialog(selectedCategory, tools);
+                }
+            })
+            .setNegativeButton("取消", null)
+            .show();
+    }
+
+    private void showKaliToolsListDialog(String category, final String[] tools) {
+        new AlertDialog.Builder(this)
+            .setTitle(category + " 工具列表")
+            .setItems(tools, (dialog, which) -> {
+                String selectedTool = tools[which];
+                executeKaliTool(selectedTool);
+            })
+            .setNegativeButton("返回", (dialog, which) -> showKaliToolsCategoryDialog())
+            .show();
+    }
+
+    private void executeKaliTool(String toolCommand) {
+        String sessionName = "Kali-Root";
+        TerminalSession targetSession = null;
+
+        if (mTermuxService != null) {
+            List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+            for (int i = 0; i < sessions.size(); i++) {
+                TerminalSession session = sessions.get(i).getTerminalSession();
+                if (sessionName.equals(session.mSessionName)) {
+                    targetSession = session;
+                    break;
+                }
+            }
+        }
+
+        if (targetSession != null) {
+            mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
+        } else {
+            mTermuxTerminalSessionActivityClient.addNewSession(false, sessionName);
+        }
+
+        // 确保进入 Root 权限的 Kali 环境并执行工具
+        // 这里使用 ; 分隔命令，即使 nethunter -r 已经执行过也不会报错
+        // 更好的方式是直接发送 nethunter -r 切换环境，然后发送工具命令
+        // 如果已经在 nethunter 环境下，再次执行 nethunter -r 可能会嵌套，但通常是可以接受的
+        // 或者直接发送命令字符串
+        
+        mTerminalView.sendTextToTerminal("nethunter -r\n");
+        // 等待一下或者直接发送命令，Termux 终端会排队处理
+        // 为了确保工具能运行，我们尝试直接调用
+        mTerminalView.sendTextToTerminal(toolCommand + "\n");
+        
+        // 如果希望用户看到工具运行界面，这里不需要做额外操作，终端会自动显示输出
+    }
+
+    private void showAiTerminalMenu(View showView) {
+        ArrayList<MenuLeftPopuListWindow.MenuLeftPopuListData> aiToolsList = new ArrayList<>();
+        
+        // Gemini
+        MenuLeftPopuListWindow.MenuLeftPopuListData gemini = new MenuLeftPopuListWindow.MenuLeftPopuListData(R.drawable.ic_gemini_icon, "Gemini", 1001);
+        aiToolsList.add(gemini);
+        
+        // iFlow
+        MenuLeftPopuListWindow.MenuLeftPopuListData iflow = new MenuLeftPopuListWindow.MenuLeftPopuListData(R.drawable.ic_iflow_icon, "iFlow", 1002);
+        aiToolsList.add(iflow);
+        
+        showMenuDialog(aiToolsList, showView, 1);
+    }
+
+    private void executeInRootKali(String command, String sessionName) {
+        TerminalSession targetSession = null;
+
+        if (mTermuxService != null) {
+            List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+            for (int i = 0; i < sessions.size(); i++) {
+                TerminalSession session = sessions.get(i).getTerminalSession();
+                if (sessionName.equals(session.mSessionName)) {
+                    targetSession = session;
+                    break;
+                }
+            }
+        }
+
+        if (targetSession != null) {
+            mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
+        } else {
+            mTermuxTerminalSessionActivityClient.addNewSession(false, sessionName);
+        }
+
+        if (mTerminalView != null) {
+            mTerminalView.sendTextToTerminal("nethunter -r\n");
+            mTerminalView.sendTextToTerminal(command + "\n");
+        }
+    }
+
+    private void executeInTermux(String command) {
+        TerminalSession targetSession = null;
+        String[] preferredNames = {"Termux", "Zero session"};
+
+        if (mTermuxService != null) {
+            List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+            // Try to find an existing preferred session
+            for (String name : preferredNames) {
+                for (int i = 0; i < sessions.size(); i++) {
+                    TerminalSession session = sessions.get(i).getTerminalSession();
+                    if (name.equals(session.mSessionName)) {
+                        targetSession = session;
+                        break;
+                    }
+                }
+                if (targetSession != null) break;
+            }
+            
+            // If not found, try to find ANY session that is NOT Kali
+            if (targetSession == null) {
+                 for (int i = 0; i < sessions.size(); i++) {
+                    TerminalSession session = sessions.get(i).getTerminalSession();
+                    String sName = session.mSessionName;
+                    if (sName != null && !sName.contains("Kali") && !sName.contains("nethunter")) {
+                        targetSession = session;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (targetSession != null) {
+            mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
+        } else {
+            mTermuxTerminalSessionActivityClient.addNewSession(false, "Termux");
+        }
+
+        if (mTerminalView != null) {
+            mTerminalView.sendTextToTerminal(command + "\n");
+        }
+    }
+
+    private void executeGemini() {
+        SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.选择方式), "请选择 Gemini 运行环境");
+        switchDialog.getOk().setText("Kali-Root");
+        switchDialog.getCancel().setText("Termux-X");
+
+        switchDialog.getOk().setOnClickListener(v -> {
+            switchDialog.dismiss();
+            runGeminiInSession("Kali-Root", true);
+        });
+
+        switchDialog.getCancel().setOnClickListener(v -> {
+            switchDialog.dismiss();
+            runGeminiInSession("Termux", false);
+        });
+    }
+
+    private void runGeminiInSession(String sessionName, boolean isKaliRoot) {
+        TerminalSession targetSession = null;
+
+        if (mTermuxService != null) {
+            List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+            for (int i = 0; i < sessions.size(); i++) {
+                TerminalSession session = sessions.get(i).getTerminalSession();
+                if (sessionName.equals(session.mSessionName)) {
+                    targetSession = session;
+                    break;
+                }
+            }
+        }
+
+        if (targetSession != null) {
+            mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
+        } else {
+            mTermuxTerminalSessionActivityClient.addNewSession(false, sessionName);
+        }
+
+        if (isKaliRoot) {
+            // 切换到 nethunter 环境
+            mTerminalView.sendTextToTerminal("nethunter -r\n");
+            // 检查并运行/安装 Gemini (Kali)
+            String cmd = "if [ -f /usr/bin/gemini-cli ]; then /usr/bin/gemini-cli; else echo 'Gemini not found, installing...'; apt update && apt install gemini-cli -y && /usr/bin/gemini-cli; fi\n";
+            mTerminalView.sendTextToTerminal(cmd);
+        } else {
+            // Termux 环境下的安装/启动命令
+            String cmd = "if [ -f /data/data/com.termux/files/usr/bin/gemini ]; then gemini; else echo 'Gemini not found, installing...'; pkg update -y && pkg install python nodejs -y && npm install -g @google/gemini-cli --ignore-scripts; fi\n";
+            mTerminalView.sendTextToTerminal(cmd);
+        }
+    }
+
+    private void executeIflow() {
+        SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.选择方式), "请选择 iFlow 运行环境");
+        switchDialog.getOk().setText("Kali-Root");
+        switchDialog.getCancel().setText("Termux-X");
+
+        switchDialog.getOk().setOnClickListener(v -> {
+            switchDialog.dismiss();
+            runIflowInSession("Kali-Root", true);
+        });
+
+        switchDialog.getCancel().setOnClickListener(v -> {
+            switchDialog.dismiss();
+            runIflowInSession("Termux", false);
+        });
+    }
+
+    private void runIflowInSession(String sessionName, boolean isKaliRoot) {
+        TerminalSession targetSession = null;
+
+        if (mTermuxService != null) {
+            List<com.termux.shared.termux.shell.command.runner.terminal.TermuxSession> sessions = mTermuxService.getTermuxSessions();
+            for (int i = 0; i < sessions.size(); i++) {
+                TerminalSession session = sessions.get(i).getTerminalSession();
+                if (sessionName.equals(session.mSessionName)) {
+                    targetSession = session;
+                    break;
+                }
+            }
+        }
+
+        if (targetSession != null) {
+            mTermuxTerminalSessionActivityClient.setCurrentSession(targetSession);
+        } else {
+            mTermuxTerminalSessionActivityClient.addNewSession(false, sessionName);
+        }
+
+        if (isKaliRoot) {
+            // 切换到 nethunter 环境
+            mTerminalView.sendTextToTerminal("nethunter -r\n");
+            // Kali Root 环境下的安装/启动命令
+            String cmd = "if [ -f /usr/local/bin/iflow ]; then iflow; else echo 'iFlow not found, installing...'; apt update && apt install npm -y && bash -c \"$(curl -fsSL https://gitee.com/iflow-ai/iflow-cli/raw/main/install.sh)\"; fi\n";
+            mTerminalView.sendTextToTerminal(cmd);
+        } else {
+            // Termux 环境下的安装/启动命令
+            String cmd = "if [ -f /data/data/com.termux/files/usr/bin/iflow ]; then iflow; else echo 'iFlow not found, installing...'; pkg update && pkg install nodejs -y && npm install -g @iflow-ai/iflow-cli@latest && iflow; fi\n";
+            mTerminalView.sendTextToTerminal(cmd);
+        }
     }
 
     private void x11KeyboardGone() {
@@ -2728,6 +3242,115 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
     }
 
+    private void showMenuDialog(ArrayList<MenuLeftPopuListWindow.MenuLeftPopuListData> arrayList, View showView, int spanCount) {
+
+        MenuLeftPopuListWindow menuLeftPopuListWindow = new MenuLeftPopuListWindow(this);
+        menuLeftPopuListWindow.setItemClickPopuListener(this);
+        menuLeftPopuListWindow.setSpanCount(spanCount);
+        menuLeftPopuListWindow.setListData(arrayList);
+        menuLeftPopuListWindow.showAsDropDown(showView, 250, -200);
+
+
+    }
+
+    private void showCommandKeyDialog() {
+        MingLShowDialog mingLShowDialog = new MingLShowDialog(this);
+        mingLShowDialog.mTitleCard.setVisibility(View.GONE);
+        mingLShowDialog.mSwitchCard.setVisibility(View.GONE);
+        mingLShowDialog.edit_text.setHint(UUtils.getString(R.string.zt_command_edit_h));
+        
+        String dataMessageFileString = getProperties()
+            .getInternalPropertyValue(TermuxPropertyConstants.KEY_EXTRA_KEYS, true).toString();
+        if (dataMessageFileString != null && !dataMessageFileString.isEmpty()) {
+            mingLShowDialog.edit_text.setText(dataMessageFileString);
+        }
+        
+        mingLShowDialog.def_commit_ll.setVisibility(View.VISIBLE);
+        mingLShowDialog.def_commit_ll.setOnClickListener(v -> {
+            try {
+                Properties properties = loadProperties();
+                if (properties != null) {
+                    properties.setProperty(TermuxPropertyConstants.KEY_EXTRA_KEYS, 
+                        TermuxPropertyConstants.DEFAULT_IVALUE_EXTRA_KEYS);
+                    saveProperties(properties);
+                    reloadTermuxStyle();
+                    UUtils.showMsg(UUtils.getString(R.string.zt_command_path_ok));
+                    mingLShowDialog.dismiss();
+                } else {
+                    UUtils.showMsg(UUtils.getString(R.string.zt_command_path_error));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                UUtils.showMsg(UUtils.getString(R.string.zt_command_path_error));
+            }
+        });
+        
+        mingLShowDialog.start.setOnClickListener(v -> {
+            String text = mingLShowDialog.edit_text.getText().toString();
+            setCommandKey(mingLShowDialog, text);
+        });
+        
+        mingLShowDialog.show();
+    }
+
+    private void setCommandKey(MingLShowDialog mingLShowDialog, String propertiesInfo) {
+        try {
+            JSONArray arr = new JSONArray(propertiesInfo);
+            Object[][] matrix = new Object[arr.length()][];
+            for (int i = 0; i < arr.length(); i++) {
+                JSONArray line = arr.getJSONArray(i);
+                matrix[i] = new Object[line.length()];
+                for (int j = 0; j < line.length(); j++) {
+                    matrix[i][j] = line.get(j);
+                }
+            }
+            
+            Properties properties = loadProperties();
+            if (properties == null) {
+                UUtils.showMsg(UUtils.getString(R.string.zt_command_path_error));
+                return;
+            }
+            
+            properties.setProperty(TermuxPropertyConstants.KEY_EXTRA_KEYS, propertiesInfo);
+            saveProperties(properties);
+            mingLShowDialog.dismiss();
+            UUtils.showMsg(UUtils.getString(R.string.zt_command_path_ok));
+            reloadTermuxStyle();
+        } catch (Exception e) {
+            e.printStackTrace();
+            UUtils.showMsg(UUtils.getString(R.string.zt_command_key_error));
+        }
+    }
+
+    private Properties loadProperties() {
+        try {
+            Properties properties = new Properties();
+            FileInputStream input = new FileInputStream(TermuxConstants.TERMUX_PROPERTIES_PRIMARY_FILE_PATH);
+            properties.load(input);
+            input.close();
+            return properties;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void saveProperties(Properties properties) {
+        try {
+            FileOutputStream output = new FileOutputStream(TermuxConstants.TERMUX_PROPERTIES_PRIMARY_FILE_PATH);
+            properties.store(output, "Application Configuration");
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void reloadTermuxStyle() {
+        Intent stylingIntent = new Intent(TERMUX_ACTIVITY.ACTION_RELOAD_STYLE);
+        stylingIntent.putExtra(TERMUX_ACTIVITY.EXTRA_RECREATE_ACTIVITY, false);
+        sendBroadcast(stylingIntent);
+    }
+
     /**
      * 刷新状态
      */
@@ -2757,6 +3380,32 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
      * @param id
      * @param index
      */
+
+    private void runRootAdbHttp() {
+        ExeCommand exeCommand = new ExeCommand();
+        exeCommand.run("setprop service.adb.tcp.port 5555", 6000, true);
+        exeCommand.run("stop adbd", 6000, true);
+        exeCommand.run("start adbd", 6000, true);
+
+        SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.运行完成) + "\n" + UUtils.getHostIP() + ":5555");
+        switchDialog.show();
+        switchDialog.setCancelable(false);
+        switchDialog.getOk().setOnClickListener(v -> switchDialog.dismiss());
+        switchDialog.getCancel().setOnClickListener(v -> switchDialog.dismiss());
+    }
+
+    private void runRootAdbHttpClose() {
+        ExeCommand exeCommand = new ExeCommand();
+        exeCommand.run("setprop service.adb.tcp.port -1", 6000, true);
+        exeCommand.run("stop adbd", 6000, true);
+        exeCommand.run("start adbd", 6000, true);
+
+        SwitchDialog switchDialog = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.关闭成功) + "\n");
+        switchDialog.show();
+        switchDialog.setCancelable(false);
+        switchDialog.getOk().setOnClickListener(v -> switchDialog.dismiss());
+        switchDialog.getCancel().setOnClickListener(v -> switchDialog.dismiss());
+    }
 
     @Override
     public void itemClick(int id, int index, MenuLeftPopuListWindow mMenuLeftPopuListWindow) {
@@ -2818,6 +3467,12 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                     mTerminalView.sendTextToTerminal(CodeString.INSTANCE.getUpDate());
                 }
             });
+        } else if (id == 1001) {
+            // Gemini
+            executeGemini();
+        } else if (id == 1002) {
+            // iFlow
+            executeIflow();
         } else if (id == 496) {
             //NJU
             SwitchDialog switchDialog15 = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.该操作会覆盖您的文件记录));
@@ -2872,6 +3527,22 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                     mTerminalView.sendTextToTerminal(CodeString.INSTANCE.getHEB());
                 }
             });
+        } else if (id == 6001) {
+            // Kali Official
+            String cmd = "echo 'deb http://http.kali.org/kali kali-rolling main non-free contrib' > /etc/apt/sources.list && apt update";
+            executeInRootKali(cmd, "Kali-Root");
+        } else if (id == 6002) {
+            // Kali Tsinghua
+            String cmd = "echo 'deb https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main non-free contrib' > /etc/apt/sources.list && apt update";
+            executeInRootKali(cmd, "Kali-Root");
+        } else if (id == 6003) {
+            // Kali USTC
+            String cmd = "echo 'deb https://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib' > /etc/apt/sources.list && apt update";
+            executeInRootKali(cmd, "Kali-Root");
+        } else if (id == 6004) {
+            // Kali Aliyun
+            String cmd = "echo 'deb https://mirrors.aliyun.com/kali kali-rolling main non-free contrib' > /etc/apt/sources.list && apt update";
+            executeInRootKali(cmd, "Kali-Root");
         } else if (id == 5) {
             //qemu
             SwitchDialog msgQemuLine = switchDialogShow(UUtils.getString(R.string.选择方式), UUtils.getString(R.string.要获取最新版本));
@@ -2982,41 +3653,6 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                         }
                     }
                 });
-        } else if (id == 6) {
-            SwitchDialog msg = switchDialogShow(UUtils.getString(R.string.警告), UUtils.getString(R.string.该操作有风险));
-
-            msg.getCancel().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    msg.dismiss();
-
-                }
-            });
-            msg.getOk().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    msg.dismiss();
-                    File file = new File(FileUrl.INSTANCE.getSmsUrl());
-                    if (file.exists()) {
-
-                        UUtils.showMsg(UUtils.getString(R.string.您已安装工具));
-
-                    } else {
-
-
-                        UUtils.writerFile("runcommand/smsread", new File(FileUrl.INSTANCE.getSmsUrl()));
-                        UUtils.writerFile("runcommand/readcontacts", new File(FileUrl.INSTANCE.getPhoneUrl()));
-
-                        TermuxActivity.mTerminalView.sendTextToTerminal(CodeString.INSTANCE.getRunsmsChomdSh());
-                        TermuxActivity.mTerminalView.sendTextToTerminal(CodeString.INSTANCE.getRunPhoneChomdSh());
-
-                        UUtils.showMsg(UUtils.getString(R.string.安装完成));
-
-
-                    }
-
-                }
-            });
         } else if (id == 10) {
             //快速
             UUtils.showLog("插件:快速");
@@ -3161,11 +3797,21 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             @Override
             public void onClick(View v) {
                 android.widget.PopupMenu popup = new android.widget.PopupMenu(TermuxActivity.this, v);
-                popup.getMenu().add(0, 1, 0, "新建Termux shell");
-                popup.getMenu().add(0, 2, 1, "kali shell");
-                popup.getMenu().add(0, 3, 2, "root kali shell");
+                popup.getMenu().add(0, 4, 0, "切换会话");
+                popup.getMenu().add(0, 1, 1, "新建Termux shell");
+                popup.getMenu().add(0, 2, 2, "kali shell");
+                popup.getMenu().add(0, 3, 3, "root kali shell");
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
+                        case 4:
+                            getDrawer().smoothRightOpen();
+                            // 切换到会话列表
+                            if (frame_file != null && session_rl != null) {
+                                frame_file.setVisibility(View.GONE);
+                                session_rl.setVisibility(View.VISIBLE);
+                            }
+                            popupWindow[0].dismiss();
+                            return true;
                         case 1:
                             mTermuxTerminalSessionActivityClient.addNewSession(false, null);
                             popupWindow[0].dismiss();
@@ -3207,124 +3853,12 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         }
 
         if (msg.equals("readsms")) {
-
-            boolean vim = IsInstallCommand.INSTANCE.isInstall(this, "vim", CodeString.INSTANCE.getRunsmsInstallSh());
-
-            if (vim) {
-
-                XXPermissions.with(this)
-                    .permission(Permission.READ_SMS)
-                    .request(new OnPermissionCallback() {
-
-                        @Override
-                        public void onGranted(List<String> permissions, boolean all) {
-                            if (all) {
-                                // UUtils.showMsg("获取录音和日历权限成功");
-
-                                String smsInPhone = SmsUtils.getSmsInPhone();
-                                UUtils.setFileString(new File(FileUrl.INSTANCE.getSmsUrlFile()), smsInPhone);
-                                UUtils.sleepSetRunMm(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        TermuxActivity.mTerminalView.sendTextToTerminal("cd ~ && cd ~ && vim sms.txt \n");
-                                    }
-                                }, 100);
-
-                            } else {
-                                // UUtils.showMsg(("获取部分权限成功，但部分权限未正常授予"));
-                                TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.无权限读取) + "! \n");
-                            }
-                        }
-
-                        @Override
-                        public void onDenied(List<String> permissions, boolean never) {
-                            if (never) {
-                                TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.无权限读取) + "! \n");
-                                // 如果是被永久拒绝就跳转到应用权限系统设置页面
-                                XXPermissions.startPermissionActivity(TermuxActivity.this, permissions);
-                            } else {
-                                TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.无权限读取) + "! \n");
-                            }
-                        }
-                    });
-
-            }
-
+            // Functionality removed
         }
 
         //联系人
         if (msg.equals("contactperson")) {
-
-            if (!isPhoneRun) {
-
-                synchronized (TermuxActivity.class) {
-
-                    isPhoneRun = true;
-
-                    boolean vim = IsInstallCommand.INSTANCE.isInstall(this, "vim", CodeString.INSTANCE.getRunsmsInstallSh());
-
-                    if (vim) {
-
-                        XXPermissions.with(this)
-                            .permission(Permission.READ_CONTACTS)
-                            .request(new OnPermissionCallback() {
-
-                                @Override
-                                public void onGranted(List<String> permissions, boolean all) {
-
-                                    if (all) {
-                                        // UUtils.showMsg("获取录音和日历权限成功");
-
-                                        LoadingDialog loadingDialog = new LoadingDialog(TermuxActivity.this);
-                                        loadingDialog.show();
-
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                String allContacts = PhoneUtils.getAllContacts(UUtils.getContext());
-                                                UUtils.setFileString(new File(FileUrl.INSTANCE.getPhoneUrlFile()), allContacts);
-                                                UUtils.sleepSetRunMm(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        TermuxActivity.this.runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                isPhoneRun = false;
-                                                                loadingDialog.dismiss();
-                                                                TermuxActivity.mTerminalView.sendTextToTerminal("cd ~ && cd ~ && vim phone.txt \n");
-                                                            }
-                                                        });
-                                                    }
-                                                }, 100);
-                                            }
-                                        }).start();
-
-                                    } else {
-                                        isPhoneRun = false;
-                                        // UUtils.showMsg(("获取部分权限成功，但部分权限未正常授予"));
-                                        TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.无权限读取) + "! \n");
-                                    }
-                                }
-
-                                @Override
-                                public void onDenied(List<String> permissions, boolean never) {
-                                    isPhoneRun = false;
-                                    if (never) {
-                                        TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.无权限读取) + "! \n");
-                                        // 如果是被永久拒绝就跳转到应用权限系统设置页面
-                                        XXPermissions.startPermissionActivity(TermuxActivity.this, permissions);
-                                    } else {
-                                        TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.无权限读取) + "! \n");
-                                    }
-                                }
-                            });
-                    } else {
-                        isPhoneRun = false;
-                    }
-                }
-            } else {
-                TermuxActivity.mTerminalView.sendTextToTerminal("echo " + UUtils.getString(R.string.请等待) + "! \n");
-            }
+            // Functionality removed
         }
         if (msg.equals("left")) {
             getDrawer().smoothLeftOpen();
@@ -3537,7 +4071,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                         loadingDialog.show();
 
 
-                        new BaseHttpUtils().getUrl(ip + "/repository/main.json", new HttpResponseListenerBase() {
+                        new BaseHttpUtils().getUrl(ip + "/main.json", new HttpResponseListenerBase() {
                             @Override
                             public void onSuccessful(@NotNull Message msg, int mWhat) {
                                 loadingDialog.dismiss();
@@ -3547,7 +4081,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                                     ZDYDataBean zdyDataBean = new Gson().fromJson((String) msg.obj, ZDYDataBean.class);
 
                                     DownLoadDialogBoom downLoadDialogBoom = new DownLoadDialogBoom(TermuxActivity.this);
-                                    downLoadDialogBoom.setIP(ip + "/repository/main.json");
+                                    downLoadDialogBoom.setIP(ip + "/main.json");
                                     downLoadDialogBoom.show();
                                     downLoadDialogBoom.setCancelable(true);
                                 } catch (Exception e) {

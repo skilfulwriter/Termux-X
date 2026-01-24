@@ -27,14 +27,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="@string/请双击命令窗口试试"
-                    android:textColor="@color/color_ffffff"
+                    android:textColor="#1AFFFFFF"
                     android:gravity="center"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:id="@+id/double_tishi"
                     android:textStyle="bold"
                     android:textSize="16sp"
-                    android:alpha="0.1"
                     android:layout_height="wrap_content"/>
                 <FrameLayout
                     android:layout_width="match_parent"

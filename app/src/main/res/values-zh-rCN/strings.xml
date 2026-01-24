@@ -496,11 +496,11 @@
     <string name="Termux_ADB">Termux-ADB</string>
     <string name="实验功能">实验功能</string>
     <string name="ZeroTermux实验功能">ZeroTermux 实验功能</string>
-    <string name="网络ADB">网络ADB(ROOT)</string>
+    <string name="网络ADB">网络ADB</string>
     <string name="网络ADBNo">网络ADB(无ROOT)</string>
     <string name="没有找到本机的ROOT权限">没有找到本机的ROOT权限,是否强制继续?</string>
     <string name="运行完成">命令执行完成,请确保在Root下执行\n请使用:\n \n adb.exe connect</string>
-    <string name="网络ADBClose">关闭ADB(ROOT)</string>
+    <string name="网络ADBClose">关闭ADB</string>
     <string name="关闭成功">ADB命令关闭成功</string>
 
 
@@ -635,7 +635,7 @@
     <string name="获取线上">获取线上</string>
     <string name="线上脚本">线上脚本</string>
     <string name="本地脚本">本地脚本</string>
-    <string name="请双击命令窗口试试">Termux-X\n双击命令窗口打开快捷栏\n双击最左(音量+按键)\n右(音量-按键)打开菜单/会话栏\n双指单击打开 工具箱\n右侧菜单打开内置文件浏览器</string>
+    <string name="请双击命令窗口试试">Termux-X\n双击命令窗口打开工具箱\n屏幕向最右滑动打开菜单栏\n向左滑动打开内部文件管理/会话栏</string>
 
     <string name="在线脚本">在线脚本</string>
     <string name="在线脚本服务器名称">Server Name</string>
@@ -710,7 +710,7 @@
     <string name="keyboard_select_name">内置键盘</string>
     <string name="image_size_error">文件过大</string>
 
-    <string name="zero_eg_not_install">没有安装零引擎，请在下载站下载引擎 </string>
+    <string name="zero_eg_not_install">没有安装零引擎，请在ZT设置-关于Termux-x选项-ZeroCoreManage选项下载 </string>
 
     <string name="install_environment">安装所需环境?</string>
 
@@ -829,6 +829,12 @@
     <string name="save_error_">保存失败</string>
     <string name="save_ok_">保存成功,有些文件需要重启APP生效</string>
     <string name="start_msg">修改欢迎语</string>
+    <string name="zt_command_key">底部键盘</string>
+    <string name="zt_command_edit_h">输入你的终端底部代码…</string>
+    <string name="zt_command_key_error">格式错误!</string>
+    <string name="zt_command_path_error">文件操作失败!</string>
+    <string name="zt_command_path_ok">保存成功，重启APP生效</string>
+    <string name="zt_command_def">默认</string>
     <string name="create_folder">创建文件夹</string>
     <string name="rohibit_toolbox_msg">在你调整字体大小或三指截图的时候，可以选择禁止显示工具箱\n启用工具箱:[长按终端->启用工具箱]</string>
     <string name="rohibit_toolbox_select">禁用显示</string>
@@ -867,7 +873,7 @@
     <string name="attention_closing_ftp">正在关闭FTP服务&#8230;</string>
     <string name="word_stop">停止</string>
     <string name="ftp_title_no">ZeroTermux:FTP</string>
-    <string name="docker_check">Docker检查\n(ROOT)</string>
+    <string name="docker_check">Docker检查</string>
     <string name="termux_copy_ll">复制文件到~</string>
     <string name="termux_moudle_ll">安装模块包</string>
     <string name="termux_targz_ll">安装恢复包</string>
@@ -887,17 +893,18 @@
 
     <string name="label_server_title">远程连接(BATE)</string>
     <string name="ip_connect">0.0.0.0</string>
-    <string name="remote_connection">ADB远程连接(bate)</string>
+    <string name="remote_connection">ADB远程</string>
     <string name="press_again">再按一次退出</string>
     <string name="adb_title_msg">正在连接...请勿多次点击\'启动\'！</string>
     <string name="copy_uri_error">URI复制错误，请等待开发者修复...</string>
 
     <string name="developer_activity">请在DEBUG模式下进入</string>
 
-    <string name="common_functions">常用功能</string>
+    <string name="common_functions">工具箱</string>
     <string name="beautification_function">美化/UI功能</string>
     <string name="online_features">线上功能</string>
     <string name="zt_features">ZT功能</string>
+    <string name="root_features">ROOT功能</string>
     <string name="zt_settings">Termux-X设置</string>
     <string name="zt_settings1">ZT设置</string>
     <string name="zt_settings_note">ZeroTermux 相关设置选项</string>
@@ -1005,7 +1012,7 @@
     <string name="zt_particle_animation">粒子动画</string>
 
     <!-- X11功能模块 -->
-    <string name="x11_features">X11功能</string>
+    <string name="x11_features">Termux功能</string>
     <string name="x11_features_settings">X11设置</string>
     <string name="x11_features_settings_internal">内部通道X11设置</string>
     <string name="x11_features_settings_summary">高级（原生）设置：分辨率、底部键盘显示等</string>
@@ -1147,6 +1154,43 @@
         示例(或指定一个目录)：ln /data/data/com.termux/files/home/自定义名称 /sdcard/自定义目录/ \n
         ] \n
     </string>
+    <!-- AI Assistant -->
+    <string name="ai_assistant_title">AI 助手</string>
+    <string name="ai_terminal_title">AI终端</string>
+    <string name="ai_config_title">AI 配置</string>
+    <string name="ai_api_url_hint">API 基础地址</string>
+    <string name="ai_model_name_hint">模型名称</string>
+    <string name="ai_preset_openai">OpenAI</string>
+    <string name="ai_preset_deepseek">DeepSeek</string>
+    <string name="ai_api_key_hint">API Key</string>
+    <string name="ai_save_key">保存 API Key</string>
+    <string name="ai_features_title">AI 功能</string>
+    <string name="ai_btn_code_audit">代码审计</string>
+    <string name="ai_btn_payload_gen">Payload 生成</string>
+    <string name="ai_btn_phishing">社会工程学</string>
+    <string name="ai_btn_smart_dict">智能字典</string>
+    <string name="ai_btn_waf_bypass">WAF 绕过</string>
+    <string name="ai_btn_traffic_detection">流量检测</string>
+    <string name="ai_btn_command_helper">命令辅助</string>
+    <string name="ai_btn_log_analysis">日志分析</string>
+
+    <string name="ai_cmd_helper_desc">AI 命令辅助</string>
+    <string name="ai_cmd_helper_input_hint">输入您的需求...</string>
+    <string name="ai_cmd_helper_btn_generate">生成</string>
+    <string name="ai_cmd_helper_output_label">输出:</string>
+    <string name="ai_cmd_helper_output_hint">生成的命令将显示在这里...</string>
+
+    <string name="action_yes">是</string>
+    <string name="action_no">否</string>
+    <string name="ai_msg_config_saved">配置已保存</string>
+    <string name="ai_msg_preset_openai_applied">已应用 OpenAI 预设</string>
+    <string name="ai_msg_preset_deepseek_applied">已应用 DeepSeek 预设</string>
+    <string name="ai_msg_api_key_required">需要 API Key</string>
+    <string name="ai_cmd_helper_btn_close">关闭</string>
+    <string name="ai_cmd_helper_generating">生成中...</string>
+    <string name="ai_ask">AI 提问</string>
+    <string name="ai_cmd_helper_btn_run">在终端运行</string>
+
 </resources>
 
 

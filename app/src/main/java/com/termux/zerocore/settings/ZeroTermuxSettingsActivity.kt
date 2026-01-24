@@ -73,7 +73,7 @@ class ZeroTermuxSettingsActivity : AppCompatActivity() {
         linearLayout.setOnClickListener {
             switchCompat.isChecked = !(switchCompat.isChecked)
         }
-        switchCompat.setOnCheckedChangeListener { buttonView, isChecked ->
+        switchCompat.setOnCheckedChangeListener { _, isChecked ->
             val ztUserBean = UserSetManage.get().getZTUserBean()
             when (switchCompat) {
                 ztDownloadServicesSwitch -> {

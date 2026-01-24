@@ -67,6 +67,12 @@ import java.util.List;
  */
 public final class TermuxService extends Service implements AppShell.AppShellClient, TermuxSession.TermuxSessionClient {
 
+    private static TermuxService mInstance;
+
+    public static TermuxService getInstance() {
+        return mInstance;
+    }
+
     /** This service is only bound from inside the same process and never uses IPC. */
     class LocalBinder extends Binder {
         public final TermuxService service = TermuxService.this;
@@ -109,8 +115,9 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
 
     @Override
     public void onCreate() {
+        mInstance = this;
         Logger.logVerbose(LOG_TAG, "onCreate");
-
+        
         // Get Termux app SharedProperties without loading from disk since TermuxApplication handles
         // load and TermuxActivity handles reloads
         mProperties = TermuxAppSharedProperties.getProperties();
@@ -167,6 +174,7 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
 
     @Override
     public void onDestroy() {
+        mInstance = null;
         Logger.logVerbose(LOG_TAG, "onDestroy");
 
         TermuxShellUtils.clearTermuxTMPDIR(true);

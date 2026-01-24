@@ -36,6 +36,7 @@ public class MingLShowDialog extends BaseDialogCentre {
     public TextView commit;
     public Switch switch_btn;
     public LinearLayout commit_ll;
+    public LinearLayout def_commit_ll;
     public boolean isChecked = true;
     private AddCommitListener mAddCommitListener;
     public MingLShowDialog(@NonNull Context context) {
@@ -55,6 +56,7 @@ public class MingLShowDialog extends BaseDialogCentre {
         edit_text = mView.findViewById(R.id.edit_text);
         commit = mView.findViewById(R.id.commit);
         commit_ll = mView.findViewById(R.id.commit_ll);
+        def_commit_ll = mView.findViewById(R.id.def_commit_ll);
         name_edit = mView.findViewById(R.id.name_edit);
         switch_btn = mView.findViewById(R.id.switch_btn);
         mTitleCard = mView.findViewById(R.id.title_card);

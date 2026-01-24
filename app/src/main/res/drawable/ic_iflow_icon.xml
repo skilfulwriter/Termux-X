@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    
+    <!-- White Background Rounded -->
+    <path
+        android:pathData="M8,4h32a4,4 0 0,1 4,4v32a4,4 0 0,1 -4,4h-32a4,4 0 0,1 -4,-4v-32a4,4 0 0,1 4,-4z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Purple Chat Bubble / Face Shape -->
+    <!-- Simplified approximation of the logo: Circle with tail and eyes -->
+    <path
+        android:fillColor="#7C4DFF"
+        android:pathData="M24,10 C15.16,10 8,16.27 8,24 C8,31.73 15.16,38 24,38 C26,38 28,37.6 30,37 L38,40 L36,32 C39,29.5 40,26.8 40,24 C40,16.27 32.84,10 24,10 Z" />
+        
+    <!-- White "Eyes" -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,20 h4 v8 h-4 z M26,20 h4 v8 h-4 z"/>
+        
+    <!-- White Swirl/Curve (Artistic touch to match the style roughly) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M8,24 Q8,12 24,12 Q32,12 36,20 Q32,16 24,16 Q14,16 12,24 Z"
+        android:fillAlpha="0.3"/>
+</vector>

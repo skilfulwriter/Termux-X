@@ -14,5 +14,6 @@ data class Data(
     val download: String,
     val isDownload: String,
     val name: String,
-    val note: String
+    val note: String,
+    val kali: String? = null
 )

@@ -29,11 +29,13 @@ class ModuleAdapter: RecyclerView.Adapter<RestoreViewHolder> {
 
     override fun onBindViewHolder(holder: RestoreViewHolder, position: Int) {
         val mFile = mList!![position].mFile
+        if (mFile == null) return
+
         holder.mDelete?.text = UUtils.getString(R.string.delete_module_data)
-        holder.mDataName?.text = "${UUtils.getString(R.string.data_module_name)} ${mFile?.name}"
-        holder.mDataSize?.text = "${UUtils.getString(R.string.data_module_size)} ${FileIOUtils.formatFileSize(mFile?.length()!!)}"
-        holder.mDataPath?.text = "${UUtils.getString(R.string.data_module_path)} ${mFile?.absolutePath}"
-        if (FileIOUtils.isModuleFormat(mFile!!.name)) {
+        holder.mDataName?.text = "${UUtils.getString(R.string.data_module_name)} ${mFile.name}"
+        holder.mDataSize?.text = "${UUtils.getString(R.string.data_module_size)} ${FileIOUtils.formatFileSize(mFile.length())}"
+        holder.mDataPath?.text = "${UUtils.getString(R.string.data_module_path)} ${mFile.absolutePath}"
+        if (FileIOUtils.isModuleFormat(mFile.name)) {
             holder.mDataName?.setTextColor(UUtils.getColor(R.color.color_48baf3))
         } else {
             holder.mDataName?.setTextColor(UUtils.getColor(R.color.color_CC5A6B))
@@ -43,7 +45,7 @@ class ModuleAdapter: RecyclerView.Adapter<RestoreViewHolder> {
             switchDialog.createSwitchDialog(UUtils.getString(R.string.file_module_msg))
             switchDialog.ok?.setOnClickListener {
                 switchDialog.dismiss()
-                if (mList!![position].mFile!!.delete()) {
+                if (mFile.delete()) {
                     UUtils.showMsg(UUtils.getString(R.string.删除成功))
                     mRestoreRefreshFileListener?.refresh()
                 } else {

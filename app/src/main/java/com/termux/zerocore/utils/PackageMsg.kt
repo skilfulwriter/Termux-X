@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.view.View.OnClickListener
@@ -28,7 +29,7 @@ object PackageMsg {
     final val REQUEST_CODE = 3000
     private var index: Int = 0
 
-    private val mHandlerIns1: Handler = object : Handler(){
+    private val mHandlerIns1: Handler = object : Handler(Looper.getMainLooper()){
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             if (msg.obj == null) {
@@ -44,10 +45,7 @@ object PackageMsg {
             }
             val packageName = mMessageBean.mList[index].packageName
             val dialog = getDialog(mMessageBean.mActivity)
-            unInstallApk(dialog, mMessageBean.mActivity,
-                mMessageBean.mList[index].packageName,
-                mMessageBean.mList[index].showName
-            ) {
+            unInstallApk(dialog, mMessageBean.mList[index].showName) {
                 LogUtils.d(TAG, "unInstallApk UninstallApk: $packageName")
                 val packageURI: Uri = Uri.parse("package:$packageName")
                 val uninstallIntent = Intent(Intent.ACTION_DELETE, packageURI)
@@ -61,7 +59,7 @@ object PackageMsg {
         }
     }
 
-    private val mHandlerIns2: Handler = object : Handler(){
+    private val mHandlerIns2: Handler = object : Handler(Looper.getMainLooper()){
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             if (msg.obj == null) {
@@ -75,10 +73,7 @@ object PackageMsg {
             }
             val packageName = mMessageBean.mList[index].packageName
             val dialog = getDialog(mMessageBean.mActivity)
-            unInstallApk(dialog, mMessageBean.mActivity,
-                mMessageBean.mList[index].packageName,
-                mMessageBean.mList[index].showName
-            ) {
+            unInstallApk(dialog, mMessageBean.mList[index].showName) {
                 LogUtils.d(TAG, "unInstallApk UninstallApk: $packageName")
                 val packageURI: Uri = Uri.parse("package:$packageName")
                 val uninstallIntent = Intent(Intent.ACTION_DELETE, packageURI)
@@ -148,11 +143,11 @@ object PackageMsg {
         var mMessageBean = MessageBean()
         mMessageBean.mActivity = activity
         mMessageBean.mList = arrayList
-        unInstallHandler(activity, mMessageBean)
+        unInstallHandler(mMessageBean)
 
     }
 
-    public fun unInstallHandler(mActivity: Activity, mMessageBean:  MessageBean) {
+    public fun unInstallHandler(mMessageBean:  MessageBean) {
         index = 0
         var mMessage = Message()
         mMessage.obj = mMessageBean
@@ -163,7 +158,7 @@ object PackageMsg {
         return SwitchDialog(mActivity)
     }
 
-    public fun unInstallApk(mSwitchDialog: SwitchDialog,activity: Activity, packageName: String, name: String, mOnClickListener: OnClickListener): SwitchDialog {
+    public fun unInstallApk(mSwitchDialog: SwitchDialog, name: String, mOnClickListener: OnClickListener): SwitchDialog {
         mSwitchDialog.show()
         mSwitchDialog.createSwitchDialog("unInstall $name?")
         mSwitchDialog.ok?.setOnClickListener(mOnClickListener)

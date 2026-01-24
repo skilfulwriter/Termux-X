@@ -287,6 +287,138 @@
                     android:orientation="vertical"
                     android:layout_height="wrap_content">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/color_ffffff"
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/ai_assistant_title"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:background="@color/color0A868686"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/ai_config"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@drawable/ic_settings"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/ai_config_title"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/ai_command_helper"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@drawable/ic_ai_command_helper"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/ai_btn_command_helper"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/ai_other"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:src="@drawable/ic_ai_terminal"
+                                android:layout_height="35dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/ai_terminal_title"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_55000000"
+                app:cardCornerRadius="6dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="horizontal"
@@ -610,8 +742,29 @@
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:layout_gravity="center"
+                            android:id="@+id/kali_install_tools"
                             android:gravity="center"
                             android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/install_module"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="安装工具集"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -642,7 +795,7 @@
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
                         android:layout_alignParentRight="true"
-                        android:text="渗透测试(需要先安装kali Nethunter)"
+                        android:text="kali工具集(需要先安装工具集)"
                         android:layout_height="wrap_content"/>
 
                     <TextView
@@ -651,6 +804,135 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/kali_tools_menu"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@drawable/ic_kali_menu"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="常用Kali工具"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/pentest_nmap"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@drawable/ic_nmap"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="Nmap"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/pentest_dirb"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@drawable/ic_dirb"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="Dirb"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                        
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/kali_change_source"
+                            android:gravity="center"
+                            android:background="@drawable/selector_menu_item"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/code_view"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="kali换源"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -807,138 +1089,6 @@
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
                         android:layout_alignParentRight="true"
-                        android:text="AI Assistant"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:background="@color/color0A868686"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_height="1dp"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:id="@+id/ai_config"
-                            android:gravity="center"
-                            android:layout_height="80dp">
-
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:src="@drawable/ic_settings"
-                                android:layout_height="40dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:padding="2dp"
-                                android:paddingLeft="10dp"
-                                android:textStyle="bold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
-                                android:text="@string/ai_config_title"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/color_ffffff"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:id="@+id/ai_command_helper"
-                            android:gravity="center"
-                            android:layout_height="80dp">
-
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:src="@drawable/ic_ai_command_helper"
-                                android:layout_height="40dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:padding="2dp"
-                                android:paddingLeft="10dp"
-                                android:textStyle="bold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
-                                android:text="@string/ai_btn_command_helper"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/color_ffffff"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:id="@+id/ai_other"
-                            android:layout_height="80dp">
-
-                            <ImageView
-                                android:layout_width="35dp"
-                                android:src="@mipmap/meihua_all"
-                                android:layout_height="35dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:padding="2dp"
-                                android:paddingLeft="10dp"
-                                android:textStyle="bold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
-                                android:text="More"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/color_ffffff"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/color_55000000"
-                app:cardCornerRadius="6dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_margin="8dp"
-                        android:textColor="@color/color_ffffff"
-                        android:textStyle="bold"
-                        android:textSize="13sp"
-                        android:layout_marginTop="5dp"
-                        android:layout_alignParentRight="true"
                         android:text="@string/common_functions"
                    android:layout_height="wrap_content"/>
 
@@ -961,13 +1111,13 @@
                        android:layout_weight="1"
                        android:orientation="vertical"
                        android:layout_gravity="center"
-                       android:id="@+id/code_ll"
                        android:gravity="center"
+                       android:id="@+id/adb_remote"
                        android:layout_height="80dp">
 
                        <ImageView
                            android:layout_width="40dp"
-                           android:src="@mipmap/code_view"
+                           android:src="@mipmap/yc_connect"
                            android:layout_height="40dp"/>
 
                        <TextView
@@ -980,12 +1130,10 @@
                            android:textStyle="bold"
                            android:paddingTop="10dp"
                            android:paddingBottom="10dp"
-                           android:text="@string/切换源"
+                           android:text="@string/remote_connection"
                            android:layout_alignParentRight="true"
                            android:textColor="@color/color_ffffff"
                            android:textSize="10sp" />
-
-
                    </LinearLayout>
 
                    <LinearLayout
@@ -993,8 +1141,8 @@
                        android:layout_weight="1"
                        android:orientation="vertical"
                        android:layout_gravity="center"
-                       android:id="@+id/rongqi"
                        android:gravity="center"
+                       android:id="@+id/rongqi"
                        android:layout_height="80dp">
 
                        <ImageView
@@ -1199,35 +1347,10 @@
 
                    </LinearLayout>
 
-                   <LinearLayout
-                       android:layout_width="0dp"
-                       android:layout_weight="1"
-                       android:orientation="vertical"
-                       android:layout_gravity="center"
-                       android:gravity="center"
-                       android:id="@+id/settings"
-                       android:layout_height="80dp">
-
-                       <ImageView
-                           android:layout_width="40dp"
-                           android:src="@mipmap/settings"
-                           android:layout_height="40dp"/>
-
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_marginTop="5dp"
-                           android:layout_marginBottom="5dp"
-                           android:padding="2dp"
-                           android:paddingLeft="10dp"
-                           android:textStyle="bold"
-                           android:paddingTop="10dp"
-                           android:paddingBottom="10dp"
-                           android:text="@string/zt_settings1"
-                           android:layout_alignParentRight="true"
-                           android:textColor="@color/color_ffffff"
-                           android:textSize="10sp" />
-                   </LinearLayout>
+                   <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"/>
                    <TextView
                        android:layout_width="0dp"
                        android:layout_weight="1"
@@ -1238,6 +1361,240 @@
            </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/color_55000000"
+            app:cardCornerRadius="6dp"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@color/color_ffffff"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentRight="true"
+                android:text="@string/online_features"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:background="@color/color0A868686"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_height="1dp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:id="@+id/online_sh"
+                    android:layout_height="80dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/online_sh_ll"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/online_sh"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/在线脚本"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/zerotermux_bbs"
+                    android:layout_height="80dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:src="@mipmap/bbs_zero"
+                        android:layout_height="40dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:padding="2dp"
+                        android:paddingLeft="10dp"
+                        android:textStyle="bold"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="社区交流"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/color_ffffff"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:id="@+id/download_http"
+                    android:layout_height="match_parent">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/xiazaizhan"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/download_http"
+                                android:layout_height="40dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/下载站"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/zero_tier"
+                    android:layout_height="80dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:src="@mipmap/gongongcangku"
+                        android:layout_height="40dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:padding="2dp"
+                        android:paddingLeft="10dp"
+                        android:textStyle="bold"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/公共仓库"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/color_ffffff"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/feedback_suggestion"
+                    android:layout_height="80dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:src="@mipmap/duanxin_ico"
+                        android:layout_height="40dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:padding="2dp"
+                        android:paddingLeft="10dp"
+                        android:textStyle="bold"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="反馈建议"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/color_ffffff"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -1453,13 +1810,13 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_gravity="center"
-                        android:id="@+id/video_back_menu"
+                        android:id="@+id/command_key_ll"
                         android:gravity="center"
                         android:layout_height="80dp">
 
                         <ImageView
                             android:layout_width="40dp"
-                            android:src="@mipmap/video_img_menu"
+                            android:src="@mipmap/zt_command_key"
                             android:layout_height="40dp"/>
 
                         <TextView
@@ -1472,12 +1829,10 @@
                             android:textStyle="bold"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
-                            android:text="@string/vedio_select_name"
+                            android:text="@string/zt_command_key"
                             android:layout_alignParentRight="true"
                             android:textColor="@color/color_ffffff"
                             android:textSize="10sp" />
-
-
                     </LinearLayout>
 
                 </LinearLayout>
@@ -1517,228 +1872,71 @@
                                 android:textSize="10sp" />
                         </LinearLayout>
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"/>
-                        <TextView
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/clear_style"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/clear_style"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/clear_style_dialog"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"/>
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:id="@+id/start_msg"
+                            android:gravity="center"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/start_msg_ico"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/start_msg"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/color_55000000"
-            app:cardCornerRadius="6dp"
-            android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_margin="8dp"
-                android:textColor="@color/color_ffffff"
-                android:textStyle="bold"
-                android:textSize="13sp"
-                android:layout_marginTop="5dp"
-                android:layout_alignParentRight="true"
-                android:text="@string/online_features"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:background="@color/color0A868686"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_height="1dp"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:id="@+id/online_sh"
-                    android:layout_height="80dp">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:id="@+id/online_sh_ll"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:src="@mipmap/online_sh"
-                                android:layout_height="40dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:padding="2dp"
-                                android:paddingLeft="10dp"
-                                android:textStyle="bold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
-                                android:text="@string/在线脚本"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/color_ffffff"
-                                android:textSize="10sp" />
-
-                        </LinearLayout>
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/zerotermux_bbs"
-                    android:layout_height="80dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:src="@mipmap/bbs_zero"
-                        android:layout_height="40dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="2dp"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/Zero论坛"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:id="@+id/download_http"
-                    android:layout_height="match_parent">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:id="@+id/xiazaizhan"
-                            android:layout_height="match_parent">
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:src="@mipmap/download_http"
-                                android:layout_height="40dp"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:padding="2dp"
-                                android:paddingLeft="10dp"
-                                android:textStyle="bold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
-                                android:text="@string/下载站"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/color_ffffff"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/zero_tier"
-                    android:layout_height="80dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:src="@mipmap/gongongcangku"
-                        android:layout_height="40dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="2dp"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/公共仓库"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -1778,37 +1976,7 @@
                 android:padding="8dp"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/zero_fun"
-                    android:layout_height="80dp">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:src="@mipmap/zero_fun_ico"
-                        android:layout_height="40dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="2dp"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/Zero功能"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -1847,13 +2015,13 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_gravity="center"
-                    android:id="@+id/cmd_command"
                     android:gravity="center"
+                    android:id="@+id/settings"
                     android:layout_height="80dp">
 
                     <ImageView
                         android:layout_width="40dp"
-                        android:src="@mipmap/zidingyi_cmd"
+                        android:src="@mipmap/settings"
                         android:layout_height="40dp"/>
 
                     <TextView
@@ -1866,53 +2034,10 @@
                         android:textStyle="bold"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="@string/命令定义"
+                        android:text="@string/zt_settings1"
                         android:layout_alignParentRight="true"
                         android:textColor="@color/color_ffffff"
                         android:textSize="10sp" />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/msg"
-                    android:layout_height="80dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:src="@mipmap/duanxin_ico"
-                        android:layout_height="40dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="2dp"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/短信通话"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="10sp" />
-
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -1943,10 +2068,20 @@
                         android:layout_alignParentRight="true"
                         android:textColor="@color/color_ffffff"
                         android:textSize="10sp" />
-
-
-
                 </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:layout_height="wrap_content">
+
+
+
+
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -1974,47 +2109,6 @@
                         android:id="@+id/text_start"
                         android:paddingBottom="10dp"
                         android:text="@string/开机启动"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/shiyan_fun"
-                    android:layout_height="80dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:src="@mipmap/shiyan_fun"
-                        android:layout_height="40dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="2dp"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/实验功能"
                         android:layout_alignParentRight="true"
                         android:textColor="@color/color_ffffff"
                         android:textSize="10sp" />
@@ -2054,44 +2148,149 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/github"
-                    android:layout_height="80dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:src="@mipmap/github"
-                        android:layout_height="40dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="2dp"
-                        android:paddingLeft="10dp"
-                        android:textStyle="bold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/开源地址"
-                        android:layout_alignParentRight="true"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
+                    android:layout_height="80dp"/>
 
 
             </LinearLayout>
+
+
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/color_55000000"
+                app:cardCornerRadius="6dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textColor="@color/color_ffffff"
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/root_features"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:background="@color/color0A868686"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_height="1dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/adb_net_root"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/adb_root"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/网络ADB"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/adb_net_root_close"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/adb_root"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/网络ADBClose"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/docker_check"
+                            android:layout_height="80dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:src="@mipmap/docker"
+                                android:layout_height="40dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:padding="2dp"
+                                android:paddingLeft="10dp"
+                                android:textStyle="bold"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/docker_check"
+                                android:layout_alignParentRight="true"
+                                android:textColor="@color/color_ffffff"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"

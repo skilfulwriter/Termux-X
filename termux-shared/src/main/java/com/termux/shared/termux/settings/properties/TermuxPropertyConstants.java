@@ -327,8 +327,13 @@ public final class TermuxPropertyConstants {
     public static final String KEY_EXTRA_KEYS =  "extra-keys"; // Default: "extra-keys"
     //public static final String DEFAULT_IVALUE_EXTRA_KEYS = "[[ESC, TAB, CTRL, ALT, {key: '-', popup: '|'}, DOWN, UP]]"; // Single row
     // ZeroTermux add {@ 
-    public static final String DEFAULT_IVALUE_EXTRA_KEYS  = "[['ESC', 'TAB', 'CTRL', 'ALT', '-', 'UP', 'ENTER'],['INS', 'END','SHIFT',':', 'LEFT', 'DOWN', 'RIGHT']]";  // Double row
+    public static final String DEFAULT_IVALUE_EXTRA_KEYS = "[[ \"ESC\", \"FN\", \"/\", \"BACKSLASH\", {\"key\":\"<>\",\"popup\":\">\"}, {\"key\":\"()\",\"popup\":\")\"}, {\"key\":\"{}\",\"popup\":\"}\"}, {\"key\":\"[]\",\"popup\":\"]\"}, \"DEL\" ], [ \"=\", \"!\", {\"key\":\"-\",\"popup\":\"_\",\"display\":\"-_\"}, \"+\", \"^\", {\"key\":\";\",\"popup\":\",\",\"display\":\"; ,\"}, {\"key\":\"UP\",\"popup\":\"PGUP\"}, {\"key\":\"*\",\"popup\":\"?\",\"display\":\"* ?\"}, \"PGUP\" ], [ {\"key\":\"TAB\",\"display\":\"TAB\"}, \"CTRL\", \"ALT\", {\"key\":\"QUOTE\",\"popup\":\"'\",\"display\":\"\\\" \\'\"}, \".\", {\"key\":\"LEFT\",\"popup\":\"HOME\"}, {\"key\":\"DOWN\",\"popup\":\"PGDN\"}, {\"key\":\"RIGHT\",\"popup\":\"END\"}, \"PGDN\" ]]";  // Double row
 	// @}
+    
+    /** Defines the key for extra keys 2 */
+    public static final String KEY_EXTRA_KEYS_2 =  "extra-keys-2"; // Default: "extra-keys-2"
+    public static final String DEFAULT_IVALUE_EXTRA_KEYS_2 = "[[ \"INS\", \"DEL\", \"BACKSLASH\", \"|\", \"~\", \"=\", \"+\" ], [ \"ESC\", \"/\", \"-\", \"HOME\", \"UP\", \"END\", \"PGUP\" ], [ \"TAB\", \"CTRL\", \"ALT\", \"LEFT\", \"DOWN\", \"RIGHT\", \"PGDN\" ]]";
+
     /** Defines the key for extra keys style */
     public static final String KEY_EXTRA_KEYS_STYLE =  "extra-keys-style"; // Default: "extra-keys-style"
     public static final String DEFAULT_IVALUE_EXTRA_KEYS_STYLE = "default";
@@ -428,6 +433,7 @@ public final class TermuxPropertyConstants {
         KEY_BACK_KEY_BEHAVIOUR,
         KEY_DEFAULT_WORKING_DIRECTORY,
         KEY_EXTRA_KEYS,
+        KEY_EXTRA_KEYS_2,
         KEY_EXTRA_KEYS_STYLE,
         KEY_NIGHT_MODE,
         KEY_SOFT_KEYBOARD_TOGGLE_BEHAVIOUR,

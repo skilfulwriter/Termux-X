@@ -29,10 +29,12 @@ class RestoreAdapter: RecyclerView.Adapter<RestoreViewHolder> {
 
     override fun onBindViewHolder(holder: RestoreViewHolder, position: Int) {
         val mFile = mList!![position].mFile
-        holder.mDataName?.text = "${UUtils.getString(R.string.data_file_name)} ${mFile?.name}"
-        holder.mDataSize?.text = "${UUtils.getString(R.string.data_file_size)} ${FileIOUtils.formatFileSize(mFile?.length()!!)}"
-        holder.mDataPath?.text = "${UUtils.getString(R.string.data_file_path)} ${mFile?.absolutePath}"
-        if (FileIOUtils.isPacketFormat(mFile!!.name)) {
+        if (mFile == null) return
+
+        holder.mDataName?.text = "${UUtils.getString(R.string.data_file_name)} ${mFile.name}"
+        holder.mDataSize?.text = "${UUtils.getString(R.string.data_file_size)} ${FileIOUtils.formatFileSize(mFile.length())}"
+        holder.mDataPath?.text = "${UUtils.getString(R.string.data_file_path)} ${mFile.absolutePath}"
+        if (FileIOUtils.isPacketFormat(mFile.name)) {
             holder.mDataName?.setTextColor(UUtils.getColor(R.color.color_48baf3))
         } else {
             holder.mDataName?.setTextColor(UUtils.getColor(R.color.color_CC5A6B))
@@ -42,7 +44,7 @@ class RestoreAdapter: RecyclerView.Adapter<RestoreViewHolder> {
             switchDialog.createSwitchDialog(UUtils.getString(R.string.file_delete_msg))
             switchDialog.ok?.setOnClickListener {
                 switchDialog.dismiss()
-                if (mList!![position].mFile!!.delete()) {
+                if (mFile.delete()) {
                     UUtils.showMsg(UUtils.getString(R.string.删除成功))
                     mRestoreRefreshFileListener?.refresh()
                 } else {
