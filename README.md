@@ -103,6 +103,22 @@
 
 ## 📝 更新日志 (Changelog)
 
+### v0.118.3.59 (2026.01.30)
+*   **新增**：**AI IDE**  ，内置 **Builder 模式**，支持 AI 自动构建项目、生成文件、即时预览与代码补全
+*   **新增**：**远程协助**功能，支持屏幕共享、远程控制、文字输入等，方便远程调试与协助
+*   **新增**：**AI 对话 MCP 客户端**，支持 Model Context Protocol，扩展 AI 能力
+*   **优化**：App 整体性能与体验优化，提升流畅度
+*   **修复**：修复已知 Bug，提升稳定性
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<img src="img/update/7.jpg" height="300" />
+<img src="img/update/8.jpg" height="300" />
+<img src="img/update/9.jpg" height="300" />
+<img src="img/update/10.jpg" height="300" />
+<img src="img/update/11.jpg" height="300" />
+<img src="img/update/12.jpg" height="300" />
+</div>
+
 ### v0.118.3.58 (2026.01.24)
 *   **新增**：完善 ADB 远程功能，功能详情：
     *   **🔌 连接**：ADB 连接 (USB/WiFi)、Android 11+ 无线配对码连接
@@ -122,6 +138,7 @@
 <img src="img/update/3.jpg" height="300" />
 <img src="img/update/3.png" height="300" />
 </div>
+
 ### v0.118.3.57 (2026.01.10)
 *   **新增**：在线脚本下载运行逻辑优化，支持自动识别当前环境。若在 Kali Shell 中运行 Termux 脚本，会自动切换至 Termux 会话执行，避免环境错误
 *   **新增**：在线脚本支持 Kali Root 环境自动部署。下载的脚本会自动复制到 Kali Root 目录并赋予权限执行，解决路径权限问题
