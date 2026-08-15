@@ -7,7 +7,7 @@
 **Termux-X** 是一款基于 **ZeroTermux** 进行二次开发（二开）的增强版终端模拟器应用。它保留了 ZeroTermux 的强大功能，并在此基础上进行了深度定制与优化，旨在为移动端渗透测试人员和极客提供更便捷、更强大的操作环境。
 
 ### 官方下载地址
-*   **Termux-X APP**: [点击下载](http://xheishou.com/download)
+*   **Termux-X APP**: [点击下载](https://xheishou.com/xheishou-download)
 *   **X黑手社区**: [访问社区](http://xheishou.com/)
 
 ## 🌟 核心亮点
